@@ -230,6 +230,9 @@
   .idea strong, .avis strong, .bloc > strong { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
   .idea strong { color: var(--accent); } .avis strong { color: var(--calid); } .bloc > strong { color: var(--suau); }
   .bloc { margin: 0 0 14px; }
+  .bloc.lligat { padding: 10px 14px; border: 1px solid var(--accent); border-radius: var(--radi); }
+  .bloc.lligat strong { display: block; }
+  .fitxa .projecte { display: inline-block; align-self: flex-start; margin-top: 2px; padding: 2px 8px; border: 1px solid var(--accent); border-radius: 999px; font-size: 12.5px; font-weight: 600; color: var(--accent); }
   /* Alerta d'ús recomanat: triangle groc (gris si la privadesa no està confirmada), sempre amb text al costat */
   .tri { display: inline-flex; vertical-align: -3px; margin-right: 6px; color: var(--segell); }
   .tri.gris { color: var(--suau); }
@@ -433,7 +436,7 @@
     <details data-s="etiquetes">
       <summary>Etiquetes, filtres i cercador</summary>
       <ul>
-        <li>Els filtres són al botó <b>Filtres</b>, de la barra superior, per apartats. El botó avisa de quants filtres hi ha d'actius i sota la barra en surt la llista.</li>
+        <li>Els filtres són al botó <b>Filtres</b>, de la barra superior, per apartats. L'apartat <b>Projecte d'àmbit de la FJE</b> mostra els recursos lligats a un projecte; la targeta i la fitxa ho diuen. El botó avisa de quants filtres hi ha d'actius i sota la barra en surt la llista.</li>
         <li><b>Etapa i curs</b>: l'etapa és on es pot fer servir el recurs (primària, ESO, Batxillerat, FP). El curs és on encaixa el contingut segons el currículum; surt en triar primària, ESO o Batxillerat i és més restrictiu que l'etapa: un recurs útil a tota l'ESO pot encaixar només a 2n i 3r. A FP, en lloc de curs es tria la família professional.</li>
         <li><b>Matèria</b>: es dedueix de la matèria de la fitxa. Un recurs pot ser de dos àmbits.</li>
         <li><b>Tipus de recurs</b>: explicació visual, explicació interactiva, simulador, eina o visor de dades i mapes.</li>
@@ -500,7 +503,7 @@
 'use strict';
 const R = window.RECURSOS || [];
 const $ = (id) => document.getElementById(id);
-const BUIT = () => ({ q: '', etapa: '', curs: '', familia: '', area: [], tipus: [], llengua: [], dest: false, nota: '', errors: false, priv: false, llic: false, alum: false, meu: '' });
+const BUIT = () => ({ q: '', etapa: '', curs: '', familia: '', projecte: '', area: [], tipus: [], llengua: [], dest: false, nota: '', errors: false, priv: false, llic: false, alum: false, meu: '' });
 const estat = { ...BUIT(), ordre: 'rec' };
 
 function el(etq, props, ...fills) {
@@ -521,6 +524,9 @@ const POLZE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke
 const llistaUnica = (f) => [...new Set(R.flatMap(f))].sort((a, b) => a.localeCompare(b, 'ca'));
 const NOMS_LL = { CA: 'Català', ES: 'Castellà', EN: 'Anglès', FR: 'Francès', DE: 'Alemany', IT: 'Italià', PT: 'Portuguès', altres: 'Altres llengües' };
 const MULTI = ['area', 'tipus', 'llengua'];
+// Projectes d'àmbit de la FJE a què està lligat un recurs: «Nom · curs».
+const nomProj = (p) => p.nom + (p.curs ? ' · ' + p.curs : '');
+const projectesDe = (r) => (r.projectes || []).map(nomProj);
 const BOOL = ['dest', 'errors', 'priv', 'llic', 'alum'];
 const NOMS_MEU = { pendent: 'Oberts i per valorar', valorat: 'Ja valorats per mi', nou: 'Encara no oberts' };
 // Derivats del text de la fitxa (aproximats fins que siguin camps propis a la base de dades).
@@ -532,6 +538,7 @@ function filtresActius() {
   if (estat.etapa) a.push(estat.etapa);
   if (estat.curs) a.push(estat.curs.split(' ')[0]);
   if (estat.familia) a.push(estat.familia);
+  if (estat.projecte) a.push('Projecte: ' + estat.projecte);
   a.push(...estat.area, ...estat.tipus, ...estat.llengua.map((c) => NOMS_LL[c]));
   if (estat.dest) a.push('Destacats');
   if (estat.nota) a.push('Revisió amb IA ' + estat.nota.replace('.', ',') + ' o més');
@@ -563,7 +570,7 @@ function quants(clau, valor) {
   Object.assign(estat, desat);
   return n;
 }
-const GRUPS = { nivell: ['etapa', 'curs', 'familia'], area: ['area'], tipus: ['tipus'], llengua: ['llengua'], qualitat: ['dest', 'nota', 'errors'], condicions: ['priv', 'llic', 'alum'], meu: ['meu'] };
+const GRUPS = { nivell: ['etapa', 'curs', 'familia'], projecte: ['projecte'], area: ['area'], tipus: ['tipus'], llengua: ['llengua'], qualitat: ['dest', 'nota', 'errors'], condicions: ['priv', 'llic', 'alum'], meu: ['meu'] };
 function refrescaFiltres() {
   const p = document.querySelector('.p-filtres');
   if (!p) return;
@@ -609,6 +616,8 @@ function obreFiltres() {
             xip('etapa', 'ESO', 'ESO'), xip('etapa', 'Batxillerat', 'Batxillerat'), xip('etapa', 'FP', 'FP')),
           cursos('Primària', ['1r', '2n', '3r', '4t', '5è', '6è']), cursos('ESO', ['1r', '2n', '3r', '4t']), cursos('Batxillerat', ['1r', '2n']),
           el('div', { class: 'xips', 'data-etapa': 'FP' }, fam)),
+        sec("Projecte d'àmbit de la FJE", 'projecte', fila(llistaUnica(projectesDe).map((p) => xip('projecte', p, p))),
+          el('p', { class: 'p-intro' }, "Recursos triats o fets per a un projecte concret. De moment n'hi ha pocs: s'hi aniran afegint.")),
         sec('Matèria', 'area', fila(llistaUnica((r) => r.arees).map((a) => xip('area', a, a)))),
         sec('Tipus de recurs', 'tipus', fila(llistaUnica((r) => [r.tipus]).map((t) => xip('tipus', t, t)))),
         sec('Llengua', 'llengua', fila(Object.entries(NOMS_LL).map(([c, nom]) => xip('llengua', c, nom)))),
@@ -631,6 +640,7 @@ function passa(r) {
   if (estat.etapa && !r.etapes.includes(estat.etapa)) return false;
   if (estat.curs && !r.cursos.includes(estat.curs)) return false;
   if (estat.familia && !r.families.includes(estat.familia)) return false;
+  if (estat.projecte && !projectesDe(r).includes(estat.projecte)) return false;
   if (estat.area.length && !estat.area.some((a) => r.arees.includes(a))) return false;
   if (estat.tipus.length && !estat.tipus.includes(r.tipus)) return false;
   if (estat.dest && !r.destacat) return false;
@@ -816,6 +826,7 @@ function targeta(r) {
       el('span', { class: 'materia' }, r.materiaCurta),
       el('h2', null, r.titol),
       el('p', null, r.resum),
+      projectesDe(r).length ? el('span', { class: 'projecte' }, 'Projecte: ' + projectesDe(r).join(', ')) : null,
       variant === 'G' && r.destacat ? pestanyaDest(r) : null,
       el('div', { class: 'peu' + (franja ? ' franja' + (r.destacat ? ' dest' : '') : ''), 'data-id': r.id }, peu)));
 }
@@ -997,6 +1008,8 @@ function obre(r, pestanya) {
              : el('p', { class: 'nota-rubrica' }, "Aquest recurs encara no té cap idea d'aula escrita."),
       r.peces.length ? el('div', { class: 'bloc' }, el('strong', null, 'Per on començar'),
         el('div', { class: 'peces' }, r.peces.map((p) => el('a', { href: p.url, target: '_blank', rel: 'noopener noreferrer', onclick: marcaObert }, p.titol)))) : null,
+      (r.projectes || []).map((p) => el('div', { class: 'bloc lligat' }, el('strong', null, "Lligat al projecte d'àmbit «" + p.nom + '»'),
+        [p.curs && p.curs + (p.ambit ? ', àmbit ' + p.ambit : '') + '.', p.activitats && 'On encaixa: ' + p.activitats + '.', p.nota].filter(Boolean).join(' '))),
       blocUs,
       r.precaucions && el('div', { class: 'avis' }, el('strong', null, 'Abans de fer-lo servir'), r.precaucions),
       r.errors && r.errors.length ? el('div', { class: 'avis' }, el('strong', null, 'Límits i errors detectats'),
@@ -1056,7 +1069,7 @@ function obre(r, pestanya) {
         r.propi && el('img', { class: 'logo-fitxa', src: LOGO_FJE, alt: 'Recurs de Jesuïtes Educació' }))),
     punt,
     el('div', { class: 'info' },
-      dada('Etapa i curs', nivellLlarg(r).join(' · ')), dada('Tema del currículum', r.tema),
+      dada('Etapa i curs', nivellLlarg(r).join(' · ')), dada('Tema del currículum', r.tema), dada("Projecte d'àmbit", (r.projectes || []).map((p) => p.nom + ' (' + [p.curs, p.ambit && 'àmbit ' + p.ambit].filter(Boolean).join(', ') + ')').join(' · ')),
       dada('Llengua', r.llenguaLlarga), dada('Tipus de recurs', r.tipus), dada('Condicions', ['Gratuït · sense registre', alertaText && el('span', { class: 'alerta-linia' }, triangle(), alertaText)]),
       dada('Autoria', autoriaCurta(r.autor))),
     f.accions = el('div', { class: 'accions' },
