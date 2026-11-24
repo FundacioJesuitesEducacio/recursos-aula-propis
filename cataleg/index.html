@@ -604,7 +604,7 @@ function obreFiltres() {
         sec('Matèria', 'area', fila(llistaUnica((r) => r.arees).map((a) => xip('area', a, a)))),
         sec('Tipus de recurs', 'tipus', fila(llistaUnica((r) => [r.tipus]).map((t) => xip('tipus', t, t)))),
         sec('Llengua', 'llengua', fila(Object.entries(NOMS_LL).map(([c, nom]) => xip('llengua', c, nom)))),
-        sec('Qualitat', 'qualitat', fila(xip('dest', '1', 'Només destacats'), xip('nota', '4', 'Revisió amb IA de 4 o més'), xip('nota', '4.5', 'De 4,5 o més'), xip('errors', '1', 'Sense errors detectats'))),
+        sec('Qualitat', 'qualitat', fila(xip('dest', '1', 'Només destacats'), xip('nota', '4', 'Revisió amb IA de 4 o més'), xip('nota', '4.5', 'De 4,5 o més'))),
         sec('Condicions d\'ús', 'condicions', fila(xip('priv', '1', 'Sense analítica ni publicitat'), xip('llic', '1', 'Llicència oberta declarada'), xip('alum', '1', "Per als dispositius de l'alumnat"))),
         sec('El meu seguiment', 'meu', fila(Object.entries(NOMS_MEU).map(([c, nom]) => xip('meu', c, nom)))),
         sec('Ordena per', null, fila(xip('ordre', 'rec', 'Recomanats'), xip('ordre', 'val', 'Més ben valorats pels docents'), xip('ordre', 'ia', 'Revisió amb IA més alta'),
