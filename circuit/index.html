@@ -1,0 +1,1024 @@
+<!doctype html><html lang="ca"><head><meta name="robots" content="noindex"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Circuits elèctrics senzills</title><style>/* Colors dels dos temes. Mateixos noms i valors que el kit d'anatomy (ISO_CSS), perquè una figura feta amb el kit
+   i una feta a mà (mida Esquema) facin servir les mateixes variables. Si la pàgina inclou ISO_CSS, aquest bloc no hi fa nosa. */
+.iso{
+  color-scheme:dark;
+  --anatomy-page:#0b0b0b;--anatomy-card:#131313;--anatomy-text:#a3a3a3;--anatomy-strong:#e6e6e6;--anatomy-muted:#6e6e6e;
+  --anatomy-paper:#131313;--anatomy-face:#1b1b1b;--anatomy-top:#1c1c1c;
+  --anatomy-shade-0:#0f0f0f;--anatomy-shade-1:#121212;--anatomy-shade-2:#151515;--anatomy-shade-3:#181818;
+  --anatomy-hi:#d4d4d4;--anatomy-mid:#6a6a6a;--anatomy-lo:#3e3e3e;--anatomy-faint:#2a2a2a;--anatomy-lit:#ffffff;
+  --anatomy-red:#ff6b6b;--anatomy-green:#6be0a0;--anatomy-blue:#6b9bff;
+}
+.iso[data-theme="light"]{
+  color-scheme:light;
+  --anatomy-page:#f2f2ef;--anatomy-card:#fbfbfa;--anatomy-text:#57575a;--anatomy-strong:#18181a;--anatomy-muted:#8c8c90;
+  --anatomy-paper:#fbfbfa;--anatomy-face:#ffffff;--anatomy-top:#ffffff;
+  --anatomy-shade-0:#dcdcd9;--anatomy-shade-1:#e5e5e2;--anatomy-shade-2:#ededea;--anatomy-shade-3:#f4f4f1;
+  --anatomy-hi:#26262a;--anatomy-mid:#8a8a8f;--anatomy-lo:#b4b4b8;--anatomy-faint:#d4d4d6;--anatomy-lit:#000000;
+  --anatomy-red:#e5484d;--anatomy-green:#30a46c;--anatomy-blue:#3e63dd;
+}
+/* Plantilla de pantalla única (skill recurs-aula). Cos genèric: barra superior, menú de panells, pestanyes del mòbil,
+   figura, controls, lectures i panells. El que és propi del recurs va al seu pagina.css, que es carrega després.
+   Variables que el recurs pot canviar a .app: --lletra (18 px a primària, 16 px a ESO), --ctrl-w (amplada de la columna de controls),
+   --fig-ratio (proporció de la figura al mòbil, p. ex. 760/430). */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:var(--anatomy-page);color:var(--anatomy-text);font:18px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.app{--gap:8px;--lletra:18px;--ctrl-w:290px;--fig-ratio:16/9;display:grid;height:100vh;height:100dvh;padding:var(--gap);gap:var(--gap);color:var(--anatomy-text);font-size:var(--lletra);line-height:1.4;
+  grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto;grid-template-areas:"top" "fig" "ctrl" "lect"}
+.app h1{font-size:22px;line-height:1.15;margin:0;color:var(--anatomy-strong)}
+.app h2{font-size:24px;margin:0;color:var(--anatomy-strong)}
+.app h3{font-size:var(--lletra);margin:0;color:var(--anatomy-strong);font-weight:600}
+.app p{margin:0}
+.app [hidden]{display:none!important}
+
+/* barra superior i menú */
+.top{grid-area:top;display:flex;align-items:center;flex-wrap:wrap;gap:4px 16px;position:relative}
+.top h1{flex:1 1 auto;min-width:0}
+.top .sub{flex:1 1 100%;font-size:var(--lletra);line-height:1.3;margin:0;order:3}
+.menu-nav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-end;flex:0 0 auto;order:2}
+.menu-nav .btn{font-size:16px;padding:6px 9px}
+.menu-toggle{display:none}
+.ind{font-weight:600;color:var(--anatomy-strong)}
+.ind:not(:empty)::before{content:"· ";font-weight:400}
+
+/* botons */
+.btn{appearance:none;font:inherit;font-size:var(--lletra);line-height:1.1;min-height:44px;min-width:44px;padding:6px 14px;color:var(--anatomy-text);background:var(--anatomy-card);border:2px solid var(--anatomy-mid);border-radius:8px;cursor:pointer;font-variant-numeric:tabular-nums}
+.btn:hover{border-color:var(--anatomy-strong);color:var(--anatomy-strong)}
+.btn[aria-pressed="true"]{background:var(--anatomy-strong);color:var(--anatomy-card);border-color:var(--anatomy-strong)}
+.btn[aria-disabled="true"]{opacity:.55;border-style:dashed}
+.btn[data-desc][data-ready="true"]{border-color:var(--anatomy-lit);color:var(--anatomy-strong);font-weight:600}
+.btn:focus-visible,.panell input:focus-visible,.panell a:focus-visible{outline:3px solid var(--anatomy-lit);outline-offset:2px}
+.btn.mini{padding:4px 10px;font-size:16px}
+.btn.gran{padding:8px 22px;font-weight:600}
+.tabs{display:none}
+
+/* figura */
+.fig{grid-area:fig;position:relative;min-height:0;min-width:0;overflow:hidden;border:1px solid var(--anatomy-lo);border-radius:10px;background:var(--anatomy-card);display:flex}
+.visor{margin:0;position:relative}
+.mainv{flex:1;min-width:0;min-height:0}
+.mainv .stage{position:absolute;inset:0;overflow:hidden}
+.mainv .stage>svg:not(.lead){position:absolute;inset:0;width:100%;height:100%}
+
+/* etiquetes: capa HTML sobre la figura (Pantalla.etiquetes) */
+.stage .tags{position:absolute;inset:0;pointer-events:none}
+.tag{position:absolute;font:600 17px/1.25 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:2px 8px;background:var(--anatomy-paper);color:var(--anatomy-strong);border:1.5px solid var(--anatomy-mid);border-radius:6px;white-space:nowrap;transform:translate(-50%,-50%)}
+.lead{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.lead line{stroke:var(--anatomy-strong);stroke-width:2}
+.lead circle{fill:var(--anatomy-strong);stroke:var(--anatomy-paper);stroke-width:1.5}
+
+/* vista ampliada (opcional): requadre dins de la figura */
+.inset{position:absolute;z-index:2;top:8px;left:8px;width:clamp(300px,34%,430px);background:var(--anatomy-card);border:2px solid var(--anatomy-mid);border-radius:10px;overflow:hidden;box-shadow:0 2px 10px #0003}
+.inset .stage{position:relative;overflow:hidden}
+.inset .stage>svg:not(.lead){display:block;width:100%;height:auto}
+.inset-bar{display:flex;align-items:center;gap:6px;padding:3px 6px 3px 10px;border-bottom:1px solid var(--anatomy-lo)}
+.inset-t{flex:1;font-size:16px;font-weight:600;color:var(--anatomy-strong);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inset.gran{width:min(64%,760px);left:50%;transform:translateX(-50%)}
+.mostra{position:absolute;z-index:2;top:8px;left:8px}
+
+/* controls */
+.ctrl{grid-area:ctrl;display:grid;gap:8px 16px;align-content:start;padding:10px 12px;border:1px solid var(--anatomy-lo);border-radius:10px;background:var(--anatomy-card);grid-template-columns:1fr;min-height:0}
+.fila{display:flex;flex-direction:column;gap:4px;min-width:0}
+.etiq{font-size:var(--lletra);font-weight:600;color:var(--anatomy-strong)}
+.grup{display:flex;flex-wrap:wrap;gap:6px}
+.grup .btn{flex:1 1 auto}
+.grup.dos{display:grid;grid-template-columns:1fr 1fr}
+.grup.dos .btn{min-width:0;padding:4px 6px;line-height:1.15}
+.fila>.btn{width:100%}
+.estat{font-size:16px;line-height:1.3}
+.quick{display:none}
+
+/* lectures */
+.lect{grid-area:lect;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+.lectura{border:1px solid var(--anatomy-lo);border-radius:10px;padding:6px 12px 8px;background:var(--anatomy-card);min-width:0}
+.lectura .gran-text{font-size:22px;font-weight:700;color:var(--anatomy-strong);line-height:1.2}
+.lectura .sub{font-size:var(--lletra);line-height:1.25}
+.barra{display:flex;gap:5px;margin-top:5px}
+.barra i{flex:1;height:14px;border:2px solid var(--anatomy-mid);border-radius:4px;background:transparent}
+.barra i.on{background:var(--anatomy-strong);border-color:var(--anatomy-strong)}
+.frase{grid-column:1/-1;padding:2px 4px;font-size:var(--lletra);line-height:1.3}
+.frase .resum{font-weight:600;color:var(--anatomy-strong)}
+
+/* panells */
+.panell{padding:0;border:2px solid var(--anatomy-mid);border-radius:12px;background:var(--anatomy-card);color:var(--anatomy-text);width:min(760px,94vw);max-height:88vh;max-height:88dvh;overflow:hidden;font:inherit;font-size:18px}
+.panell[open]{display:flex;flex-direction:column}
+.panell::backdrop{background:#000a}
+.p-cap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid var(--anatomy-lo)}
+.p-cap h2{font-size:24px;margin:0;color:var(--anatomy-strong)}
+.p-cos{padding:12px 18px 18px;overflow:auto;display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-content:start}
+.p-cos>div{display:grid;gap:12px}
+.p-cos p{margin:0}
+.p-cos h3{font-size:20px;margin:6px 0 0;color:var(--anatomy-strong)}
+.p-cos ul{margin:0;padding-left:1.3em}
+.p-cos li{margin:4px 0}
+.p-cos .peu{position:sticky;bottom:-18px;background:var(--anatomy-card);padding:8px 0 10px;margin:0;border-top:1px solid var(--anatomy-lo)}
+.p-cos a{color:var(--anatomy-strong)}
+.panell p,.panell li{font-size:18px;line-height:1.5}
+.panell .pregunta{font-size:20px;color:var(--anatomy-strong)}
+.panell fieldset.pred{border:1px solid var(--anatomy-lo);border-radius:8px;padding:8px 14px;margin:0}
+.panell fieldset.pred legend{font-size:19px;color:var(--anatomy-strong);padding:0 6px}
+.panell fieldset.pred label{display:flex;align-items:center;gap:12px;min-height:46px;cursor:pointer}
+.panell fieldset.pred input{width:24px;height:24px;flex:0 0 auto;accent-color:var(--anatomy-strong)}
+.avis{border:2px solid var(--anatomy-mid);border-radius:8px;padding:8px 12px}
+.taula{border-collapse:collapse;width:100%;font-size:18px}
+.taula caption{text-align:left;font-weight:600;padding-bottom:6px}
+.taula th,.taula td{border:1px solid var(--anatomy-lo);padding:3px 8px;text-align:right}
+.taula th[scope=row],.taula th[scope=col]:first-child{text-align:left}
+.taula-wrap{overflow-x:auto}
+.p-cos .taula{display:block;overflow-x:auto} /* una taula ampla es desplaça dins del panell en lloc d'eixamplar-lo */
+.p-cos a{overflow-wrap:anywhere}
+
+/* ---- mides ---- */
+/* ordinador i projector: controls en una columna a la dreta */
+@media (min-width:1000px) and (min-height:560px){
+  .app{grid-template-columns:minmax(0,1fr) var(--ctrl-w);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"top top" "fig ctrl" "lect ctrl"}
+  .ctrl{gap:14px}
+}
+/* tauleta: controls en dues columnes sota la figura */
+@media (max-width:999px){
+  .menu-nav{flex:1 1 100%;justify-content:flex-start}
+  .ctrl{grid-template-columns:1fr 1fr}
+  .ctrl>.estat,.ctrl>.peu-ctrl{grid-column:1/-1}
+}
+/* mòbil: menú en un botó i dues pestanyes («a»: figura, «b»: controls i lectures) */
+@media (max-width:600px){
+  .app{--gap:6px;--lletra:16px;grid-template-rows:auto auto minmax(0,1fr) auto auto auto;grid-template-areas:"top" "tabs" "fig" "quick" "ctrl" "lect"}
+  .app h1{font-size:18px;flex:1 1 0}
+  .top .pregunta{display:none}
+  .top .sub:has(.ind:empty){display:none}
+  .ind::before{content:none!important}
+  .menu-toggle{display:inline-block;flex:0 0 auto}
+  .menu-nav{display:none;position:absolute;z-index:6;right:0;top:48px;flex-direction:column;align-items:stretch;background:var(--anatomy-card);border:2px solid var(--anatomy-mid);border-radius:10px;padding:8px;box-shadow:0 4px 16px #0006;min-width:230px}
+  .menu-nav.obert{display:flex}
+  .tabs{grid-area:tabs;display:flex;gap:6px}
+  .tabs .btn{flex:1}
+  .fig{flex-direction:column}
+  .mainv{flex:1 1 auto;width:100%}
+  .fig:has(.inset) .mainv{flex:0 0 auto;height:auto;aspect-ratio:var(--fig-ratio)} /* amb vista ampliada a sota, la figura principal fa la seva proporció */
+  .ctrl{padding:8px 10px;grid-template-columns:1fr;gap:6px}
+  .fila{flex-direction:row;align-items:center;flex-wrap:wrap}
+  .fila>.etiq{flex:0 0 96px}
+  .fila>.grup,.fila>.btn{flex:1}
+  .quick{grid-area:quick;display:grid;gap:4px}
+  .quick .grup{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .quick .btn{min-width:0;padding:4px 6px;line-height:1.1}
+  .lect{grid-template-columns:1fr;gap:4px}
+  .lectura{padding:3px 8px}
+  .lectura .gran-text{font-size:16px}
+  .lectura .sub{display:none}
+  .barra i{height:10px}
+  .inset{width:min(62%,300px)}
+  .app[data-tab="a"] .ctrl,.app[data-tab="a"] .frase{display:none}
+  .app[data-tab="b"] .fig,.app[data-tab="b"] .quick{display:none}
+  .app[data-tab="b"]{grid-template-rows:auto auto 0 0 auto auto;align-content:start}
+  .panell{width:96vw;max-height:92dvh}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* Propi del tauler de circuits. El cos de pantalla és a la plantilla de la skill (plantilla-pantalla/pantalla.css). */
+.app{--fig-ratio:700/430;--lletra:18px}
+.iso{--bd-fill:#2b2a27;--bd-line:#4a4944;--cos:#2a2d36;--metal:#9a8b5a;--pinca:#3a3a3e;--vidre:#1a1d22;--w-pos:#e0523f;--w-mid:#e39a3a;--w-neg:#4c7ee8;--dot:#fff2a0;--dot-line:#201a00}
+.iso[data-theme="light"]{--bd-fill:#e8dcc4;--bd-line:#a8946a;--cos:#cfd6e2;--metal:#8a7a42;--pinca:#5b5b60;--vidre:#f6f8fb;--w-pos:#c4301e;--w-mid:#b8740e;--w-neg:#2c59c9;--dot:#ffe45c;--dot-line:#3a2f00}
+.iso .lit{pointer-events:none}
+.lect{grid-template-columns:repeat(3,minmax(0,1fr))}
+.app{--sel:#d9a400}
+.ctrl{overflow:auto}
+.ctrl .fila[data-only]{display:none}
+.app[data-sit="una"] .fila[data-only~="una"],.app[data-sit="serie"] .fila[data-only~="serie"],.app[data-sit="parallel"] .fila[data-only~="parallel"],.app[data-sit="materials"] .fila[data-only~="materials"]{display:flex}
+.grup.sits .btn{flex:1 1 130px}
+.mats .btn{flex:1 1 120px;min-height:44px;font-size:16px;padding:4px 8px}
+.btn[aria-pressed="true"].on-state{background:var(--anatomy-strong)}
+.seguretat{position:absolute;left:10px;bottom:8px;margin:0;font-size:16px;font-weight:600;color:var(--anatomy-strong);background:var(--anatomy-paper);border:1.5px solid var(--anatomy-mid);border-radius:6px;padding:2px 10px;z-index:2}
+.llum{display:grid;grid-template-columns:auto 1fr;gap:0 10px;align-items:center;margin-top:2px}
+.llum-n{font-size:18px;font-weight:600;color:var(--anatomy-strong)}
+.llum .barra{margin:0;grid-column:2;grid-row:1}
+.llum-t{grid-column:1/-1;font-size:18px;color:var(--anatomy-strong);line-height:1.2}
+.llum[hidden]{display:none}
+/* figura */
+.bd{fill:var(--bd-fill);stroke:var(--bd-line);stroke-width:2}
+.scr{fill:var(--anatomy-mid);stroke:none}
+.cab{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:7}
+.cab.pos{stroke:var(--w-pos)}.cab.mid{stroke:var(--w-mid)}.cab.neg{stroke:var(--w-neg)}
+.cab.fora{opacity:.9}
+.met{fill:var(--metal);stroke:var(--anatomy-hi);stroke-width:1.2;stroke-linejoin:round}
+.cos{fill:var(--cos);stroke:var(--anatomy-hi);stroke-width:1.5;stroke-linejoin:round}
+.pinca{fill:var(--pinca);stroke:var(--anatomy-hi);stroke-width:1.2;stroke-linejoin:round}
+.vidre{fill:var(--vidre);stroke:var(--anatomy-hi);stroke-width:1.6}
+.fil{fill:none;stroke:var(--anatomy-hi);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.glow{fill:url(#glow);pointer-events:none}
+.pt{fill:var(--dot);stroke:var(--dot-line);stroke-width:1.2}
+.marca{font:700 24px system-ui,sans-serif;fill:var(--anatomy-strong)}
+.obj{stroke:var(--anatomy-hi);stroke-width:1.4;stroke-linejoin:round}
+@media (max-width:600px){
+  .seguretat{font-size:16px;bottom:6px;left:6px}
+  .grup.sits .btn{flex:1 1 45%}
+  .llum-n{font-size:16px}.llum-t{font-size:16px}
+  .app[data-tab="b"] .quick{display:none}
+  .app[data-tab="b"] .lect{display:grid}
+}
+
+.ctrl .grup.sits,.ctrl .grup.mats,.ctrl .fila[data-only~="serie"] .grup{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ctrl .grup .btn{min-width:0;flex:none;font-size:16px;padding:4px 6px;line-height:1.15}
+.ctrl{gap:6px 12px;padding:8px 10px}
+.ctrl .fila{gap:2px}
+.ctrl .etiq{font-size:17px}
+.estat{font-size:15px;line-height:1.25}
+.btn[data-sw],.btn[data-cable]{font-size:16px}
+@media (max-width:600px){.ctrl .grup.sits,.ctrl .grup.mats{grid-template-columns:1fr 1fr}}
+
+@media (max-width:600px){
+  .quick .etiq{display:none}
+  .quick .grup{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-wrap:wrap}
+  .quick .grup .btn{min-width:0;padding:4px 6px;line-height:1.1;font-size:16px}
+  .lect{grid-template-columns:1fr;gap:4px}
+  .lectura{display:grid;grid-template-columns:96px 1fr;column-gap:8px;align-items:center;padding:3px 8px}
+  .lectura h3{grid-row:1/span 4;font-size:16px;align-self:center}
+  .lectura>*:not(h3){grid-column:2}
+  .lectura .gran-text{font-size:16px}
+  .lectura .barra{margin-top:2px}
+  .lectura .sub{display:none}
+  .llum{grid-template-columns:auto 84px 1fr;gap:0 8px;margin:0}
+  .llum .barra{grid-column:2;margin:0}
+  .llum-t{grid-column:3}
+  .llum-n{font-size:16px}
+  .app[data-tab="b"] .lect{display:grid}
+}
+@media (max-width:600px){.ctrl .grup.mats{grid-template-columns:1fr 1fr 1fr}.mats .btn{font-size:16px;padding:2px 3px}}
+/* tauleta vertical: els materials ocupen tota l'amplada en quatre columnes, i l'aclariment dels punts (que també és als panells) s'amaga, perquè la figura no quedi aixafada */
+@media (min-width:601px) and (max-width:999px){
+  .ctrl .fila[data-only~="materials"]{grid-column:1/-1}
+  .ctrl .grup.mats{grid-template-columns:repeat(4,1fr)}
+  .lectura .sub{display:none}
+}
+@media (max-width:600px){.ctrl{gap:4px;padding:6px 8px}.ctrl .fila{gap:0}}
+</style></head><body class="iso" data-theme="light"><div class="app" data-tab="a">
+<header class="top">
+<h1>Circuits elèctrics senzills</h1>
+<button class="btn menu-toggle" type="button" aria-expanded="false" aria-controls="menu">Menú</button>
+<nav class="menu-nav" id="menu" aria-label="Panells"><button class="btn menu" type="button" data-open="p-pred" >La pregunta</button><button class="btn menu" type="button" data-open="p-desc" aria-disabled="true" aria-describedby="estat-desc" data-desc>Què has descobert?</button><button class="btn menu" type="button" data-open="p-repte" >Reptes</button><button class="btn menu" type="button" data-open="p-model" >Sobre aquest model</button><button class="btn menu" type="button" data-open="p-docent" >Per al docent</button></nav>
+<p class="sub"><span class="pregunta">Què cal perquè una bombeta s'encengui, i què canvia si en poso dues en fila o una al costat de l'altra?</span> <span class="ind" data-f="ind" aria-live="polite"></span></p>
+</header>
+<div class="tabs" role="group" aria-label="Vista"><button class="btn" type="button" data-tab-btn="a" aria-pressed="true">Tauler</button><button class="btn" type="button" data-tab-btn="b" aria-pressed="false">Controls i lectures</button></div>
+<section class="fig" aria-label="Tauler"><figure class="visor mainv"><div class="stage"><svg class="circ" viewBox="0 0 700 430" role="img" aria-label="Un tauler de circuits vist de dalt: una pila de petaca a l'esquerra, un interruptor de palanca, cables amb pinces de cocodril i bombetes en portabombetes. Els punts que es mouen pels cables mostren el sentit convencional del corrent." preserveAspectRatio="xMidYMid meet"><defs><radialGradient id="glow"><stop offset="0" stop-color="#ffe680" stop-opacity="0.95"/><stop offset="0.45" stop-color="#ffd24a" stop-opacity="0.55"/><stop offset="1" stop-color="#ffd24a" stop-opacity="0"/></radialGradient></defs><g id="scene"></g><g id="top"></g><g id="dots"></g></svg><div class="tags" aria-hidden="true"></div></div></figure>
+<p class="seguretat">Només amb piles: mai amb l'endoll.</p></section>
+<section class="ctrl" aria-label="Controls">
+<div class="fila"><span class="etiq">Muntatge</span><div class="grup sits"><button class="btn" type="button" data-sit="una" aria-pressed="true">Una bombeta</button><button class="btn" type="button" data-sit="serie" aria-pressed="false">Dues en sèrie</button><button class="btn" type="button" data-sit="parallel" aria-pressed="false">Dues en paral·lel</button><button class="btn" type="button" data-sit="materials" aria-pressed="false">Provar materials</button></div></div>
+<div class="fila"><span class="etiq">Interruptor</span><button class="btn" type="button" data-sw aria-pressed="false">Interruptor obert: tanca'l</button></div>
+<div class="fila" data-only="una"><span class="etiq">Cable de tornada</span><button class="btn" type="button" data-cable aria-pressed="true">Cable posat: treu-lo</button></div>
+<div class="fila" data-only="serie parallel"><span class="etiq">Bombetes</span><div class="grup"><button class="btn" type="button" data-bulbbtn="A" aria-pressed="true">Bombeta A: treu-la</button><button class="btn" type="button" data-bulbbtn="B" aria-pressed="true">Bombeta B: treu-la</button></div></div>
+<div class="fila" data-only="materials"><span class="etiq">Al buit hi poses</span><div class="grup mats"><button class="btn mat" type="button" data-mat="clip" aria-pressed="false">Clip</button><button class="btn mat" type="button" data-mat="moneda" aria-pressed="false">Moneda</button><button class="btn mat" type="button" data-mat="mina" aria-pressed="false">Mina de llapis</button><button class="btn mat" type="button" data-mat="alumini" aria-pressed="false">Paper d'alumini</button><button class="btn mat" type="button" data-mat="goma" aria-pressed="false">Goma</button><button class="btn mat" type="button" data-mat="fusta" aria-pressed="false">Fusta</button><button class="btn mat" type="button" data-mat="plastic" aria-pressed="false">Plàstic</button><button class="btn mat" type="button" data-mat="" aria-pressed="true">Cap (buit)</button></div></div>
+<p class="estat" id="estat-desc" data-f="estat"></p>
+<div class="grup dos peu-ctrl"><button class="btn" type="button" data-move aria-pressed="true">Atura els punts</button><button class="btn" type="button" data-reveal>Ja ho he provat</button></div>
+</section>
+<section class="quick" aria-label="Controls ràpids"><div class="grup qfila"><button class="btn" type="button" data-sit="una" aria-pressed="true">Una bombeta</button><button class="btn" type="button" data-sit="serie" aria-pressed="false">Dues en sèrie</button><button class="btn" type="button" data-sit="parallel" aria-pressed="false">Dues en paral·lel</button><button class="btn" type="button" data-sit="materials" aria-pressed="false">Provar materials</button></div></section>
+<section class="lect" aria-label="Lectures">
+<div class="lectura"><h3>Llum de cada bombeta</h3><div class="llum" data-bulb="A"><span class="llum-n">Bombeta A</span><div class="barra" data-f="barra-A" role="img"><i></i><i></i><i></i><i></i></div><b class="llum-t" data-f="llum-A"></b></div><div class="llum" data-bulb="B"><span class="llum-n">Bombeta B</span><div class="barra" data-f="barra-B" role="img"><i></i><i></i><i></i><i></i></div><b class="llum-t" data-f="llum-B"></b></div></div>
+<div class="lectura"><h3>Corrent (els punts)</h3><p class="gran-text" data-f="corrent"></p><div class="barra" data-f="corrent-bar" role="img"><i></i><i></i><i></i><i></i><i></i></div><p class="sub">Els punts mostren el sentit convencional del corrent (del + al −); no són els electrons ni la seva velocitat real.</p></div>
+<div class="lectura"><h3>Durada de la pila</h3><p class="gran-text" data-f="durada"></p><div class="barra" data-f="durada-bar" role="img"><i></i><i></i><i></i><i></i><i></i></div></div>
+<p class="frase"><span class="resum" data-f="resum" aria-live="polite"></span> <span class="consell" data-f="consell"></span></p>
+</section>
+<dialog class="panell" id="p-pred" aria-labelledby="p-pred-t"><div class="p-cap"><h2 id="p-pred-t">Abans de provar-ho</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<p class="pregunta">Què cal perquè una bombeta s'encengui, i què canvia si en poso dues en fila o una al costat de l'altra?</p>
+<p>Aquest tauler és com el de l'aula: una pila de petaca de 4,5 volts, un interruptor, cables amb pinces de cocodril i bombetes petites. Comença amb l'interruptor obert. Pots provar de fer-ho tot: treure un cable, treure una bombeta o posar un material al buit.</p>
+<p class="avis"><strong>Compte:</strong> això només es fa amb piles, mai amb l'endoll. L'endoll és perillós.</p>
+<fieldset class="pred"><legend>Posem dues bombetes iguals una darrere l'altra, en sèrie. Com faran llum, comparades amb una bombeta sola?</legend><label><input type="radio" name="pred" value="a"> La primera bombeta farà més llum que la segona.</label><label><input type="radio" name="pred" value="b"> Totes dues faran la mateixa llum, però menys que una bombeta sola.</label><label><input type="radio" name="pred" value="c"> Totes dues faran la mateixa llum que una bombeta sola.</label></fieldset>
+<p class="nota">No et dic la resposta encara: primer prova-ho amb el tauler.</p>
+<p class="peu"><button class="btn gran" type="button" data-pred-ok>Desa la predicció i prova-ho</button></p></div></dialog>
+<dialog class="panell" id="p-desc" aria-labelledby="p-desc-t"><div class="p-cap"><h2 id="p-desc-t">Què has descobert?</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<div data-locked>
+<p>Encara no has provat els tres muntatges. Canvia de muntatge i, en sèrie i en paral·lel, treu una bombeta. Després ho podràs veure.</p>
+<p data-f="estat2"></p>
+<p><button class="btn" type="button" data-reveal2>Ja ho he provat</button></p>
+</div>
+<div data-unlocked hidden>
+<p data-f="havies"></p>
+
+<ul>
+<li>Perquè una bombeta s'encengui cal un camí tancat: de la pila a la bombeta i de la bombeta a la pila.</li>
+<li>Un sol cable no basta: sense el cable de tornada la bombeta no s'encén.</li>
+<li>L'interruptor obre i tanca el camí.</li>
+<li>El clip, la moneda, la mina de llapis i el paper d'alumini deixen passar el corrent.</li>
+<li>La goma, la fusta i el plàstic no deixen passar el corrent.</li>
+<li>En sèrie, els punts van igual de ràpid a tot el circuit: el corrent no es gasta.</li>
+<li>En sèrie, totes dues bombetes fan la mateixa llum, i menys que una de sola.</li>
+<li>En sèrie, si en treus una, s'apaguen totes.</li>
+<li>En paral·lel, si en treus una, l'altra continua encesa.</li>
+<li>En paral·lel, cada bombeta fa bona llum, tot i que una mica menys que una de sola: quan la pila ha de donar més corrent, perd una mica de força.</li>
+<li>En paral·lel, la pila s'esgota abans que amb una bombeta sola.</li>
+<li>En sèrie, la pila dura més que amb una bombeta sola.</li>
+</ul>
+<h3>«Posar més bombetes dona més llum»</h3>
+<p>Més bombetes no vol dir més llum a cada bombeta: en sèrie cada una en fa menys, i en paral·lel en fan una mica menys que una de sola. El que sí que passa en paral·lel és que la pila ha de donar més corrent, i per això s'esgota abans.</p>
+<h3>«El corrent es gasta a la primera bombeta»</h3>
+<p>Mira els punts en sèrie: van a la mateixa velocitat abans i després de cada bombeta. La bombeta no gasta el corrent: el fa servir per fer llum i calor, i el corrent continua pel circuit fins a tornar a la pila. A «Sobre aquest model» pots veure que el corrent és el mateix a tot el circuit en sèrie.</p>
+<p>Els punts mostren el sentit convencional del corrent (del + al −). No són els electrons ni la seva velocitat real.</p>
+
+</div></div></dialog>
+<dialog class="panell" id="p-repte" aria-labelledby="p-repte-t"><div class="p-cap"><h2 id="p-repte-t">Reptes</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos"><p><strong>Primer repte.</strong> Tens dues bombetes i vols que, si una s'espatlla, l'altra continuï encesa. Quin muntatge triaries?</p>
+<p><button class="btn" type="button" data-answer="1">Mostra la resposta</button></p>
+<p data-f="resposta" data-r="1" hidden>El de paral·lel: cada bombeta té el seu propi camí fins a la pila.</p>
+<p><strong>Segon repte.</strong> Quin dels dos muntatges d'aquest tauler fa que la pila s'esgoti abans?</p>
+<p><button class="btn" type="button" data-answer="2">Mostra la resposta</button></p>
+<p data-f="resposta" data-r="2" hidden>El de paral·lel: la pila dona corrent a dos camins alhora.</p>
+<p><strong>Tercer repte.</strong> Amb la mina d'un llapis i el paper d'alumini a mà, quin faries servir per fer un cable? I quin material tria un electricista per folrar-lo?</p>
+<p><button class="btn" type="button" data-answer="3">Mostra la resposta</button></p>
+<p data-f="resposta" data-r="3" hidden>Per fer un cable, un material que deixi passar el corrent, com el paper d'alumini o un metall. Per folrar-lo, un material que no en deixi passar, com el plàstic.</p></div></dialog>
+
+<dialog class="panell" id="p-model" aria-labelledby="p-model-t"><div class="p-cap"><h2 id="p-model-t">Sobre aquest model</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<p>Les xifres de la pàgina surten d'un model senzill de circuit. Les fonts i les suposicions són al document FONTS.md que acompanya el recurs; aquí hi ha el resum.</p>
+<ul>
+<li>Pila de petaca 3R12: 4,5 V i resistència interna de 3 Ω, del <a href="https://www.lemona.lt/Files/Instrukcijos/TI/En/Pdf/5013091_Datasheet.pdf">full de característiques d'Ansmann</a>. La resistència interna d'aquest full està mesurada a 1 kHz; aquí es fa servir en corrent continu (simplificació). Amb una pila ideal, sense resistència interna, cada bombeta en paral·lel faria la mateixa llum que una de sola. La pila real perd tensió quan en surt més corrent, i per això en aquest model les bombetes en paral·lel fan una mica menys de llum.</li>
+<li>Bombeta: 3,7 V i 0,30 A, la bombeta de rosca miniatura núm. 13 del <a href="https://www.worldradiohistory.com/Archive-Catalogs/GE/GE-Specialty-Lamps-1983.CV01.pdf">catàleg de GE de 1983</a> (la xifra és de la lectura del catàleg escanejat). Resistència: 12,3 Ω, amb la llei d'Ohm (V = I · R).</li>
+<li>Simplificació: la bombeta es tracta com una resistència fixa. En realitat la resistència del filament de tungstè augmenta amb la temperatura: en fred és al voltant d'1/15 de la d'operació (<a href="https://en.wikipedia.org/wiki/Incandescent_light_bulb">Wikipedia, «Incandescent light bulb»</a>). Això canvia una mica els valors.</li>
+<li>La llum és proporcional a la potència de la bombeta (P = V · I), comparada amb la nominal de 1,11 W. És una simplificació: la brillantor real no és exactament proporcional a la potència.</li>
+<li>Durada de la pila: capacitat constant de 2,0 Ah, de manera que la durada és inversament proporcional al corrent. A la realitat, la capacitat disminueix si el corrent és més gran. La pàgina només compara muntatges.</li>
+<li>Cables, interruptor i pinces: resistència zero. Materials del buit: el clip, la moneda, la mina de llapis i el paper d'alumini es tracten com a conductors sense resistència, i la goma, la fusta i el plàstic com a aïllants perfectes. La resistència real d'una mina de llapis pot ser notable: no és verificada.</li>
+<li>Els punts es mouen a una velocitat proporcional al corrent de cada tram de cable. Representen el sentit convencional del corrent (del + al −) i no la velocitat real dels electrons, que és molt més lenta i va en sentit contrari.</li>
+<li>Les xifres de la pantalla (corrent en ampers, tensió en volts, potència en watts) són del model i no s'han mesurat en un tauler real.</li>
+</ul>
+<div class="taula-wrap"><table class="taula"><caption>Resultats del model, amb l'interruptor tancat (corrent de la pila, corrent i tensió de cada bombeta, potència de cada bombeta i durada de la pila comparada amb la d'una sola bombeta)</caption><thead><tr><th scope="col">Muntatge</th><th scope="col">Pila (A)</th><th scope="col">Bombeta (A)</th><th scope="col">Bombeta (V)</th><th scope="col">Bombeta (W)</th><th scope="col">% de la potència nominal</th><th scope="col">Durada relativa</th></tr></thead><tbody><tr><th scope="row">Una bombeta</th><td>0,29</td><td>0,29</td><td>3,6</td><td>1,06</td><td>96 %</td><td>1,0</td></tr><tr><th scope="row">Dues en sèrie</th><td>0,16</td><td>0,16</td><td>2,0</td><td>0,33</td><td>29 %</td><td>1,8</td></tr><tr><th scope="row">Dues en paral·lel</th><td>0,49</td><td>0,25</td><td>3,0</td><td>0,74</td><td>67 %</td><td>0,6</td></tr></tbody></table></div></div></dialog>
+<dialog class="panell" id="p-docent" aria-labelledby="p-docent-t"><div class="p-cap"><h2 id="p-docent-t">Per al docent</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<ul>
+<li><strong>Seguretat:</strong> aquest recurs i les activitats amb el tauler es fan només amb piles o fonts de baixa tensió. Mai amb l'endoll (230 V): és perillós i cap alumne no ha de connectar res a la xarxa elèctrica.</li>
+<li><strong>Abans:</strong> plantejar la pregunta guia i demanar que cadascú triï una resposta a la predicció. Si teniu un tauler real, deixeu que provin d'encendre una bombeta amb la pila i un sol cable.</li>
+<li><strong>Durant:</strong> en parelles, provar els quatre muntatges. Que apuntin què passa quan treuen una bombeta en sèrie i en paral·lel, i que comparin la llum de cada bombeta amb la d'una de sola.</li>
+<li><strong>Després:</strong> posar en comú, tornar a les prediccions i resoldre els reptes. Es pot relacionar amb la competència d'indagació: fer una predicció, provar-la i interpretar el resultat.</li>
+<li><strong>Idees errònies que poden aparèixer:</strong> «amb un sol cable ja n'hi ha prou», «el corrent es gasta a la primera bombeta i la segona fa menys llum» i «com més bombetes, més llum». El recurs les fa trontollar amb el cable de tornada, els punts que van igual de ràpid en sèrie i la comparació de la llum.</li>
+<li><strong>Nota:</strong> el model és de dibuix; en un tauler real, la llum de les bombetes pot variar entre bombetes i amb l'estat de la pila.</li>
+</ul></div></dialog>
+</div><script type="module">// Plantilla de pantalla única (skill recurs-aula): comportament genèric. El build l'insereix abans del live.js del recurs.
+// No sap res del model: el recurs li diu quan s'ha provat tot (progres) i què ha de redibuixar en canviar de pestanya.
+//
+//   const P = Pantalla.inicia({ opcions, correcta, missatges, onTab, onObre });
+//   P.progres("Falta provar: …", fet)   // actualitza l'estat i desbloqueja «Què has descobert?» quan fet és cert
+//   Pantalla.etiquetes(stage, svg, [{ t, pt: [x, y], dx, dy, alt: [[dx, dy], …] }])
+//   Pantalla.vistaAmpliada({ minAmplada: 900, onCanvi })
+//   ?mesura o ?debug a l'adreça: window.__mesura() i window.__panells() per a la verificació de la fase 6.
+const Pantalla = (() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const NS = "http://www.w3.org/2000/svg";
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const senseFinal = (s) => s.replace(/[.:;]$/, "");
+
+  function inicia({ opcions = {}, correcta = null, missatges = {}, onTab = () => {}, onObre = () => {}, obrePrediccio = true } = {}) {
+    const app = $(".app");
+    let prediccio = null, vista = false, revelat = false, opener = null;
+
+    // ---- predicció i descoberta ----
+    const ind = $("[data-f=ind]");
+    const mostraInd = () => { if (ind) ind.textContent = prediccio ? "Predicció: " + opcions[prediccio] : vista ? "Predicció: sense resposta" : ""; };
+    function missatge() {
+      const m = missatges.perOpcio?.[prediccio];
+      if (m) return m;
+      if (!prediccio) return missatges.senseResposta ?? "";
+      return prediccio === correcta ? missatges.encert ?? "" : missatges.error ?? "";
+    }
+    function pintaDescoberta() {
+      const box = $("#p-desc"); if (!box) return;
+      $("[data-locked]", box).hidden = revelat;
+      $("[data-unlocked]", box).hidden = !revelat;
+      if (!revelat) return;
+      const h = $("[data-f=havies]", box);
+      if (h) h.textContent = prediccio ? "Havies triat «" + senseFinal(opcions[prediccio]) + "». " + missatge() : missatge();
+    }
+    function desbloqueja() {
+      revelat = true;
+      const b = $("[data-desc]"); if (b) { b.setAttribute("aria-disabled", "false"); b.dataset.ready = "true"; }
+      pintaDescoberta();
+    }
+    function progres(text, fet) {
+      $$("[data-f=estat], [data-f=estat2]").forEach((e) => { e.textContent = text; });
+      if (fet && !revelat) desbloqueja();
+    }
+
+    // ---- panells ----
+    const nav = $("#menu"), tog = $(".menu-toggle");
+    const tancaMenu = () => { if (!nav) return; nav.classList.remove("obert"); tog?.setAttribute("aria-expanded", "false"); };
+    function obre(id, from) {
+      const d = document.getElementById(id);
+      if (!d || d.open) return;
+      opener = from || document.activeElement;
+      if (id === "p-desc") pintaDescoberta();
+      onObre(id);
+      d.showModal(); tancaMenu();
+    }
+    $$("dialog.panell").forEach((d) => {
+      d.addEventListener("close", () => {
+        if (d.id === "p-pred") { vista = true; mostraInd(); }
+        if (opener && opener.isConnected) opener.focus();
+        opener = null;
+      });
+      d.addEventListener("click", (e) => { if (e.target === d) d.close(); }); // clic al fons
+      $("[data-close]", d)?.addEventListener("click", () => d.close());
+    });
+    $$("[data-open]").forEach((b) => b.addEventListener("click", () => obre(b.dataset.open, b)));
+    $$('input[name="pred"]').forEach((e) => e.addEventListener("change", () => { prediccio = e.value; mostraInd(); pintaDescoberta(); }));
+    $("[data-pred-ok]")?.addEventListener("click", () => $("#p-pred").close());
+    $("[data-reveal]")?.addEventListener("click", (e) => { desbloqueja(); obre("p-desc", e.currentTarget); });
+    $("[data-reveal2]")?.addEventListener("click", () => desbloqueja());
+    $$("[data-answer]").forEach((b) => b.addEventListener("click", () => {
+      const r = $(`[data-f=resposta][data-r="${b.dataset.answer}"]`); if (r) r.hidden = false;
+      b.hidden = true; r?.setAttribute("tabindex", "-1"); r?.focus();
+    }));
+
+    // ---- menú del mòbil i pestanyes ----
+    tog?.addEventListener("click", () => { const o = nav.classList.toggle("obert"); tog.setAttribute("aria-expanded", String(o)); if (o) $("button", nav)?.focus(); });
+    $$("[data-tab-btn]").forEach((b) => b.addEventListener("click", () => {
+      app.dataset.tab = b.dataset.tabBtn;
+      $$("[data-tab-btn]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      setTimeout(() => onTab(app.dataset.tab), 0);
+    }));
+
+    // ---- Esc propi: tanca el panell obert o el menú (l'Esc sintètic de les proves no tanca un <dialog>) ----
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      const d = $("dialog.panell[open]");
+      if (d) { e.preventDefault(); d.close(); return; }
+      if (nav?.classList.contains("obert")) { tancaMenu(); tog.focus(); }
+    });
+
+    if (obrePrediccio) requestAnimationFrame(() => obre("p-pred", $("[data-open=p-pred]")));
+    return { obre, progres, desbloqueja, get prediccio() { return prediccio; }, get revelat() { return revelat; } };
+  }
+
+  // ---- etiquetes: capa HTML sobre la figura, de 16-22 px reals a qualsevol amplada ----
+  // stage: element posicionat que conté l'SVG i un .tags; pt: punt de la peça en coordenades de l'SVG;
+  // dx, dy: desplaçament de l'etiqueta en píxels de pantalla; alt: altres desplaçaments per si toca una altra etiqueta.
+  // Una etiqueta que no troba lloc no es mostra i queda apuntada a window.__etiquetesAmagades (es revisa a la verificació).
+  function etiquetes(stage, svg, llista) {
+    const capa = $(".tags", stage); if (!capa) return;
+    capa.innerHTML = "";
+    const m = svg.getScreenCTM(); if (!m) return;
+    const box = stage.getBoundingClientRect();
+    if (!box.width || !box.height) return; // figura amagada (pestanya de controls al mòbil): es recol·loquen en tornar-hi
+    const lead = document.createElementNS(NS, "svg"); lead.setAttribute("class", "lead"); capa.appendChild(lead);
+    const proj = ([x, y]) => [m.a * x + m.c * y + m.e - box.left, m.b * x + m.d * y + m.f - box.top];
+    const posades = [], amagades = [];
+    for (const l of llista) {
+      const [px, py] = proj(l.pt);
+      const tag = document.createElement("span"); tag.className = "tag"; tag.textContent = l.t; capa.appendChild(tag);
+      const w = tag.offsetWidth, h = tag.offsetHeight;
+      let lloc = null;
+      for (const [dx, dy] of [[l.dx ?? 0, l.dy ?? 0], ...(l.alt || [])]) {
+        const tx = clamp(px + dx, w / 2 + 4, box.width - w / 2 - 4), ty = clamp(py + dy, h / 2 + 4, box.height - h / 2 - 4);
+        if (!posades.some((q) => Math.abs(q.x - tx) < (q.w + w) / 2 + 4 && Math.abs(q.y - ty) < (q.h + h) / 2 + 2)) { lloc = [tx, ty]; break; }
+      }
+      if (!lloc) { tag.remove(); amagades.push(l.t); continue; }
+      const [tx, ty] = lloc;
+      posades.push({ x: tx, y: ty, w, h });
+      tag.style.left = tx.toFixed(1) + "px"; tag.style.top = ty.toFixed(1) + "px";
+      const ln = document.createElementNS(NS, "line");
+      ln.setAttribute("x1", tx); ln.setAttribute("y1", ty); ln.setAttribute("x2", px); ln.setAttribute("y2", py);
+      lead.insertBefore(ln, lead.firstChild);
+      const c = document.createElementNS(NS, "circle"); c.setAttribute("cx", px); c.setAttribute("cy", py); c.setAttribute("r", 4); lead.appendChild(c);
+    }
+    window.__etiquetesAmagades = amagades;
+  }
+
+  // ---- vista ampliada (opcional): requadre #inset amb botons data-inset="gran|amaga|mostra" ----
+  // Si la figura fa menys de minAmplada px, comença amagada perquè no tapi l'objecte.
+  function vistaAmpliada({ minAmplada = 900, onCanvi = () => {} } = {}) {
+    const inset = $("#inset"), mostra = $("[data-inset=mostra]"), gran = $("[data-inset=gran]"), fig = $(".fig");
+    if (!inset) return;
+    const nom = inset.dataset.nom || "la vista ampliada";
+    $$("[data-inset]").forEach((b) => b.addEventListener("click", () => {
+      const k = b.dataset.inset;
+      if (k === "gran") { const g = inset.classList.toggle("gran"); gran.setAttribute("aria-pressed", String(g)); gran.textContent = g ? "Redueix" : "Amplia"; gran.setAttribute("aria-label", (g ? "Redueix " : "Amplia ") + nom); }
+      if (k === "amaga") { inset.hidden = true; mostra.hidden = false; mostra.focus(); }
+      if (k === "mostra") { inset.hidden = false; mostra.hidden = true; gran.focus(); }
+      onCanvi(!inset.hidden);
+    }));
+    if (getComputedStyle(inset).position === "absolute" && fig.clientWidth < minAmplada) { inset.hidden = true; mostra.hidden = false; onCanvi(false); }
+  }
+
+  // ---- mesura per a la verificació (fase 6) ----
+  // Amb overflow:hidden, scrollHeight <= innerHeight sempre és cert: aquí es mira que cada bloc visible acabi dins de la pantalla,
+  // que no tingui contingut tallat i que cap fill en sobresurti.
+  // cert si entre l'element i el bloc hi ha un contenidor que es desplaça (overflow auto o scroll)
+  const dinsDeDesplacament = (c, bloc) => { for (let p = c.parentElement; p && p !== bloc; p = p.parentElement) { const o = getComputedStyle(p); if (/(auto|scroll)/.test(o.overflowX) || /(auto|scroll)/.test(o.overflowY)) return true; } return false; };
+  const BLOCS = [".top", ".tabs", ".fig", ".quick", ".ctrl", ".lect"];
+  function mesura() {
+    const problemes = [];
+    const de = document.documentElement;
+    if (de.scrollWidth > innerWidth + 1) problemes.push(`desplaçament horitzontal: ${de.scrollWidth} > ${innerWidth}`);
+    for (const sel of BLOCS) {
+      const e = $(sel); if (!e || e.offsetParent === null || getComputedStyle(e).display === "none") continue;
+      const r = e.getBoundingClientRect();
+      if (r.bottom > innerHeight + 1 || r.right > innerWidth + 1) problemes.push(`${sel} surt de la pantalla (${Math.round(r.right)} × ${Math.round(r.bottom)})`);
+      if (sel !== ".fig" && e.scrollHeight > e.clientHeight + 1) problemes.push(`${sel} té contingut tallat (${e.scrollHeight} > ${e.clientHeight})`);
+      for (const c of e.querySelectorAll("*")) {
+        if (c.closest("svg") || c.closest(".tags") || c.closest("[hidden]") || getComputedStyle(c).position === "absolute") continue;
+        if (dinsDeDesplacament(c, e)) continue; // dins d'un contenidor amb desplaçament propi (una taula llarga): sobresortir-ne és el seu ofici
+        const q = c.getBoundingClientRect();
+        if (q.width && (q.bottom > r.bottom + 1 || q.right > r.right + 1)) { problemes.push(`${sel} > ${c.tagName.toLowerCase()}${c.className ? "." + String(c.className).split(" ")[0] : ""} sobresurt`); break; }
+      }
+    }
+    // al mòbil, que alguna etiqueta no hi càpiga és un avís per revisar en captura; a partir de tauleta, és un problema
+    const avisos = [];
+    const figVisible = $(".fig") && $(".fig").offsetParent !== null && getComputedStyle($(".fig")).display !== "none";
+    if (figVisible && window.__etiquetesAmagades?.length) (innerWidth <= 600 ? avisos : problemes).push("etiquetes amagades per manca de lloc: " + window.__etiquetesAmagades.join(", "));
+    const fig = $(".fig")?.getBoundingClientRect();
+    // la figura és el centre del recurs: si els controls o les lectures l'aixafen, cal treure'ls espai, no reduir-la
+    const minFig = innerWidth > 600 ? 0.3 : 0.22;
+    if (fig && fig.height > 0 && fig.height < minFig * innerHeight) problemes.push(`figura massa petita: ${Math.round(fig.height)} px d'alçada (mínim ${Math.round(minFig * innerHeight)})`);
+    return { mida: `${innerWidth}×${innerHeight}`, figura: fig ? `${Math.round(fig.width)}×${Math.round(fig.height)}` : null, ok: problemes.length === 0, problemes, avisos };
+  }
+  function panells() {
+    return $$("dialog.panell").map((d) => {
+      const obert = d.open; if (!obert) d.showModal();
+      const r = d.getBoundingClientRect(), c = $(".p-cos", d);
+      const ok = r.top >= -1 && r.bottom <= innerHeight + 1 && r.right <= innerWidth + 1 && c.scrollWidth <= c.clientWidth + 1;
+      const res = { id: d.id, ok, alt: `${Math.round(r.height)}/${innerHeight}`, desplacaInterior: c.scrollHeight > c.clientHeight + 1 };
+      if (!obert) d.close();
+      return res;
+    });
+  }
+  if (/[?&](mesura|debug)/.test(location.search)) { window.__mesura = mesura; window.__panells = panells; }
+
+  return { inicia, etiquetes, vistaAmpliada, mesura, panells };
+})();
+
+const M = (() => {
+// Model pur del tauler de circuits. Tots els números de la pàgina surten d'aquí.
+// Origen de cada constant: vegeu FONTS.md.
+
+const V_PILA = 4.5;          // V, tensió nominal de la pila de petaca 3R12 (full d'Ansmann)
+const R_PILA = 3;            // ohm, resistència interna (full d'Ansmann: 3 ohm a 1 kHz; simplificació: es fa servir en corrent continu)
+const V_BOMBETA = 3.7;       // V nominals de la bombeta (catàleg GE 1983, llum núm. 13, rosca miniatura)
+const I_BOMBETA = 0.30;      // A nominals
+const R_BOMBETA = V_BOMBETA / I_BOMBETA; // ohm, resistència fixa (simplificació: en realitat creix amb la temperatura)
+const P_NOMINAL = V_BOMBETA * I_BOMBETA; // W
+const RATIO_FRED = 1 / 15;   // resistència en fred / en calent del tungstè (Wikipedia); només per a «Sobre aquest model»
+const CAPACITAT_AH = 2.0;    // Ah, capacitat de la 3R12 amb càrrega de 220 ohm (full d'Ansmann); simplificació: constant
+
+const SITUACIONS = ["una", "serie", "parallel", "materials"];
+const NOM_SIT = { una: "Una bombeta", serie: "Dues en sèrie", parallel: "Dues en paral·lel", materials: "Provar materials" };
+
+// Materials que es poden posar al buit. conductor: suposició raonable de material (FONTS.md).
+const MATERIALS = {
+  clip: { nom: "Clip", conductor: true },
+  moneda: { nom: "Moneda", conductor: true },
+  mina: { nom: "Mina de llapis", conductor: true },
+  alumini: { nom: "Paper d'alumini", conductor: true },
+  goma: { nom: "Goma", conductor: false },
+  fusta: { nom: "Fusta", conductor: false },
+  plastic: { nom: "Plàstic", conductor: false },
+};
+const MATERIAL_IDS = Object.keys(MATERIALS);
+
+const estatInicial = () => ({ sit: "una", interruptor: false, cable: true, A: true, B: true, objecte: null });
+
+// Nivells de llum (fracció de la potència nominal de la bombeta). Llindars: decisió de disseny.
+const NIVELLS_LLUM = ["apagada", "gairebé no fa llum", "poca llum", "bona llum", "llum forta"];
+const nivellLlum = (b) => (b <= 0 ? 0 : b <= 0.15 ? 1 : b <= 0.5 ? 2 : b <= 0.85 ? 3 : 4);
+const NIVELLS_DURADA = ["la pila no es gasta", "s'esgota de pressa", "dura menys", "dura com amb una bombeta", "dura més", "dura molt més"];
+
+// Dues bombetes en sèrie o en paral·lel: resol el circuit.
+function resol(r) {
+  // r: resistència externa total (ohm) i, per a paral·lel, ramals
+  return r;
+}
+
+function resolEstat(st) {
+  const { sit } = st;
+  const present = { A: st.A, B: st.B };
+  let tancat = false, motiu = null;
+  if (!st.interruptor) motiu = "interruptor";
+  else if (sit === "una") { if (!st.A) motiu = "bombeta"; else if (!st.cable) motiu = "cable"; else tancat = true; }
+  else if (sit === "materials") {
+    if (!st.A) motiu = "bombeta";
+    else if (!st.objecte) motiu = "buit";
+    else if (!MATERIALS[st.objecte].conductor) motiu = "aillant";
+    else tancat = true;
+  } else if (sit === "serie") { if (!st.A || !st.B) motiu = "bombeta"; else tancat = true; }
+  else if (sit === "parallel") { if (!st.A && !st.B) motiu = "bombeta"; else tancat = true; }
+  const nul = { tancat: false, motiu, Itot: 0, IA: 0, IB: 0, VA: 0, VB: 0, PA: 0, PB: 0, bA: 0, bB: 0, durada: Infinity, duradaRel: Infinity };
+  if (!tancat) return finalitza(nul, st);
+  let Itot, IA = 0, IB = 0, VA = 0, VB = 0;
+  const R = R_BOMBETA;
+  if (sit === "una" || sit === "materials") { Itot = V_PILA / (R_PILA + R); IA = Itot; VA = Itot * R; }
+  else if (sit === "serie") { Itot = V_PILA / (R_PILA + 2 * R); IA = IB = Itot; VA = VB = Itot * R; }
+  else {
+    const n = (present.A ? 1 : 0) + (present.B ? 1 : 0);
+    const Rpar = R / n;
+    Itot = V_PILA / (R_PILA + Rpar);
+    const Vb = Itot * Rpar;
+    if (present.A) { IA = Vb / R; VA = Vb; }
+    if (present.B) { IB = Vb / R; VB = Vb; }
+  }
+  const o = { tancat: true, motiu: null, Itot, IA, IB, VA, VB, PA: IA * VA, PB: IB * VB };
+  o.bA = o.PA / P_NOMINAL; o.bB = o.PB / P_NOMINAL;
+  return finalitza(o, st);
+}
+function finalitza(o, st) {
+  const I1 = V_PILA / (R_PILA + R_BOMBETA); // corrent amb una sola bombeta
+  o.I1 = I1;
+  o.durada = o.Itot > 0 ? CAPACITAT_AH / o.Itot : Infinity; // hores (model de capacitat constant)
+  o.duradaRel = o.Itot > 0 ? I1 / o.Itot : Infinity;
+  o.nivA = nivellLlum(o.bA); o.nivB = nivellLlum(o.bB);
+  o.nivDurada = o.Itot === 0 ? 0 : o.duradaRel > 1.5 ? 5 : o.duradaRel > 1.1 ? 4 : o.duradaRel >= 0.9 ? 3 : o.duradaRel >= 0.5 ? 2 : 1;
+  o.nivCorrent = Math.min(5, Math.ceil((o.Itot / ITOT_MAX) * 5 - 1e-9));
+  return o;
+}
+// Corrent més alt del recurs: dues bombetes en paral·lel
+const ITOT_MAX = V_PILA / (R_PILA + R_BOMBETA / 2);
+
+// Corrent que passa per cada tipus de tram de cable (per a la velocitat dels punts)
+const corrent = (r, clau) => (clau === "tot" ? r.Itot : clau === "A" ? r.IA : r.IB);
+// Velocitat dels punts a la pantalla (unitats de la figura per segon), proporcional al corrent
+const K_PUNTS = 240;
+const velocitat = (I) => K_PUNTS * I;
+
+// Tots els estats possibles (per a les comprovacions)
+function totsElsEstats() {
+  const out = [];
+  for (const sit of SITUACIONS)
+    for (const interruptor of [false, true])
+      for (const cable of [true, false])
+        for (const A of [true, false])
+          for (const B of [true, false])
+            for (const objecte of [null, ...MATERIAL_IDS]) {
+              if (sit !== "una" && !cable) continue;
+              if (sit !== "materials" && objecte) continue;
+              if (sit === "materials" && !B) continue;
+              out.push({ sit, interruptor, cable, A, B, objecte });
+            }
+  return out;
+}
+
+const coma = (n, d = 1) => n.toFixed(d).replace(".", ",");
+
+
+return { CAPACITAT_AH, ITOT_MAX, I_BOMBETA, K_PUNTS, MATERIALS, MATERIAL_IDS, NIVELLS_DURADA, NIVELLS_LLUM, NOM_SIT, P_NOMINAL, RATIO_FRED, R_BOMBETA, R_PILA, SITUACIONS, V_BOMBETA, V_PILA, coma, corrent, estatInicial, nivellLlum, resolEstat, totsElsEstats, velocitat };
+})();
+
+const F = (() => {
+// Frases que la pàgina viva escriu segons l'estat. Cap xifra. Es contrasten a afirmacions.mjs.
+const ART = { clip: "El clip", moneda: "La moneda", mina: "La mina de llapis", alumini: "El paper d'alumini", goma: "La goma", fusta: "La fusta", plastic: "El plàstic" };
+function resum(st, r) {
+  if (!r.tancat) {
+    if (r.motiu === "interruptor") return "L'interruptor està obert: el camí queda tallat i no passa res.";
+    if (r.motiu === "cable") return "Només hi ha un cable de la pila a la bombeta: el camí no es tanca i la bombeta no s'encén.";
+    if (r.motiu === "buit") return "Hi ha un buit al circuit: el camí queda tallat i la bombeta s'apaga.";
+    if (r.motiu === "aillant") return ART[st.objecte] + " no deixa passar el corrent: el camí queda tallat.";
+    if (st.sit === "serie") return "Has tret una bombeta: el camí queda tallat i s'apaguen totes.";
+    if (st.sit === "parallel") return "No queda cap bombeta: el camí queda tallat.";
+    return "No hi ha bombeta: el camí queda tallat.";
+  }
+  if (st.sit === "una") return "El camí està tancat: el corrent hi passa i la bombeta s'encén.";
+  if (st.sit === "materials") return ART[st.objecte] + " deixa passar el corrent: el camí està tancat i la bombeta s'encén.";
+  if (st.sit === "serie") return "Les dues bombetes estan una darrere l'altra: totes dues fan la mateixa llum, però més fluixa que una de sola.";
+  if (st.A && st.B) return "Cada bombeta té el seu camí: totes dues fan bona llum, però la pila es gasta més de pressa.";
+  return "Has tret una bombeta: l'altra continua encesa perquè té el seu propi camí.";
+}
+function consell(st, r) {
+  if (!st.interruptor) return "Tanca l'interruptor per veure què passa.";
+  if (st.sit === "una") return r.tancat ? "Treu el cable de tornada i mira què passa." : "Torna a posar el cable de tornada.";
+  if (st.sit === "materials") return "Prova un altre material al buit.";
+  if (st.sit === "serie") return r.tancat ? "Treu una bombeta: què passa amb l'altra?" : "Torna a posar la bombeta.";
+  return st.A && st.B ? "Treu una bombeta: què passa amb l'altra?" : "Torna a posar la bombeta.";
+}
+function textCorrent(st, r) {
+  if (!r.tancat) return "No hi ha corrent: els punts no es mouen";
+  if (st.sit === "serie") return "Els punts van igual de ràpid a tot el circuit";
+  if (st.sit === "parallel" && st.A && st.B) return "Al cable principal els punts van més de pressa que a cada branca";
+  return "Els punts avancen pel cable";
+}
+const textDurada = ["La pila no es gasta", "S'esgota de pressa", "Dura menys que amb una bombeta", "Dura com amb una bombeta", "Dura més que amb una bombeta", "Dura molt més que amb una bombeta"];
+
+return { consell, resum, textCorrent, textDurada };
+})();
+
+const SCN = (() => {
+// Geometria pura del tauler (unitats de la figura, 760 x 430). Cada tram de cable va en el sentit convencional del corrent (+ cap a -).
+const W = 700;
+const H = 430;
+const Y1 = 130;
+const Y2 = 270;
+const YB = 370;
+const XL = 330;
+const XR = 640;
+const XS0 = 190;
+const XS1 = 280;
+const SP = 24;
+const BAT_PLUS = [150, 215];
+const BAT_MINUS = [150, 265];
+function bulbPos(st) {
+  if (st.sit === "una") return [{ k: "A", cx: 470, y: Y1 }];
+  if (st.sit === "materials") return [{ k: "A", cx: 560, y: Y1 }];
+  if (st.sit === "serie") return [{ k: "A", cx: 410, y: Y1 }, { k: "B", cx: 540, y: Y1 }];
+  return [{ k: "A", cx: 470, y: Y1 }, { k: "B", cx: 470, y: Y2 }];
+}
+const tail = (fromY) => [[XR, fromY], [XR, YB], [150, YB], [150, 265]];
+function segments(st) {
+  const S = [];
+  const add = (id, pts, cur, cls, opt = {}) => S.push({ id, pts, cur, cls, ...opt });
+  add("s0", [[150, 215], [150, Y1], [XS0, Y1]], "tot", "pos");
+  add("sw", [[XS0, Y1], [XS1, Y1]], "tot", "mid", { strip: true });
+  const bp = bulbPos(st);
+  const inside = (b) => add("in" + b.k, [[b.cx - 32, b.y], [b.cx + 32, b.y]], b.k === "B" && st.sit === "serie" ? "tot" : st.sit === "parallel" ? b.k : "tot", "mid", { bulb: b.k, strip: true });
+  if (st.sit === "una") {
+    add("a", [[XS1, Y1], [438, Y1]], "tot", "pos"); inside(bp[0]);
+    if (st.cable) add("ret", [[502, Y1], [XR, Y1]], "tot", "neg"); else add("stub", [[XR, Y1], [585, Y1]], "tot", "neg", { dead: true });
+    add("t", tail(Y1), "tot", "neg");
+  } else if (st.sit === "materials") {
+    add("a", [[XS1, Y1], [340, Y1]], "tot", "pos");
+    add("gap", [[340, Y1], [440, Y1]], "tot", "mid", { gap: true });
+    add("b", [[440, Y1], [528, Y1]], "tot", "pos"); inside(bp[0]);
+    add("ret", [[592, Y1], [XR, Y1]], "tot", "neg");
+    add("t", tail(Y1), "tot", "neg");
+  } else if (st.sit === "serie") {
+    add("a", [[XS1, Y1], [378, Y1]], "tot", "pos"); inside(bp[0]);
+    add("m", [[442, Y1], [508, Y1]], "tot", "mid"); inside(bp[1]);
+    add("ret", [[572, Y1], [XR, Y1]], "tot", "neg");
+    add("t", tail(Y1), "tot", "neg");
+  } else {
+    add("a", [[XS1, Y1], [XL, Y1]], "tot", "pos");
+    add("a1", [[XL, Y1], [438, Y1]], "A", "pos"); inside(bp[0]); add("r1", [[502, Y1], [XR, Y1], [XR, Y2]], "A", "neg");
+    add("b1", [[XL, Y1], [XL, Y2], [438, Y2]], "B", "pos"); inside(bp[1]); add("r2", [[502, Y2], [XR, Y2]], "B", "neg");
+    add("t", tail(Y2), "tot", "neg");
+  }
+  return S;
+}
+
+return { BAT_MINUS, BAT_PLUS, H, SP, W, XL, XR, XS0, XS1, Y1, Y2, YB, bulbPos, segments, tail };
+})();
+
+const GEOM = {"tx":{"encert":"Tenies raó: en sèrie totes dues fan la mateixa llum, i menys que una de sola.","error":"Ara ho pots comparar: en sèrie totes dues fan la mateixa llum, i menys que una de sola.","errorA":"Les dues bombetes fan la mateixa llum: el corrent no es gasta a la primera bombeta. En sèrie totes dues fan la mateixa llum, i menys que una de sola.","senseResposta":"No havies triat cap resposta, però ho pots comprovar: en sèrie totes dues fan la mateixa llum, i menys que una de sola."},"opcions":{"a":"La primera bombeta farà més llum que la segona.","b":"Totes dues faran la mateixa llum, però menys que una bombeta sola.","c":"Totes dues faran la mateixa llum que una bombeta sola."},"etiq":{"pila":"Pila","interruptor":"Interruptor","bombetaA":"Bombeta A","bombetaB":"Bombeta B","pinca":"Cable amb pinça","buit":"Buit per provar"}};
+const $ = (s) => document.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const still = matchMedia("(prefers-reduced-motion: reduce)");
+const svg = $("svg.circ");
+const gScene = svg.querySelector("#scene"), gDots = svg.querySelector("#dots"), gTop = svg.querySelector("#top");
+const { W, H } = SCN; // mateixes mides que el viewBox (abans 760: el tauler sortia de la figura)
+
+const st = M.estatInicial();
+let r = M.resolEstat(st);
+const DEBUG = location.search.includes("debug");
+const vista = { moving: true, swA: -32, swTarget: -32, gl: { A: 0, B: 0 } };
+const visited = new Set(["una"]), removed = new Set();
+
+const el = (name, attrs = {}, parent) => { const e = document.createElementNS(NS, name); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const pts2d = (pts) => pts.map((p) => p.join(",")).join(" ");
+const dPath = (pts) => "M" + pts.map((p) => p.join(" ")).join(" L");
+
+const { Y1, Y2, YB, XL, XR, XS0, XS1, SP } = SCN;
+const bulbPos = () => SCN.bulbPos(st);
+const segments = () => SCN.segments(st);
+const curOf = (cur) => M.corrent(r, cur);
+
+// ---------- dibuix estàtic ----------
+let dotSegs = [];
+function clip(g, x, y, dir) { // pinça de cocodril: cos i dues mandíbules, a l'extrem del cable
+  const s = dir; // 1: mandíbules cap a la dreta
+  const gg = el("g", {}, g);
+  el("rect", { class: "pinca", x: s > 0 ? x - 20 : x, y: y - 8, width: 20, height: 16, rx: 4 }, gg);
+  el("path", { class: "pinca", d: `M${x} ${y - 8} L${x + s * 16} ${y - 4} L${x + s * 16} ${y - 1} L${x} ${y - 1}Z M${x} ${y + 8} L${x + s * 16} ${y + 4} L${x + s * 16} ${y + 1} L${x} ${y + 1}Z`, transform: `translate(${s > 0 ? 0 : 0} 0)` }, gg);
+}
+function terminal(g, x, y) { el("circle", { class: "met", cx: x, cy: y, r: 7 }, g); el("circle", { class: "scr", cx: x, cy: y, r: 2.5 }, g); }
+function vclip(g, x, y, dir) { // pinça vertical (a les pestanyes de la pila)
+  const gg = el("g", {}, g);
+  el("rect", { class: "pinca", x: x - 8, y: dir > 0 ? y : y - 20, width: 16, height: 20, rx: 4 }, gg);
+}
+function drawBoard() {
+  el("rect", { class: "bd", x: 8, y: 8, width: W - 16, height: H - 16, rx: 16 }, gScene);
+  for (const [x, y] of [[26, 26], [W - 26, 26], [26, H - 26], [W - 26, H - 26]]) { el("circle", { class: "met", cx: x, cy: y, r: 6 }, gScene); el("path", { d: `M${x - 3.5} ${y} H${x + 3.5}`, stroke: "var(--anatomy-mid)", "stroke-width": 1.4 }, gScene); }
+}
+function drawBattery() {
+  const g = el("g", {}, gScene);
+  el("rect", { class: "cos", x: 30, y: 180, width: 100, height: 120, rx: 8 }, g);
+  el("rect", { class: "met", x: 130, y: 209, width: 20, height: 12, rx: 2 }, g);
+  el("rect", { class: "met", x: 130, y: 259, width: 20, height: 12, rx: 2 }, g);
+  el("rect", { x: 40, y: 192, width: 80, height: 96, rx: 5, fill: "none", stroke: "var(--anatomy-lo)", "stroke-width": 1.5 }, g);
+  const t1 = el("text", { class: "marca", x: 108, y: 224, "text-anchor": "middle" }, g); t1.textContent = "+";
+  const t2 = el("text", { class: "marca", x: 108, y: 276, "text-anchor": "middle" }, g); t2.textContent = "−";
+  vclip(g, 150, 215, -1); vclip(g, 150, 265, 1);
+}
+function drawSwitch() {
+  const g = el("g", {}, gScene);
+  el("rect", { class: "cos", x: 198, y: 112, width: 74, height: 36, rx: 6 }, g);
+  terminal(g, XS0, Y1); terminal(g, XS1, Y1);
+  clip(g, XS0 - 2, Y1, -1);
+  gScene.appendChild(g);
+  const lever = el("g", { id: "lever" }, gTop);
+  el("line", { x1: 0, y1: 0, x2: 66, y2: 0, stroke: "var(--anatomy-strong)", "stroke-width": 8, "stroke-linecap": "round" }, lever);
+  el("circle", { cx: 66, cy: 0, r: 8, class: "met" }, lever);
+  el("circle", { cx: 0, cy: 0, r: 6, class: "met" }, lever);
+  lever.setAttribute("transform", `translate(${XS0 + 14} ${Y1}) rotate(${vista.swA})`);
+}
+function drawBulb(b) {
+  const present = st[b.k];
+  const g = el("g", {}, gScene);
+  const { cx, y } = b;
+  el("rect", { class: "cos", x: cx - 26, y: y - 12, width: 52, height: 30, rx: 5 }, g);
+  terminal(g, cx - 32, y); terminal(g, cx + 32, y);
+  el("rect", { class: "met", x: cx - 14, y: y - 22, width: 28, height: 12, rx: 3 }, g);
+  if (present) {
+    el("circle", { class: "vidre", cx, cy: y - 48, r: 28 }, g);
+    el("path", { class: "fil", d: `M${cx - 7} ${y - 22} L${cx - 7} ${y - 44} Q${cx - 7} ${y - 62} ${cx} ${y - 58} Q${cx + 7} ${y - 62} ${cx + 7} ${y - 44} L${cx + 7} ${y - 22}` }, g);
+    el("circle", { class: "lit", "data-b": b.k, cx, cy: y - 48, r: 28, fill: "#ffd84a", opacity: 0 }, g);
+    el("circle", { class: "glow", "data-g": b.k, cx, cy: y - 48, r: 90, opacity: 0 }, g);
+  } else {
+    el("circle", { cx, cy: y - 48, r: 28, fill: "none", stroke: "var(--anatomy-mid)", "stroke-width": 2, "stroke-dasharray": "5 6" }, g);
+  }
+  clip(g, cx - 32 - 2, y, -1);
+  clip(g, cx + 32 + 2, y, 1);
+}
+function drawObject() {
+  const g = el("g", { transform: "translate(390 130)" }, gTop);
+  const o = st.objecte;
+  const cls = "obj";
+  if (o === "clip") { el("rect", { class: cls, x: -46, y: -9, width: 92, height: 18, rx: 9, fill: "none", stroke: "#b9bec6", "stroke-width": 3.5 }, g); el("rect", { class: cls, x: -30, y: -4, width: 62, height: 8, rx: 4, fill: "none", stroke: "#b9bec6", "stroke-width": 3.5 }, g); }
+  else if (o === "moneda") { el("circle", { class: cls, r: 34, fill: "#d2b45a" }, g); el("circle", { class: cls, r: 25, fill: "none" }, g); el("path", { d: "M-8 8 L0 -10 L8 8 M-5 3 H5", stroke: "#7a5f1a", "stroke-width": 2.5, fill: "none" }, g); }
+  else if (o === "mina") { el("rect", { class: cls, x: -48, y: -4.5, width: 96, height: 9, rx: 2, fill: "#3b3b3f" }, g); el("path", { d: "M-44 -1.5 H44", stroke: "#8c8c94", "stroke-width": 1.4 }, g); }
+  else if (o === "alumini") { el("path", { class: cls, d: "M-46 -10 L-30 -16 L-10 -9 L10 -17 L32 -10 L46 -14 L44 8 L28 16 L8 10 L-12 17 L-32 9 L-47 13Z", fill: "#d5d9de" }, g); el("path", { d: "M-30 -16 L-32 9 M-10 -9 L-12 17 M10 -17 L8 10 M32 -10 L28 16", stroke: "#9aa0a8", "stroke-width": 1.2, fill: "none" }, g); }
+  else if (o === "goma") { el("rect", { class: cls, x: -34, y: -17, width: 68, height: 34, rx: 8, fill: "#f0a3b0" }, g); el("path", { d: "M10 -17 V17", stroke: "#4c7fd0", "stroke-width": 8 }, g); }
+  else if (o === "fusta") { el("rect", { class: cls, x: -44, y: -13, width: 88, height: 26, rx: 2, fill: "#b98a56" }, g); el("path", { d: "M-40 -5 H40 M-40 4 Q-10 8 40 3", stroke: "#8a6238", "stroke-width": 1.3, fill: "none" }, g); }
+  else if (o === "plastic") { el("rect", { class: cls, x: -40, y: -13, width: 80, height: 26, rx: 8, fill: "#5aa7e0", opacity: 0.85 }, g); el("path", { d: "M-30 -6 H20", stroke: "#e9f4ff", "stroke-width": 2.5, "stroke-linecap": "round", opacity: 0.8 }, g); }
+  else g.remove();
+}
+function render() {
+  gScene.innerHTML = ""; gDots.innerHTML = ""; gTop.innerHTML = "";
+  drawBoard();
+  const segs = segments();
+  const wires = el("g", {}, gScene);
+  for (const s of segs) {
+    if (s.strip) { if (s.bulb && !st[s.bulb]) continue; el("polyline", { points: pts2d(s.pts), fill: "none", stroke: "var(--metal)", "stroke-width": 5, "stroke-linecap": "butt" }, wires); continue; }
+    if (s.gap) continue;
+    el("polyline", { class: "cab " + s.cls + (s.dead ? " fora" : ""), points: pts2d(s.pts) }, wires);
+  }
+  drawBattery(); drawSwitch();
+  for (const b of bulbPos()) drawBulb(b);
+  // connectors
+  const nodes = st.sit === "parallel" ? [[XL, Y1], [XR, Y1], [XR, Y2], [XL, Y2]] : [];
+  for (const [x, y] of nodes) terminal(gScene, x, y);
+  if (st.sit === "materials") {
+    const g = el("g", {}, gScene);
+    clip(g, 340, Y1, 1); clip(g, 440, Y1, -1);
+    drawObject();
+  }
+  if (st.sit === "una" && !st.cable) clip(gScene, 585, Y1, -1);
+  if (st.sit === "una" && st.cable) clip(gScene, XR, Y1, 1);
+  // punts
+  dotSegs = [];
+  for (const s of segs) {
+    if (s.dead) continue;
+    if (s.bulb && !st[s.bulb]) continue;
+    if (s.gap && !(st.objecte && M.MATERIALS[st.objecte].conductor)) continue;
+    let len = 0; const cum = [0];
+    for (let i = 1; i < s.pts.length; i++) { len += Math.hypot(s.pts[i][0] - s.pts[i - 1][0], s.pts[i][1] - s.pts[i - 1][1]); cum.push(len); }
+    const n = Math.max(1, Math.floor(len / SP));
+    const circles = [];
+    for (let i = 0; i < n; i++) circles.push(el("circle", { class: "pt", r: dotR() }, gDots));
+    dotSegs.push({ s, len, cum, n, circles, ph: s.id.length * 3.7 });
+  }
+  placeDots(0);
+  glowNow();
+  tags();
+}
+function dotR() { const m = svg.getScreenCTM(); const sc = m ? m.a : 1; return Math.max(4.2, 3.4 / (sc || 1)); }
+const pointAt = (d, t) => {
+  t = ((t % d.len) + d.len) % d.len;
+  let i = 1; while (i < d.cum.length - 1 && d.cum[i] < t) i++;
+  const a = d.s.pts[i - 1], b = d.s.pts[i], l = d.cum[i] - d.cum[i - 1] || 1, u = (t - d.cum[i - 1]) / l;
+  return [a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u];
+};
+function placeDots(dt) {
+  const R = dotR();
+  for (const d of dotSegs) {
+    const I = curOf(d.s.cur);
+    const on = r.tancat && I > 1e-9;
+    if (on && vista.moving) d.ph += M.velocitat(I) * dt;
+    const step = d.len / d.n;
+    d.circles.forEach((c, i) => {
+      c.style.display = on ? "" : "none";
+      if (!on) return;
+      const [x, y] = pointAt(d, d.ph + i * step);
+      c.setAttribute("cx", x.toFixed(1)); c.setAttribute("cy", y.toFixed(1)); c.setAttribute("r", R);
+      if (DEBUG && i === 0) { c.style.fill = "#ff2a2a"; c.setAttribute("r", R * 1.5); }
+    });
+  }
+}
+function glowNow() {
+  for (const k of ["A", "B"]) {
+    const b = k === "A" ? r.bA : r.bB;
+    const target = st[k] && r.tancat ? clamp(Math.pow(b, 0.7), 0, 1) : 0;
+    if (still.matches) vista.gl[k] = target;
+    paintGlow(k);
+  }
+}
+function paintGlow(k) {
+  const v = vista.gl[k];
+  const lit = svg.querySelector(`[data-b="${k}"]`), gl = svg.querySelector(`[data-g="${k}"]`);
+  if (lit) lit.setAttribute("opacity", (v * 0.85).toFixed(3));
+  if (gl) { gl.setAttribute("opacity", v.toFixed(3)); gl.setAttribute("r", (34 + 64 * v).toFixed(1)); }
+}
+function swTargetAngle() { return st.interruptor ? 0 : -32; }
+
+// ---------- etiquetes (capa HTML sobre la figura) ----------
+function tags() {
+  const L = [];
+  L.push({ t: GEOM.etiq.pila + " " + M.coma(M.V_PILA, 1) + " V", pt: [80, 300], dx: 0, dy: 34 });
+  L.push({ t: GEOM.etiq.interruptor, pt: [235, 148], dx: 0, dy: 40 });
+  const bp = bulbPos();
+  for (const b of bp) {
+    if (b.k === "B" && st.sit === "parallel") L.push({ t: GEOM.etiq.bombetaB, pt: [b.cx + 30, b.y - 48], dx: 92, dy: 0 });
+    else L.push({ t: GEOM.etiq["bombeta" + b.k], pt: [b.cx, b.y - 76], dx: 0, dy: -30, alt: [[b.k === "A" ? -50 : 50, -30], [b.k === "A" ? -60 : 60, 0]] });
+  }
+  if (st.sit === "materials") L.push({ t: GEOM.etiq.buit, pt: [390, 150], dx: 0, dy: 52, alt: [[0, 90], [70, 70], [-70, 70]] });
+  L.push({ t: GEOM.etiq.pinca, pt: [XS0 - 10, Y1 - 6], dx: -6, dy: -58 });
+  Pantalla.etiquetes($(".mainv .stage"), svg, L);
+}
+new ResizeObserver(() => { tags(); placeDots(0); }).observe($(".stage"));
+
+// ---------- lectures ----------
+const f = (n) => document.querySelector(`[data-f="${n}"]`);
+function bar(elb, n) { elb.querySelectorAll("i").forEach((i, k) => i.classList.toggle("on", k < n)); }
+function say() {
+  r = M.resolEstat(st);
+  const two = st.sit === "serie" || st.sit === "parallel";
+  for (const k of ["A", "B"]) {
+    const box = document.querySelector(`[data-bulb="${k}"]`);
+    box.hidden = k === "B" && !two;
+    const niv = k === "A" ? r.nivA : r.nivB;
+    const txt = st[k] ? M.NIVELLS_LLUM[niv] : "sense bombeta";
+    f("llum-" + k).textContent = txt;
+    bar(f("barra-" + k), st[k] ? niv : 0);
+    f("barra-" + k).setAttribute("aria-label", "Bombeta " + k + ": " + txt);
+  }
+  f("corrent").textContent = F.textCorrent(st, r);
+  bar(f("corrent-bar"), r.tancat ? r.nivCorrent : 0);
+  f("durada").textContent = F.textDurada[r.nivDurada];
+  bar(f("durada-bar"), r.nivDurada);
+  f("resum").textContent = F.resum(st, r);
+  f("consell").textContent = F.consell(st, r);
+  // controls
+  const app = $(".app"); app.dataset.sit = st.sit;
+  document.querySelectorAll("[data-sit]").forEach((b) => { if (b.tagName === "BUTTON") b.setAttribute("aria-pressed", String(b.dataset.sit === st.sit)); });
+  const sw = $("[data-sw]"); sw.setAttribute("aria-pressed", String(st.interruptor)); sw.textContent = st.interruptor ? "Interruptor tancat: obre'l" : "Interruptor obert: tanca'l";
+  const cb = $("[data-cable]"); cb.setAttribute("aria-pressed", String(st.cable)); cb.textContent = st.cable ? "Cable posat: treu-lo" : "Cable tret: posa'l";
+  for (const k of ["A", "B"]) { const b = $(`[data-bulbbtn=${k}]`); b.setAttribute("aria-pressed", String(st[k])); b.textContent = "Bombeta " + k + (st[k] ? ": treu-la" : ": posa-la"); }
+  document.querySelectorAll("[data-mat]").forEach((b) => b.setAttribute("aria-pressed", String((b.dataset.mat || null) === st.objecte)));
+  const need = ["una", "serie", "parallel"].filter((s) => !visited.has(s));
+  const rem = ["serie", "parallel"].filter((s) => !removed.has(s));
+  const done = need.length === 0 && rem.length === 0;
+  const NOMS = { una: "una bombeta", serie: "dues en sèrie", parallel: "dues en paral·lel" };
+  const txt = done ? "Ja ho has provat tot: pots obrir «Què has descobert?»." : (need.length ? "Falta provar: " + need.map((s) => NOMS[s]).join(", ") + ". " : "") + (rem.length ? "Falta treure una bombeta en: " + rem.map((s) => NOMS[s]).join(" i ") + "." : "");
+  P.progres(txt, done);
+}
+function refresh() {
+  render(); say();
+  vista.swTarget = swTargetAngle();
+  run();
+}
+function setSit(s) { st.sit = s; visited.add(s); st.A = true; st.B = true; st.cable = true; st.objecte = null; refresh(); }
+$("body").addEventListener("click", (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.sit && b.tagName === "BUTTON" && b.closest(".sits, .qfila")) setSit(b.dataset.sit);
+  else if (b.hasAttribute("data-sw")) { st.interruptor = !st.interruptor; refresh(); }
+  else if (b.hasAttribute("data-cable")) { st.cable = !st.cable; refresh(); }
+  else if (b.dataset.bulbbtn) { const k = b.dataset.bulbbtn; st[k] = !st[k]; if (!st[k]) removed.add(st.sit); refresh(); }
+  else if (b.hasAttribute("data-mat")) { st.objecte = b.dataset.mat || null; refresh(); }
+  else if (b.hasAttribute("data-move")) { vista.moving = !vista.moving; b.setAttribute("aria-pressed", String(vista.moving)); b.textContent = vista.moving ? "Atura els punts" : "Posa els punts en marxa"; run(); }
+});
+
+// ---------- pantalla (plantilla de la skill: panells, predicció, menú, pestanyes, Esc) ----------
+const P = Pantalla.inicia({
+  opcions: GEOM.opcions,
+  correcta: "b",
+  missatges: { encert: GEOM.tx.encert, error: GEOM.tx.error, perOpcio: { a: GEOM.tx.errorA }, senseResposta: GEOM.tx.senseResposta },
+  onTab: () => { tags(); placeDots(0); },
+});
+
+// ---------- bucle ----------
+let frame = 0, last = 0;
+function tick(now) {
+  const dt = last ? Math.min((now - last) / 1000, 1 / 30) : 1 / 60;
+  last = now;
+  let busy = false;
+  vista.swA += (vista.swTarget - vista.swA) * Math.min(1, dt * 10);
+  if (Math.abs(vista.swTarget - vista.swA) < 0.05) vista.swA = vista.swTarget; else busy = true;
+  const lv = $("#lever"); if (lv) lv.setAttribute("transform", `translate(${XS0 + 14} ${Y1}) rotate(${vista.swA.toFixed(2)})`);
+  for (const k of ["A", "B"]) {
+    const b = k === "A" ? r.bA : r.bB;
+    const target = st[k] && r.tancat ? clamp(Math.pow(b, 0.7), 0, 1) : 0;
+    vista.gl[k] += (target - vista.gl[k]) * Math.min(1, dt * 9);
+    if (Math.abs(target - vista.gl[k]) < 0.004) vista.gl[k] = target; else busy = true;
+    paintGlow(k);
+  }
+  placeDots(dt);
+  const flowing = vista.moving && r.tancat;
+  frame = (busy || flowing) && !document.hidden ? requestAnimationFrame(tick) : 0;
+}
+function run() {
+  if (still.matches) { vista.swA = vista.swTarget; const lv = $("#lever"); if (lv) lv.setAttribute("transform", `translate(${XS0 + 14} ${Y1}) rotate(${vista.swA})`); glowNow(); placeDots(0); return; }
+  if (!frame) { last = 0; frame = requestAnimationFrame(tick); }
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden) run(); });
+render(); say(); run();
+if (location.search.includes("debug")) {
+  window.__st = st;
+  window.__snap = () => { const d = dotSegs.find((x) => x.s.id === "t"); return { t: Math.round(performance.now()), p: d ? pointAt(d, d.ph).map((v) => +v.toFixed(1)) : null, ph: d ? +d.ph.toFixed(1) : null, sw: vista.swA }; };
+  window.__set = (o) => { Object.assign(st, o); if (o.sit) visited.add(o.sit); refresh(); };
+}
+</script></body></html>

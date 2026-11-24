@@ -1,0 +1,1040 @@
+<!doctype html><html lang="ca"><head><meta name="robots" content="noindex"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Laboratori del pèndol</title><style>/* Colors dels dos temes. Mateixos noms i valors que el kit d'anatomy (ISO_CSS), perquè una figura feta amb el kit
+   i una feta a mà (mida Esquema) facin servir les mateixes variables. Si la pàgina inclou ISO_CSS, aquest bloc no hi fa nosa. */
+.iso{
+  color-scheme:dark;
+  --anatomy-page:#0b0b0b;--anatomy-card:#131313;--anatomy-text:#a3a3a3;--anatomy-strong:#e6e6e6;--anatomy-muted:#6e6e6e;
+  --anatomy-paper:#131313;--anatomy-face:#1b1b1b;--anatomy-top:#1c1c1c;
+  --anatomy-shade-0:#0f0f0f;--anatomy-shade-1:#121212;--anatomy-shade-2:#151515;--anatomy-shade-3:#181818;
+  --anatomy-hi:#d4d4d4;--anatomy-mid:#6a6a6a;--anatomy-lo:#3e3e3e;--anatomy-faint:#2a2a2a;--anatomy-lit:#ffffff;
+  --anatomy-red:#ff6b6b;--anatomy-green:#6be0a0;--anatomy-blue:#6b9bff;
+}
+.iso[data-theme="light"]{
+  color-scheme:light;
+  --anatomy-page:#f2f2ef;--anatomy-card:#fbfbfa;--anatomy-text:#57575a;--anatomy-strong:#18181a;--anatomy-muted:#8c8c90;
+  --anatomy-paper:#fbfbfa;--anatomy-face:#ffffff;--anatomy-top:#ffffff;
+  --anatomy-shade-0:#dcdcd9;--anatomy-shade-1:#e5e5e2;--anatomy-shade-2:#ededea;--anatomy-shade-3:#f4f4f1;
+  --anatomy-hi:#26262a;--anatomy-mid:#8a8a8f;--anatomy-lo:#b4b4b8;--anatomy-faint:#d4d4d6;--anatomy-lit:#000000;
+  --anatomy-red:#e5484d;--anatomy-green:#30a46c;--anatomy-blue:#3e63dd;
+}
+/* Plantilla de pantalla única (skill recurs-aula). Cos genèric: barra superior, menú de panells, pestanyes del mòbil,
+   figura, controls, lectures i panells. El que és propi del recurs va al seu pagina.css, que es carrega després.
+   Variables que el recurs pot canviar a .app: --lletra (18 px a primària, 16 px a ESO), --ctrl-w (amplada de la columna de controls),
+   --fig-ratio (proporció de la figura al mòbil, p. ex. 760/430). */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:var(--anatomy-page);color:var(--anatomy-text);font:18px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.app{--gap:8px;--lletra:18px;--ctrl-w:290px;--fig-ratio:16/9;display:grid;height:100vh;height:100dvh;padding:var(--gap);gap:var(--gap);color:var(--anatomy-text);font-size:var(--lletra);line-height:1.4;
+  grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto;grid-template-areas:"top" "fig" "ctrl" "lect"}
+.app h1{font-size:22px;line-height:1.15;margin:0;color:var(--anatomy-strong)}
+.app h2{font-size:24px;margin:0;color:var(--anatomy-strong)}
+.app h3{font-size:var(--lletra);margin:0;color:var(--anatomy-strong);font-weight:600}
+.app p{margin:0}
+.app [hidden]{display:none!important}
+
+/* barra superior i menú */
+.top{grid-area:top;display:flex;align-items:center;flex-wrap:wrap;gap:4px 16px;position:relative}
+.top h1{flex:1 1 auto;min-width:0}
+.top .sub{flex:1 1 100%;font-size:var(--lletra);line-height:1.3;margin:0;order:3}
+.menu-nav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-end;flex:0 0 auto;order:2}
+.menu-nav .btn{font-size:16px;padding:6px 9px}
+.menu-toggle{display:none}
+.ind{font-weight:600;color:var(--anatomy-strong)}
+.ind:not(:empty)::before{content:"· ";font-weight:400}
+
+/* botons */
+.btn{appearance:none;font:inherit;font-size:var(--lletra);line-height:1.1;min-height:44px;min-width:44px;padding:6px 14px;color:var(--anatomy-text);background:var(--anatomy-card);border:2px solid var(--anatomy-mid);border-radius:8px;cursor:pointer;font-variant-numeric:tabular-nums}
+.btn:hover{border-color:var(--anatomy-strong);color:var(--anatomy-strong)}
+.btn[aria-pressed="true"]{background:var(--anatomy-strong);color:var(--anatomy-card);border-color:var(--anatomy-strong)}
+.btn[aria-disabled="true"]{opacity:.55;border-style:dashed}
+.btn[data-desc][data-ready="true"]{border-color:var(--anatomy-lit);color:var(--anatomy-strong);font-weight:600}
+.btn:focus-visible,.panell input:focus-visible,.panell a:focus-visible{outline:3px solid var(--anatomy-lit);outline-offset:2px}
+.btn.mini{padding:4px 10px;font-size:16px}
+.btn.gran{padding:8px 22px;font-weight:600}
+.tabs{display:none}
+
+/* figura */
+.fig{grid-area:fig;position:relative;min-height:0;min-width:0;overflow:hidden;border:1px solid var(--anatomy-lo);border-radius:10px;background:var(--anatomy-card);display:flex}
+.visor{margin:0;position:relative}
+.mainv{flex:1;min-width:0;min-height:0}
+.mainv .stage{position:absolute;inset:0;overflow:hidden}
+.mainv .stage>svg:not(.lead){position:absolute;inset:0;width:100%;height:100%}
+
+/* etiquetes: capa HTML sobre la figura (Pantalla.etiquetes) */
+.stage .tags{position:absolute;inset:0;pointer-events:none}
+.tag{position:absolute;font:600 17px/1.25 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:2px 8px;background:var(--anatomy-paper);color:var(--anatomy-strong);border:1.5px solid var(--anatomy-mid);border-radius:6px;white-space:nowrap;transform:translate(-50%,-50%)}
+.lead{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.lead line{stroke:var(--anatomy-strong);stroke-width:2}
+.lead circle{fill:var(--anatomy-strong);stroke:var(--anatomy-paper);stroke-width:1.5}
+
+/* vista ampliada (opcional): requadre dins de la figura */
+.inset{position:absolute;z-index:2;top:8px;left:8px;width:clamp(300px,34%,430px);background:var(--anatomy-card);border:2px solid var(--anatomy-mid);border-radius:10px;overflow:hidden;box-shadow:0 2px 10px #0003}
+.inset .stage{position:relative;overflow:hidden}
+.inset .stage>svg:not(.lead){display:block;width:100%;height:auto}
+.inset-bar{display:flex;align-items:center;gap:6px;padding:3px 6px 3px 10px;border-bottom:1px solid var(--anatomy-lo)}
+.inset-t{flex:1;font-size:16px;font-weight:600;color:var(--anatomy-strong);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inset.gran{width:min(64%,760px);left:50%;transform:translateX(-50%)}
+.mostra{position:absolute;z-index:2;top:8px;left:8px}
+
+/* controls */
+.ctrl{grid-area:ctrl;display:grid;gap:8px 16px;align-content:start;padding:10px 12px;border:1px solid var(--anatomy-lo);border-radius:10px;background:var(--anatomy-card);grid-template-columns:1fr;min-height:0}
+.fila{display:flex;flex-direction:column;gap:4px;min-width:0}
+.etiq{font-size:var(--lletra);font-weight:600;color:var(--anatomy-strong)}
+.grup{display:flex;flex-wrap:wrap;gap:6px}
+.grup .btn{flex:1 1 auto}
+.grup.dos{display:grid;grid-template-columns:1fr 1fr}
+.grup.dos .btn{min-width:0;padding:4px 6px;line-height:1.15}
+.fila>.btn{width:100%}
+.estat{font-size:16px;line-height:1.3}
+.quick{display:none}
+
+/* lectures */
+.lect{grid-area:lect;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+.lectura{border:1px solid var(--anatomy-lo);border-radius:10px;padding:6px 12px 8px;background:var(--anatomy-card);min-width:0}
+.lectura .gran-text{font-size:22px;font-weight:700;color:var(--anatomy-strong);line-height:1.2}
+.lectura .sub{font-size:var(--lletra);line-height:1.25}
+.barra{display:flex;gap:5px;margin-top:5px}
+.barra i{flex:1;height:14px;border:2px solid var(--anatomy-mid);border-radius:4px;background:transparent}
+.barra i.on{background:var(--anatomy-strong);border-color:var(--anatomy-strong)}
+.frase{grid-column:1/-1;padding:2px 4px;font-size:var(--lletra);line-height:1.3}
+.frase .resum{font-weight:600;color:var(--anatomy-strong)}
+
+/* panells */
+.panell{padding:0;border:2px solid var(--anatomy-mid);border-radius:12px;background:var(--anatomy-card);color:var(--anatomy-text);width:min(760px,94vw);max-height:88vh;max-height:88dvh;overflow:hidden;font:inherit;font-size:18px}
+.panell[open]{display:flex;flex-direction:column}
+.panell::backdrop{background:#000a}
+.p-cap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid var(--anatomy-lo)}
+.p-cap h2{font-size:24px;margin:0;color:var(--anatomy-strong)}
+.p-cos{padding:12px 18px 18px;overflow:auto;display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-content:start}
+.p-cos>div{display:grid;gap:12px}
+.p-cos p{margin:0}
+.p-cos h3{font-size:20px;margin:6px 0 0;color:var(--anatomy-strong)}
+.p-cos ul{margin:0;padding-left:1.3em}
+.p-cos li{margin:4px 0}
+.p-cos .peu{position:sticky;bottom:-18px;background:var(--anatomy-card);padding:8px 0 10px;margin:0;border-top:1px solid var(--anatomy-lo)}
+.p-cos a{color:var(--anatomy-strong)}
+.panell p,.panell li{font-size:18px;line-height:1.5}
+.panell .pregunta{font-size:20px;color:var(--anatomy-strong)}
+.panell fieldset.pred{border:1px solid var(--anatomy-lo);border-radius:8px;padding:8px 14px;margin:0}
+.panell fieldset.pred legend{font-size:19px;color:var(--anatomy-strong);padding:0 6px}
+.panell fieldset.pred label{display:flex;align-items:center;gap:12px;min-height:46px;cursor:pointer}
+.panell fieldset.pred input{width:24px;height:24px;flex:0 0 auto;accent-color:var(--anatomy-strong)}
+.avis{border:2px solid var(--anatomy-mid);border-radius:8px;padding:8px 12px}
+.taula{border-collapse:collapse;width:100%;font-size:18px}
+.taula caption{text-align:left;font-weight:600;padding-bottom:6px}
+.taula th,.taula td{border:1px solid var(--anatomy-lo);padding:3px 8px;text-align:right}
+.taula th[scope=row],.taula th[scope=col]:first-child{text-align:left}
+.taula-wrap{overflow-x:auto}
+.p-cos .taula{display:block;overflow-x:auto} /* una taula ampla es desplaça dins del panell en lloc d'eixamplar-lo */
+.p-cos a{overflow-wrap:anywhere}
+
+/* ---- mides ---- */
+/* ordinador i projector: controls en una columna a la dreta */
+@media (min-width:1000px) and (min-height:560px){
+  .app{grid-template-columns:minmax(0,1fr) var(--ctrl-w);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"top top" "fig ctrl" "lect ctrl"}
+  .ctrl{gap:14px}
+}
+/* tauleta: controls en dues columnes sota la figura */
+@media (max-width:999px){
+  .menu-nav{flex:1 1 100%;justify-content:flex-start}
+  .ctrl{grid-template-columns:1fr 1fr}
+  .ctrl>.estat,.ctrl>.peu-ctrl{grid-column:1/-1}
+}
+/* mòbil: menú en un botó i dues pestanyes («a»: figura, «b»: controls i lectures) */
+@media (max-width:600px){
+  .app{--gap:6px;--lletra:16px;grid-template-rows:auto auto minmax(0,1fr) auto auto auto;grid-template-areas:"top" "tabs" "fig" "quick" "ctrl" "lect"}
+  .app h1{font-size:18px;flex:1 1 0}
+  .top .pregunta{display:none}
+  .top .sub:has(.ind:empty){display:none}
+  .ind::before{content:none!important}
+  .menu-toggle{display:inline-block;flex:0 0 auto}
+  .menu-nav{display:none;position:absolute;z-index:6;right:0;top:48px;flex-direction:column;align-items:stretch;background:var(--anatomy-card);border:2px solid var(--anatomy-mid);border-radius:10px;padding:8px;box-shadow:0 4px 16px #0006;min-width:230px}
+  .menu-nav.obert{display:flex}
+  .tabs{grid-area:tabs;display:flex;gap:6px}
+  .tabs .btn{flex:1}
+  .fig{flex-direction:column}
+  .mainv{flex:1 1 auto;width:100%}
+  .fig:has(.inset) .mainv{flex:0 0 auto;height:auto;aspect-ratio:var(--fig-ratio)} /* amb vista ampliada a sota, la figura principal fa la seva proporció */
+  .ctrl{padding:8px 10px;grid-template-columns:1fr;gap:6px}
+  .fila{flex-direction:row;align-items:center;flex-wrap:wrap}
+  .fila>.etiq{flex:0 0 96px}
+  .fila>.grup,.fila>.btn{flex:1}
+  .quick{grid-area:quick;display:grid;gap:4px}
+  .quick .grup{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .quick .btn{min-width:0;padding:4px 6px;line-height:1.1}
+  .lect{grid-template-columns:1fr;gap:4px}
+  .lectura{padding:3px 8px}
+  .lectura .gran-text{font-size:16px}
+  .lectura .sub{display:none}
+  .barra i{height:10px}
+  .inset{width:min(62%,300px)}
+  .app[data-tab="a"] .ctrl,.app[data-tab="a"] .frase{display:none}
+  .app[data-tab="b"] .fig,.app[data-tab="b"] .quick{display:none}
+  .app[data-tab="b"]{grid-template-rows:auto auto 0 0 auto auto;align-content:start}
+  .panell{width:96vw;max-height:92dvh}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* Propi del laboratori del pèndol. El cos de pantalla és a la plantilla de la skill (plantilla-pantalla/pantalla.css). */
+.app{--fig-ratio:700/430;--lletra:18px;--ctrl-w:300px}
+.iso{--taula-c:#2a2824;--suport:#4a4d57;--suport-l:#7b7f8c;--metal:#9a8b5a;--regla-f:#c9b27a;--regla-l:#3b3320;--massa:#8a8f99;--massa-l:#e6e9ee;--fil:#d9d9d9;--eix:#7b7f8c;--marca:#e7b73c;--arc:#e7b73c}
+.iso[data-theme="light"]{--taula-c:#b9b1a2;--suport:#8d919c;--suport-l:#4c4f58;--metal:#8a7a42;--regla-f:#e9d9a8;--regla-l:#4a3f1f;--massa:#6c717c;--massa-l:#ffffff;--fil:#2b2b2e;--eix:#6a6e7a;--marca:#a56d00;--arc:#a56d00}
+.iso .tag{pointer-events:none}
+/* figura */
+.taula-l{stroke:var(--taula-c);stroke-width:3}
+.suport{fill:var(--suport);stroke:var(--suport-l);stroke-width:1.5}
+.met{fill:var(--metal);stroke:var(--anatomy-hi);stroke-width:1.2}
+.regla{fill:var(--regla-f);stroke:var(--regla-l);stroke-width:1.4}
+.regla-m{stroke:var(--regla-l);stroke-width:1.4}
+.zero{stroke:var(--eix);stroke-width:1.5;stroke-dasharray:4 4}
+.eix-v{stroke:var(--eix);stroke-width:1.5;stroke-dasharray:6 5}
+.arc{fill:none;stroke:var(--arc);stroke-width:3}
+.llarg{stroke:var(--marca);stroke-width:2;stroke-dasharray:5 4}
+.llarg-m{fill:var(--marca);stroke:var(--regla-l);stroke-width:1.2}
+.fil{stroke:var(--fil);stroke-width:2.2;stroke-linecap:round}
+.fil.fantasma{stroke:var(--eix);stroke-width:1.6;stroke-dasharray:5 5}
+.massa{fill:var(--massa);stroke:var(--anatomy-hi);stroke-width:2}
+.massa.fantasma{fill:none;stroke:var(--eix);stroke-width:2;stroke-dasharray:5 5}
+.brill{fill:var(--massa-l);opacity:.75;pointer-events:none}
+/* cronòmetre i comptador, damunt de la figura */
+.rellotge{position:absolute;top:8px;right:8px;z-index:2;display:flex;flex-direction:column;align-items:flex-end;gap:2px;background:var(--anatomy-paper);border:2px solid var(--anatomy-mid);border-radius:10px;padding:4px 12px;pointer-events:none}
+.r-t{font-size:34px;font-weight:700;line-height:1.1;color:var(--anatomy-strong);font-variant-numeric:tabular-nums}
+.r-o{font-size:17px;font-weight:600;color:var(--anatomy-strong)}
+.r-o.fet{color:var(--anatomy-lit);text-decoration:underline}
+/* controls */
+.ctrl{overflow:auto;gap:6px 12px;padding:8px 10px}
+.ctrl .fila{gap:2px}
+.ctrl .etiq{font-size:17px}
+.grup.tres{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:6px}
+.grup.tres[role=group]{grid-template-columns:repeat(4,1fr)}
+.fila:nth-of-type(n+2) .grup.tres{grid-template-columns:repeat(3,1fr)}
+.ctrl .grup .btn,.quick .btn{min-width:0;flex:none;font-size:16px;padding:4px 6px;line-height:1.15}
+.avis-var{min-height:0;font-size:16px;line-height:1.3;color:var(--anatomy-strong)}
+.avis-var.on{border:2px solid var(--marca);border-radius:8px;padding:6px 10px;background:var(--anatomy-paper)}
+.estat{font-size:15px;line-height:1.25}
+.btn[aria-disabled="true"]{cursor:not-allowed}
+/* lectures: taula de resultats i variables */
+.lect{grid-template-columns:minmax(0,2.2fr) minmax(0,1fr)}
+.lectura h3{font-size:17px}
+.sub-t{font-weight:400;font-size:16px}
+.taula-host{max-height:168px;overflow:auto;margin-top:2px}
+.lt .taula{font-size:16px;margin:0;border-collapse:separate;border-spacing:0}
+.lt .taula th,.lt .taula td{padding:1px 8px;text-align:right;white-space:nowrap;border:0;border-bottom:1px solid var(--anatomy-lo)}
+.lt .taula thead th{position:sticky;top:0;background:var(--anatomy-card);z-index:1}
+.lt .taula th[scope=row]{text-align:left}
+.lt .col-x{width:46px;min-width:46px}
+.lt .btn.mini{min-height:34px;min-width:34px;padding:0 6px;line-height:1}
+.lt .buida{font-size:16px;margin:4px 0}
+.lt .amb-avis td,.lt .amb-avis th{border-bottom-color:var(--marca)}
+.lt .avis-fila td{text-align:left;white-space:normal;font-size:16px;color:var(--anatomy-strong);background:var(--anatomy-paper);border-left:4px solid var(--marca)}
+.nomes-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.chips{list-style:none;margin:2px 0 0;padding:0;display:grid;gap:3px}
+.chips li{display:grid;grid-template-columns:auto auto 1fr;gap:0 8px;align-items:baseline;font-size:16px;line-height:1.25;padding:2px 8px;border:2px solid var(--anatomy-lo);border-radius:8px}
+.chips li.canvia{border-color:var(--marca)}
+.chips .c-n{font-weight:600;color:var(--anatomy-strong)}
+.chips .c-e{text-align:right;color:var(--anatomy-text)}
+.frase{display:none}
+/* gràfica */
+.graf-host{width:100%}
+.graf-host svg{display:block}
+.g-text{font:16px system-ui,sans-serif;fill:var(--anatomy-text)}
+.g-titol{font-weight:600;fill:var(--anatomy-strong)}
+.g-eix{stroke:var(--anatomy-mid);stroke-width:2}
+.g-xarxa{stroke:var(--anatomy-faint);stroke-width:1}
+.g-marca{stroke:var(--anatomy-mid);stroke-width:2}
+.g-punt{fill:var(--anatomy-strong);fill-opacity:.55;stroke:var(--anatomy-strong);stroke-width:2}
+@media (min-width:1000px) and (min-height:560px){
+  .lect{grid-template-columns:minmax(0,2.3fr) minmax(0,1fr)}
+}
+@media (min-width:601px) and (max-width:999px){
+  .lect{grid-template-columns:minmax(0,1.8fr) minmax(0,1fr)}
+  .taula-host{max-height:120px}
+  .r-t{font-size:28px}
+}
+@media (max-width:600px){
+  .rellotge{top:4px;right:4px;padding:2px 8px}
+  .r-t{font-size:26px}
+  .r-o{font-size:16px}
+  .quick .grup{grid-template-columns:1fr 1fr}
+  .lect{grid-template-columns:1fr;gap:4px}
+  .lectura{display:block;padding:3px 8px}
+  .lectura h3{font-size:16px}
+  .taula-host{max-height:130px}
+  .lt .taula th,.lt .taula td{padding:1px 3px}
+  .lt .taula thead th{white-space:normal;line-height:1.1;vertical-align:bottom}
+  .lt .col-x{width:40px;min-width:40px}
+  .lt .btn.mini{min-width:36px;min-height:36px}
+  .lt .taula{font-size:16px}
+  .chips{grid-template-columns:1fr}
+  .app[data-tab="a"] .lv{display:none}
+  .app[data-tab="b"] .quick{display:none}
+  .app[data-tab="b"] .lect{display:grid}
+  .fila>.etiq{flex:0 0 96px}
+  .grup.tres,.grup.tres[role=group]{grid-template-columns:repeat(4,1fr)}
+  .fila:nth-of-type(n+2) .grup.tres{grid-template-columns:repeat(3,1fr)}
+}
+/* etiquetes atenuades mentre el pèndol es mou, perquè no tapin el moviment */
+.stage .tags{transition:opacity .25s}
+.app[data-mov="si"] .stage .tags{opacity:.18}
+#p-grafica .grup{display:flex}
+#p-grafica .grup .btn{flex:1 1 auto}
+@media (max-width:600px){.app[data-tab="b"] .taula-host{max-height:170px}} /* a la pestanya de controls hi ha lloc: la taula en mostra més files */
+</style></head><body class="iso" data-theme="dark"><div class="app" data-tab="a">
+<header class="top">
+<h1>Laboratori del pèndol</h1>
+<button class="btn menu-toggle" type="button" aria-expanded="false" aria-controls="menu">Menú</button>
+<nav class="menu-nav" id="menu" aria-label="Panells"><button class="btn menu" type="button" data-open="p-pred" >La pregunta</button><button class="btn menu" type="button" data-open="p-desc" aria-disabled="true" aria-describedby="estat-desc" data-desc>Què has descobert?</button><button class="btn menu" type="button" data-open="p-repte" >Reptes</button><button class="btn menu" type="button" data-open="p-grafica" >Gràfica</button><button class="btn menu" type="button" data-open="p-model" >Sobre aquest model</button><button class="btn menu" type="button" data-open="p-docent" >Per al docent</button></nav>
+<p class="sub"><span class="pregunta">Què fa que un pèndol oscil·li més de pressa o més a poc a poc?</span> <span class="ind" data-f="ind" aria-live="polite"></span></p>
+</header>
+<div class="tabs" role="group" aria-label="Vista"><button class="btn" type="button" data-tab-btn="a" aria-pressed="true">Pèndol</button><button class="btn" type="button" data-tab-btn="b" aria-pressed="false">Controls i lectures</button></div>
+<section class="fig" aria-label="Pèndol"><figure class="visor mainv"><div class="stage"><svg class="pend" viewBox="0 0 700 430" role="img" aria-label="Un pèndol de laboratori vist de costat: un suport amb un braç, un fil que en penja amb una massa a l'extrem, i una regla vertical d'un metre. La línia de punts mostra la posició de sortida i l'arc, la separació de sortida." preserveAspectRatio="xMidYMid meet"><g id="fix"></g><g id="ghost"></g><g id="mob"></g></svg><div class="tags" aria-hidden="true"></div></div></figure>
+<div class="rellotge" role="group" aria-label="Cronòmetre i oscil·lacions"><span class="r-t" data-f="cron">0,0 s</span><span class="r-o" data-f="osc" aria-live="off">Oscil·lacions: 0 de 10</span></div></section>
+<section class="ctrl" aria-label="Controls">
+<div class="fila"><span class="etiq">Llargada del fil</span><div class="grup tres" role="group" aria-label="Llargada del fil"><button class="btn" type="button" data-var="L" data-val="25" aria-pressed="false">25 cm</button><button class="btn" type="button" data-var="L" data-val="50" aria-pressed="false">50 cm</button><button class="btn" type="button" data-var="L" data-val="75" aria-pressed="false">75 cm</button><button class="btn" type="button" data-var="L" data-val="100" aria-pressed="false">100 cm</button></div></div>
+<div class="fila"><span class="etiq">Pes de la massa</span><div class="grup tres" role="group" aria-label="Pes de la massa"><button class="btn" type="button" data-var="m" data-val="50" aria-pressed="false">50 g</button><button class="btn" type="button" data-var="m" data-val="100" aria-pressed="false">100 g</button><button class="btn" type="button" data-var="m" data-val="200" aria-pressed="false">200 g</button></div></div>
+<div class="fila"><span class="etiq">Separació de sortida</span><div class="grup tres" role="group" aria-label="Separació de sortida"><button class="btn" type="button" data-var="a" data-val="10" aria-pressed="false">10°</button><button class="btn" type="button" data-var="a" data-val="20" aria-pressed="false">20°</button><button class="btn" type="button" data-var="a" data-val="30" aria-pressed="false">30°</button></div></div>
+<div class="grup dos"><button class="btn" type="button" data-act="solta">Deixa'l anar</button><button class="btn" type="button" data-act="cron">Engega el cronòmetre</button></div>
+<div class="grup dos"><button class="btn" type="button" data-act="apunta" aria-disabled="true">Apunta a la taula</button><button class="btn" type="button" data-act="auto">Mesura automàtica</button></div>
+<p class="avis-var" data-f="avisvar" role="status"></p>
+<p class="estat" id="estat-desc" data-f="estat"></p>
+<div class="grup dos peu-ctrl"></div>
+</section>
+<section class="quick" aria-label="Controls ràpids"><div class="grup qfila"><button class="btn" type="button" data-act="solta">Deixa'l anar</button><button class="btn" type="button" data-act="cron">Engega el cronòmetre</button><button class="btn" type="button" data-act="apunta" aria-disabled="true">Apunta a la taula</button><button class="btn" type="button" data-act="auto">Mesura automàtica</button></div></section>
+<section class="lect" aria-label="Lectures">
+<div class="lectura lt"><h3>Taula de resultats <span class="sub-t">(temps de 10 oscil·lacions, en s)</span></h3><div id="taula" class="taula-host" tabindex="0" aria-label="Taula de resultats, amb desplaçament"></div></div>
+<div class="lectura lv"><h3>Què es manté i què canvia</h3><ul class="chips" id="chips"></ul></div>
+<p class="frase"><span class="resum" data-f="resum" aria-live="polite"></span> <span class="consell" data-f="consell"></span></p>
+</section>
+<dialog class="panell" id="p-pred" aria-labelledby="p-pred-t"><div class="p-cap"><h2 id="p-pred-t">Abans de provar-ho</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<p class="pregunta">Què fa que un pèndol oscil·li més de pressa o més a poc a poc?</p>
+<p>Aquest és un pèndol com el de l'aula: un suport, un fil, una massa, una regla i un cronòmetre. Pots canviar tres coses: la llargada del fil, el pes de la massa i la separació amb què el deixes anar.</p>
+<p>Cada mesura és el temps que triga a fer 10 oscil·lacions. Una oscil·lació és anar i tornar al lloc de sortida.</p>
+<p>El cronòmetre és teu: el poses en marxa i l'atures mirant el pèndol. Per això cada mesura té un error.</p>
+<fieldset class="pred"><legend>Quina d'aquestes tres coses creus que fa canviar més el temps de les 10 oscil·lacions?</legend><label><input type="radio" name="pred" value="a"> El pes de la massa: amb més pes, va més de pressa.</label><label><input type="radio" name="pred" value="b"> La llargada del fil.</label><label><input type="radio" name="pred" value="c"> La separació amb què el deixes anar.</label></fieldset>
+<p class="nota">Aquesta és la teva hipòtesi. No et dic la resposta encara: la comprovaràs amb mesures.</p>
+<p class="peu"><button class="btn gran" type="button" data-pred-ok>Desa la hipòtesi i fes mesures</button></p></div></dialog>
+<dialog class="panell" id="p-desc" aria-labelledby="p-desc-t"><div class="p-cap"><h2 id="p-desc-t">Què has descobert?</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<div data-locked>
+<p>Encara no pots respondre la pregunta. Per saber si una cosa fa canviar el temps, cal fer dues mesures que només es diferenciïn en aquesta cosa. Ho has de fer amb la llargada, amb el pes i amb la separació de sortida.</p>
+<p data-f="estat2"></p>
+
+</div>
+<div data-unlocked hidden>
+<p data-f="havies"></p>
+
+<h3>Les teves dades</h3>
+<div id="dades" aria-live="polite"></div>
+<h3>Què diuen les mesures i el model</h3>
+<ul>
+<li>La llargada del fil és el que fa canviar el temps: com més llarg és el fil, més a poc a poc oscil·la el pèndol.</li>
+<li>El pes de la massa no canvia el temps: amb masses de 50 g a 200 g, les diferències són de l'ordre de l'error del cronòmetre.</li>
+<li>La separació de sortida sí que canvia una mica el temps, però entre 10° i 30° és tan poc (com a màxim 0,3 s en 10 oscil·lacions) que amb una sola mesura de cada no es pot assegurar.</li>
+<li>Amb el fil 4 vegades més llarg (de 25 a 100 cm), el temps només es fa el doble.</li>
+<li>Cada mesura té un error d'uns 0,1 s, perquè engegues i atures el cronòmetre amb la teva reacció. Per això es mesuren 10 oscil·lacions i no una, i es repeteix la mesura per fer-ne la mitjana.</li>
+</ul>
+<h3>«Amb més pes va més de pressa»</h3>
+<p>Amb més pes, la gravetat estira més la massa, però també costa més moure-la: les dues coses es compensen. Per això el pes no canvia el temps.</p>
+<h3>Com sabem que una cosa fa canviar el temps?</h3>
+<p>Només si canviem una sola cosa i mantenim les altres iguals, i si la diferència és més gran que l'error de la mesura. Si canvies dues coses alhora, no pots saber quina ha fet la diferència.</p>
+
+</div></div></dialog>
+<dialog class="panell" id="p-repte" aria-labelledby="p-repte-t"><div class="p-cap"><h2 id="p-repte-t">Reptes</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos"><p><strong>Primer repte.</strong> Vols un pèndol que faci una oscil·lació cada segon, més o menys. Quina llargada de fil triaries entre les que hi ha?</p>
+<p><button class="btn" type="button" data-answer="1">Mostra la resposta</button></p>
+<p data-f="resposta" data-r="1" hidden>La de 25 cm: fa una oscil·lació en uns 1,0 s.</p>
+<p><strong>Segon repte.</strong> Si el fil és 4 vegades més llarg, el pèndol triga 4 vegades més?</p>
+<p><button class="btn" type="button" data-answer="2">Mostra la resposta</button></p>
+<p data-f="resposta" data-r="2" hidden>No: triga només el doble. Amb 25 cm, 10 oscil·lacions duren uns 10,1 s, i amb 100 cm, uns 20,2 s.</p>
+<p><strong>Tercer repte.</strong> Com faries per saber si la separació de sortida fa canviar el temps, amb un cronòmetre de mà?</p>
+<p><button class="btn" type="button" data-answer="3">Mostra la resposta</button></p>
+<p data-f="resposta" data-r="3" hidden>Faries moltes mesures de cada separació i en miraries la mitjana, perquè la diferència és petita (menys de 0,8 s en 10 oscil·lacions) i l'error d'una sola mesura la pot amagar. Amb la mitjana de moltes mesures, l'error es fa més petit.</p></div></dialog>
+<dialog class="panell" id="p-grafica" aria-labelledby="p-grafica-t"><div class="p-cap"><h2 id="p-grafica-t">Gràfica de les mesures</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos"><p>La gràfica mostra les mesures de la taula en què només ha canviat una cosa. Tria quina.</p>
+<div class="grup" role="group" aria-label="Variable de la gràfica"><button class="btn" type="button" data-gv="L" aria-pressed="true">Llargada del fil</button><button class="btn" type="button" data-gv="m" aria-pressed="false">Pes de la massa</button><button class="btn" type="button" data-gv="a" aria-pressed="false">Separació de sortida</button></div>
+<div id="graf" class="graf-host"></div><p id="graf-nota" aria-live="polite"></p></div></dialog>
+<dialog class="panell" id="p-model" aria-labelledby="p-model-t"><div class="p-cap"><h2 id="p-model-t">Sobre aquest model</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<p>Les xifres de la pàgina surten d'un model senzill del pèndol. Les fonts i les suposicions són al document FONTS.md que acompanya el recurs; aquí hi ha el resum.</p>
+<ul>
+<li><strong>Pèndol simple.</strong> Una massa petita penjada d'un fil sense pes, sense fregament amb l'aire. Per a oscil·lacions petites, el període només depèn de la llargada i de la gravetat, no del pes (<a href="https://hyperphysics.gsu.edu/hbase/pend.html">HyperPhysics, Universitat Estatal de Geòrgia</a>; llegit).</li>
+<li><strong>Període.</strong> T = 2π·√(L/g), l'anomenada llei de Huygens. La gravetat és g = 9,80665 m/s², el valor estàndard del <a href="https://physics.nist.gov/cgi-bin/cuu/Value?gn">NIST</a> (llegit; a Barcelona el valor real és una mica diferent). Això dona 2,01 s per a una oscil·lació amb 100 cm de fil.</li>
+<li><strong>Separació de sortida.</strong> La fórmula d'abans és per a angles petits. La pàgina fa servir la fórmula exacta amb la mitjana aritmètico-geomètrica, T = 2π·√(L/g) / M(1, cos(θ/2)), de l'article «Pendulum (mechanics)» de la <a href="https://en.wikipedia.org/wiki/Pendulum_(mechanics)">Viquipèdia en anglès</a> (llegit; és una enciclopèdia oberta, no una font primària). Amb 30° el període és un 1,7 % més llarg que amb angle petit, i amb 10°, un 0,2 %. Efecte real però petit: amb el fil de 100 cm i 10 oscil·lacions, la diferència entre 10° i 30° és d'uns 0,3 s.</li>
+<li><strong>Error de la mesura.</strong> Engegues i atures el cronòmetre mirant el pèndol. La reacció visual d'una persona dura de mitjana 231 ms i varia d'una prova a l'altra uns 50 ms (desviació dins d'una mateixa persona: 40,0 i 52,7 ms en dos experiments; <a href="https://doi.org/10.3389/fnhum.2015.00131">Woods i altres, 2015, <em>Frontiers in Human Neuroscience</em></a>; article llegit). Són adults amb un botó, no infants amb un cronòmetre: per a l'alumnat l'error pot ser més gran (suposició). El retard mitjà es compensa entre engegar i aturar; el que queda és la variació, d'uns 0,07 s en cada mesura. Les mesures automàtiques fan servir aquest error simulat.</li>
+<li><strong>Quan una diferència es nota.</strong> La pàgina només diu que una diferència «es nota» si és de 0,8 s o més en 10 oscil·lacions, unes 7 vegades l'error d'una diferència de dues mesures. És un criteri de la pàgina, no una norma. Amb moltes mesures i la mitjana es poden veure diferències més petites, com la de la separació.</li>
+<li><strong>Simplificacions.</strong> No hi ha fregament de l'aire ni del suport, i el pèndol no s'atura. La massa és puntual: no es té en compte la mida de la bola. El dibuix fa més gran el radi de la massa quan pesa més, i la llargada és fins al centre de la massa. Els pesos i les llargades són els d'un joc escolar corrent (suposició).</li>
+<li><strong>Autoria i revisió.</strong> Fet amb IA generativa a partir del model i les fonts d'aquest quadre. Versió de prova, pendent de revisió humana del model, dels textos i de les fonts. Autoria: Fundació Jesuïtes Educació, amb assistència de la IA. Llicència: continguts CC BY-SA 4.0 i codi MIT. No hi ha material aliè ni cap petició a tercers.</li>
+</ul>
+<div class="taula-wrap"><table class="taula"><caption>Valors del model: temps vertader de 10 oscil·lacions (s), sense error de mesura, segons la llargada del fil i la separació de sortida</caption><thead><tr><th scope="col">Fil (cm)</th><th scope="col">1 oscil·lació, angle petit (s)</th><th scope="col">10 osc., sortida 10° (s)</th><th scope="col">10 osc., sortida 20° (s)</th><th scope="col">10 osc., sortida 30° (s)</th></tr></thead><tbody><tr><th scope="row">25</th><td>1,00</td><td>10,1</td><td>10,1</td><td>10,2</td></tr><tr><th scope="row">50</th><td>1,42</td><td>14,2</td><td>14,3</td><td>14,4</td></tr><tr><th scope="row">75</th><td>1,74</td><td>17,4</td><td>17,5</td><td>17,7</td></tr><tr><th scope="row">100</th><td>2,01</td><td>20,1</td><td>20,2</td><td>20,4</td></tr></tbody></table></div></div></dialog>
+<dialog class="panell" id="p-docent" aria-labelledby="p-docent-t"><div class="p-cap"><h2 id="p-docent-t">Per al docent</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<ul>
+<li><strong>Abans (a l'aula, amb material real).</strong> És fàcil i barat: un tros de fil, una arandela o una pinça pesada, una regla, cinta adhesiva i un cronòmetre o un mòbil. Pregunteu què creuen que farà canviar el temps i que ho escriguin com a hipòtesi.</li>
+<li><strong>Durant.</strong> En parelles, amb la pàgina: una persona fa funcionar el cronòmetre i l'altra compta les oscil·lacions. Cal canviar una sola cosa cada vegada. Que repeteixin la mateixa mesura una o dues vegades i en comparin els resultats: això és l'error de la mesura.</li>
+<li><strong>Després.</strong> Fer el mateix amb el pèndol real i comparar els temps. Posar en comú: què ha canviat el temps? Quina diferència és més gran que l'error? Per què mesurem 10 oscil·lacions i no una? Es pot repetir amb la separació de sortida, fent la mitjana de moltes mesures de tota la classe.</li>
+<li><strong>Idea errònia que pot aparèixer.</strong> «Amb més pes va més de pressa.» El recurs la fa trontollar amb mesures amb masses diferents i la mateixa llargada.</li>
+<li><strong>Mesura automàtica.</strong> El botó fa una mesura amb un error simulat i accelerada. Serveix per veure moltes repeticions de seguida (a la pissarra digital), però no substitueix el cronòmetre propi.</li>
+<li><strong>Currículum.</strong> Encaixa amb el saber «Iniciació a l'activitat científica» de 5è i 6è (experiments amb control de variables, instruments de mesura precisos) i amb el criteri 2.3 (Decret 175/2022). El pèndol com a contingut no hi és citat expressament.</li>
+</ul></div></dialog>
+</div><script type="module">// Plantilla de pantalla única (skill recurs-aula): comportament genèric. El build l'insereix abans del live.js del recurs.
+// No sap res del model: el recurs li diu quan s'ha provat tot (progres) i què ha de redibuixar en canviar de pestanya.
+//
+//   const P = Pantalla.inicia({ opcions, correcta, missatges, onTab, onObre });
+//   P.progres("Falta provar: …", fet)   // actualitza l'estat i desbloqueja «Què has descobert?» quan fet és cert
+//   Pantalla.etiquetes(stage, svg, [{ t, pt: [x, y], dx, dy, alt: [[dx, dy], …] }])
+//   Pantalla.vistaAmpliada({ minAmplada: 900, onCanvi })
+//   ?mesura o ?debug a l'adreça: window.__mesura() i window.__panells() per a la verificació de la fase 6.
+const Pantalla = (() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const NS = "http://www.w3.org/2000/svg";
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const senseFinal = (s) => s.replace(/[.:;]$/, "");
+
+  function inicia({ opcions = {}, correcta = null, missatges = {}, onTab = () => {}, onObre = () => {}, obrePrediccio = true } = {}) {
+    const app = $(".app");
+    let prediccio = null, vista = false, revelat = false, opener = null;
+
+    // ---- predicció i descoberta ----
+    const ind = $("[data-f=ind]");
+    const mostraInd = () => { if (ind) ind.textContent = prediccio ? "Predicció: " + opcions[prediccio] : vista ? "Predicció: sense resposta" : ""; };
+    function missatge() {
+      const m = missatges.perOpcio?.[prediccio];
+      if (m) return m;
+      if (!prediccio) return missatges.senseResposta ?? "";
+      return prediccio === correcta ? missatges.encert ?? "" : missatges.error ?? "";
+    }
+    function pintaDescoberta() {
+      const box = $("#p-desc"); if (!box) return;
+      $("[data-locked]", box).hidden = revelat;
+      $("[data-unlocked]", box).hidden = !revelat;
+      if (!revelat) return;
+      const h = $("[data-f=havies]", box);
+      if (h) h.textContent = prediccio ? "Havies triat «" + senseFinal(opcions[prediccio]) + "». " + missatge() : missatge();
+    }
+    function desbloqueja() {
+      revelat = true;
+      const b = $("[data-desc]"); if (b) { b.setAttribute("aria-disabled", "false"); b.dataset.ready = "true"; }
+      pintaDescoberta();
+    }
+    function progres(text, fet) {
+      $$("[data-f=estat], [data-f=estat2]").forEach((e) => { e.textContent = text; });
+      if (fet && !revelat) desbloqueja();
+    }
+
+    // ---- panells ----
+    const nav = $("#menu"), tog = $(".menu-toggle");
+    const tancaMenu = () => { if (!nav) return; nav.classList.remove("obert"); tog?.setAttribute("aria-expanded", "false"); };
+    function obre(id, from) {
+      const d = document.getElementById(id);
+      if (!d || d.open) return;
+      opener = from || document.activeElement;
+      if (id === "p-desc") pintaDescoberta();
+      onObre(id);
+      d.showModal(); tancaMenu();
+    }
+    $$("dialog.panell").forEach((d) => {
+      d.addEventListener("close", () => {
+        if (d.id === "p-pred") { vista = true; mostraInd(); }
+        if (opener && opener.isConnected) opener.focus();
+        opener = null;
+      });
+      d.addEventListener("click", (e) => { if (e.target === d) d.close(); }); // clic al fons
+      $("[data-close]", d)?.addEventListener("click", () => d.close());
+    });
+    $$("[data-open]").forEach((b) => b.addEventListener("click", () => obre(b.dataset.open, b)));
+    $$('input[name="pred"]').forEach((e) => e.addEventListener("change", () => { prediccio = e.value; mostraInd(); pintaDescoberta(); }));
+    $("[data-pred-ok]")?.addEventListener("click", () => $("#p-pred").close());
+    $("[data-reveal]")?.addEventListener("click", (e) => { desbloqueja(); obre("p-desc", e.currentTarget); });
+    $("[data-reveal2]")?.addEventListener("click", () => desbloqueja());
+    $$("[data-answer]").forEach((b) => b.addEventListener("click", () => {
+      const r = $(`[data-f=resposta][data-r="${b.dataset.answer}"]`); if (r) r.hidden = false;
+      b.hidden = true; r?.setAttribute("tabindex", "-1"); r?.focus();
+    }));
+
+    // ---- menú del mòbil i pestanyes ----
+    tog?.addEventListener("click", () => { const o = nav.classList.toggle("obert"); tog.setAttribute("aria-expanded", String(o)); if (o) $("button", nav)?.focus(); });
+    $$("[data-tab-btn]").forEach((b) => b.addEventListener("click", () => {
+      app.dataset.tab = b.dataset.tabBtn;
+      $$("[data-tab-btn]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      setTimeout(() => onTab(app.dataset.tab), 0);
+    }));
+
+    // ---- Esc propi: tanca el panell obert o el menú (l'Esc sintètic de les proves no tanca un <dialog>) ----
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      const d = $("dialog.panell[open]");
+      if (d) { e.preventDefault(); d.close(); return; }
+      if (nav?.classList.contains("obert")) { tancaMenu(); tog.focus(); }
+    });
+
+    if (obrePrediccio) requestAnimationFrame(() => obre("p-pred", $("[data-open=p-pred]")));
+    return { obre, progres, desbloqueja, get prediccio() { return prediccio; }, get revelat() { return revelat; } };
+  }
+
+  // ---- etiquetes: capa HTML sobre la figura, de 16-22 px reals a qualsevol amplada ----
+  // stage: element posicionat que conté l'SVG i un .tags; pt: punt de la peça en coordenades de l'SVG;
+  // dx, dy: desplaçament de l'etiqueta en píxels de pantalla; alt: altres desplaçaments per si toca una altra etiqueta.
+  // Una etiqueta que no troba lloc no es mostra i queda apuntada a window.__etiquetesAmagades (es revisa a la verificació).
+  function etiquetes(stage, svg, llista) {
+    const capa = $(".tags", stage); if (!capa) return;
+    capa.innerHTML = "";
+    const m = svg.getScreenCTM(); if (!m) return;
+    const box = stage.getBoundingClientRect();
+    if (!box.width || !box.height) return; // figura amagada (pestanya de controls al mòbil): es recol·loquen en tornar-hi
+    const lead = document.createElementNS(NS, "svg"); lead.setAttribute("class", "lead"); capa.appendChild(lead);
+    const proj = ([x, y]) => [m.a * x + m.c * y + m.e - box.left, m.b * x + m.d * y + m.f - box.top];
+    const posades = [], amagades = [];
+    for (const l of llista) {
+      const [px, py] = proj(l.pt);
+      const tag = document.createElement("span"); tag.className = "tag"; tag.textContent = l.t; capa.appendChild(tag);
+      const w = tag.offsetWidth, h = tag.offsetHeight;
+      let lloc = null;
+      for (const [dx, dy] of [[l.dx ?? 0, l.dy ?? 0], ...(l.alt || [])]) {
+        const tx = clamp(px + dx, w / 2 + 4, box.width - w / 2 - 4), ty = clamp(py + dy, h / 2 + 4, box.height - h / 2 - 4);
+        if (!posades.some((q) => Math.abs(q.x - tx) < (q.w + w) / 2 + 4 && Math.abs(q.y - ty) < (q.h + h) / 2 + 2)) { lloc = [tx, ty]; break; }
+      }
+      if (!lloc) { tag.remove(); amagades.push(l.t); continue; }
+      const [tx, ty] = lloc;
+      posades.push({ x: tx, y: ty, w, h });
+      tag.style.left = tx.toFixed(1) + "px"; tag.style.top = ty.toFixed(1) + "px";
+      const ln = document.createElementNS(NS, "line");
+      ln.setAttribute("x1", tx); ln.setAttribute("y1", ty); ln.setAttribute("x2", px); ln.setAttribute("y2", py);
+      lead.insertBefore(ln, lead.firstChild);
+      const c = document.createElementNS(NS, "circle"); c.setAttribute("cx", px); c.setAttribute("cy", py); c.setAttribute("r", 4); lead.appendChild(c);
+    }
+    window.__etiquetesAmagades = amagades;
+  }
+
+  // ---- vista ampliada (opcional): requadre #inset amb botons data-inset="gran|amaga|mostra" ----
+  // Si la figura fa menys de minAmplada px, comença amagada perquè no tapi l'objecte.
+  function vistaAmpliada({ minAmplada = 900, onCanvi = () => {} } = {}) {
+    const inset = $("#inset"), mostra = $("[data-inset=mostra]"), gran = $("[data-inset=gran]"), fig = $(".fig");
+    if (!inset) return;
+    const nom = inset.dataset.nom || "la vista ampliada";
+    $$("[data-inset]").forEach((b) => b.addEventListener("click", () => {
+      const k = b.dataset.inset;
+      if (k === "gran") { const g = inset.classList.toggle("gran"); gran.setAttribute("aria-pressed", String(g)); gran.textContent = g ? "Redueix" : "Amplia"; gran.setAttribute("aria-label", (g ? "Redueix " : "Amplia ") + nom); }
+      if (k === "amaga") { inset.hidden = true; mostra.hidden = false; mostra.focus(); }
+      if (k === "mostra") { inset.hidden = false; mostra.hidden = true; gran.focus(); }
+      onCanvi(!inset.hidden);
+    }));
+    if (getComputedStyle(inset).position === "absolute" && fig.clientWidth < minAmplada) { inset.hidden = true; mostra.hidden = false; onCanvi(false); }
+  }
+
+  // ---- mesura per a la verificació (fase 6) ----
+  // Amb overflow:hidden, scrollHeight <= innerHeight sempre és cert: aquí es mira que cada bloc visible acabi dins de la pantalla,
+  // que no tingui contingut tallat i que cap fill en sobresurti.
+  // cert si entre l'element i el bloc hi ha un contenidor que es desplaça (overflow auto o scroll)
+  const dinsDeDesplacament = (c, bloc) => { for (let p = c.parentElement; p && p !== bloc; p = p.parentElement) { const o = getComputedStyle(p); if (/(auto|scroll)/.test(o.overflowX) || /(auto|scroll)/.test(o.overflowY)) return true; } return false; };
+  const BLOCS = [".top", ".tabs", ".fig", ".quick", ".ctrl", ".lect"];
+  function mesura() {
+    const problemes = [];
+    const de = document.documentElement;
+    if (de.scrollWidth > innerWidth + 1) problemes.push(`desplaçament horitzontal: ${de.scrollWidth} > ${innerWidth}`);
+    for (const sel of BLOCS) {
+      const e = $(sel); if (!e || e.offsetParent === null || getComputedStyle(e).display === "none") continue;
+      const r = e.getBoundingClientRect();
+      if (r.bottom > innerHeight + 1 || r.right > innerWidth + 1) problemes.push(`${sel} surt de la pantalla (${Math.round(r.right)} × ${Math.round(r.bottom)})`);
+      if (sel !== ".fig" && e.scrollHeight > e.clientHeight + 1) problemes.push(`${sel} té contingut tallat (${e.scrollHeight} > ${e.clientHeight})`);
+      for (const c of e.querySelectorAll("*")) {
+        if (c.closest("svg") || c.closest(".tags") || c.closest("[hidden]") || getComputedStyle(c).position === "absolute") continue;
+        if (dinsDeDesplacament(c, e)) continue; // dins d'un contenidor amb desplaçament propi (una taula llarga): sobresortir-ne és el seu ofici
+        const q = c.getBoundingClientRect();
+        if (q.width && (q.bottom > r.bottom + 1 || q.right > r.right + 1)) { problemes.push(`${sel} > ${c.tagName.toLowerCase()}${c.className ? "." + String(c.className).split(" ")[0] : ""} sobresurt`); break; }
+      }
+    }
+    // al mòbil, que alguna etiqueta no hi càpiga és un avís per revisar en captura; a partir de tauleta, és un problema
+    const avisos = [];
+    const figVisible = $(".fig") && $(".fig").offsetParent !== null && getComputedStyle($(".fig")).display !== "none";
+    if (figVisible && window.__etiquetesAmagades?.length) (innerWidth <= 600 ? avisos : problemes).push("etiquetes amagades per manca de lloc: " + window.__etiquetesAmagades.join(", "));
+    const fig = $(".fig")?.getBoundingClientRect();
+    // la figura és el centre del recurs: si els controls o les lectures l'aixafen, cal treure'ls espai, no reduir-la
+    const minFig = innerWidth > 600 ? 0.3 : 0.22;
+    if (fig && fig.height > 0 && fig.height < minFig * innerHeight) problemes.push(`figura massa petita: ${Math.round(fig.height)} px d'alçada (mínim ${Math.round(minFig * innerHeight)})`);
+    return { mida: `${innerWidth}×${innerHeight}`, figura: fig ? `${Math.round(fig.width)}×${Math.round(fig.height)}` : null, ok: problemes.length === 0, problemes, avisos };
+  }
+  function panells() {
+    return $$("dialog.panell").map((d) => {
+      const obert = d.open; if (!obert) d.showModal();
+      const r = d.getBoundingClientRect(), c = $(".p-cos", d);
+      const ok = r.top >= -1 && r.bottom <= innerHeight + 1 && r.right <= innerWidth + 1 && c.scrollWidth <= c.clientWidth + 1;
+      const res = { id: d.id, ok, alt: `${Math.round(r.height)}/${innerHeight}`, desplacaInterior: c.scrollHeight > c.clientHeight + 1 };
+      if (!obert) d.close();
+      return res;
+    });
+  }
+  if (/[?&](mesura|debug)/.test(location.search)) { window.__mesura = mesura; window.__panells = panells; }
+
+  return { inicia, etiquetes, vistaAmpliada, mesura, panells };
+})();
+
+const M = (() => {
+// Model pur del laboratori del pèndol. Tots els números que es dibuixen, es mouen o s'escriuen surten d'aquí.
+// Origen de cada constant: vegeu FONTS.md.
+
+const G = 9.80665;            // m/s², acceleració de la gravetat estàndard (NIST/CODATA; BIPM)
+const N_OSC = 10;             // oscil·lacions que es cronometren en cada mesura (decisió de disseny)
+const LLARGADES = [25, 50, 75, 100]; // cm, del punt de suspensió al centre de la massa (material d'aula: fil i regla d'1 m)
+const MASSES = [50, 100, 200];       // g, masses marcades d'un joc escolar
+const AMPLITUDS = [10, 20, 30];      // graus de separació inicial (decisió de disseny: mesurable amb un transportador)
+const VAR_NOMS = { L: "llargada del fil", m: "pes de la massa", a: "separació de sortida" };
+const VARS = ["L", "m", "a"];
+
+// Error de la mesura amb cronòmetre de mà (FONTS.md): l'alumne engega i atura mirant el pèndol.
+const SD_REACCIO = 0.05;             // s, desviació d'una reacció visual d'una mateixa persona (40,0 i 52,7 ms a Woods et al. 2015; per als infants, suposició)
+const SD_REACCIO_FONT_MS = [40.0, 52.7]; // ms, desviacions dins d'una mateixa persona als dos experiments de Woods et al. 2015 (només per citar-les a «Sobre aquest model»)
+const MITJANA_REACCIO = 0.231;       // s, temps de reacció visual mitjà (231 ms a Woods et al. 2015); en una diferència engega-atura es compensa
+const SD_MESURA = SD_REACCIO * Math.SQRT2; // s, desviació de la diferència de dues reaccions independents
+const RESOLUCIO = 0.1;               // s, el cronòmetre de la pàgina mostra dècimes (etapes.md: un decimal com a màxim)
+const coma = (x, d = 1) => x.toFixed(d).replace(".", ",");
+// Desviació de la diferència de dues mesures (cada una amb l'error de reacció i l'arrodoniment a dècimes)
+const SD_DIF = Math.SQRT2 * Math.sqrt(SD_MESURA ** 2 + RESOLUCIO ** 2 / 12);
+// Criteri de la pàgina: una diferència entre dues mesures només es dona per «es nota» si supera aquest llindar (decisió de disseny, no una norma).
+const LLINDAR = 0.8;                 // s, en 10 oscil·lacions
+const LLINDAR_VEGADES = Math.round(LLINDAR / SD_DIF); // vegades la desviació d'una diferència (≈ 7)
+
+const estatInicial = () => ({ L: 50, m: 100, a: 20 });
+
+// Mitjana aritmètico-geomètrica
+function agm(a, b) { for (let i = 0; i < 40 && Math.abs(a - b) > 1e-15; i++) [a, b] = [(a + b) / 2, Math.sqrt(a * b)]; return a; }
+const rad = (g) => (g * Math.PI) / 180;
+// Període d'oscil·lacions petites: T0 = 2π√(L/g). La massa no hi surt.
+const periode0 = (Lcm) => 2 * Math.PI * Math.sqrt(Lcm / 100 / G);
+// Període exacte per a una amplitud donada: T = T0 / M(1, cos(θ0/2)), amb M la mitjana aritmètico-geomètrica.
+const factorAmplitud = (adeg) => 1 / agm(1, Math.cos(rad(adeg) / 2));
+const periode = (st) => periode0(st.L) * factorAmplitud(st.a);
+const temps10 = (st) => N_OSC * periode(st);
+// Diferència entre el període real i el d'angle petit, en percentatge
+const efecteAmplitudPct = (adeg) => (factorAmplitud(adeg) - 1) * 100;
+
+// Moviment: θ'' = -(g/L) sin θ, integrat amb Runge-Kutta de 4t ordre. Serveix per dibuixar el pèndol i per comprovar el període.
+function pas(s, Lcm, dt) {
+  const k = G / (Lcm / 100);
+  const f = (th, om) => [om, -k * Math.sin(th)];
+  const [a1, b1] = f(s.th, s.om);
+  const [a2, b2] = f(s.th + (dt / 2) * a1, s.om + (dt / 2) * b1);
+  const [a3, b3] = f(s.th + (dt / 2) * a2, s.om + (dt / 2) * b2);
+  const [a4, b4] = f(s.th + dt * a3, s.om + dt * b3);
+  return { th: s.th + (dt / 6) * (a1 + 2 * a2 + 2 * a3 + a4), om: s.om + (dt / 6) * (b1 + 2 * b2 + 2 * b3 + b4) };
+}
+const sortida = (adeg) => ({ th: rad(adeg), om: 0 });
+
+// Una oscil·lació completa = dos extrems (punts de gir) després de la sortida.
+const oscilacionsCompletes = (extrems) => Math.floor(extrems / 2);
+
+// Generador pseudoaleatori amb llavor (mulberry32) i normal (Box-Muller): perquè les proves siguin repetibles.
+function rng(seed) {
+  let s = seed >>> 0;
+  const u = () => { s = (s + 0x6d2b79f5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const normal = () => Math.sqrt(-2 * Math.log(1 - u())) * Math.cos(2 * Math.PI * u());
+  return { u, normal };
+}
+const arrodoneix = (x) => Math.round(x / RESOLUCIO) * RESOLUCIO;
+// Mesura simulada: temps vertader més la reacció en aturar menys la reacció en engegar, arrodonida a dècimes (com el cronòmetre de la pàgina).
+function mesuraSimulada(st, r) {
+  const dEngega = MITJANA_REACCIO + SD_REACCIO * r.normal();
+  const dAtura = MITJANA_REACCIO + SD_REACCIO * r.normal();
+  return arrodoneix(temps10(st) + dAtura - dEngega);
+}
+
+// ---------- taula de resultats ----------
+// fila: { L, m, a, t } (t: temps de 10 oscil·lacions, en s). Les variables que difereixen entre dues files:
+const canvis = (f, g) => VARS.filter((v) => f[v] !== g[v]);
+const mateixMuntatge = (f, g) => canvis(f, g).length === 0;
+const mitjanaDe = (files, f) => { const c = files.filter((g) => mateixMuntatge(f, g)); return { n: c.length, mitjana: c.reduce((s, g) => s + g.t, 0) / c.length }; };
+// Parelles de files que només difereixen en una variable (control de variables), per a cada variable.
+function parelles(files) {
+  const out = { L: [], m: [], a: [] };
+  for (let i = 0; i < files.length; i++) for (let j = i + 1; j < files.length; j++) {
+    const c = canvis(files[i], files[j]);
+    if (c.length === 1) out[c[0]].push([files[i], files[j]]);
+  }
+  return out;
+}
+// Variables provades (almenys una parella de mesures que només difereixen en aquesta variable)
+const provades = (files) => { const p = parelles(files); return VARS.filter((v) => p[v].length > 0); };
+// Valoració d'una diferència de temps (s) entre dues mesures
+const valoracio = (dif) => (Math.abs(dif) >= LLINDAR ? "es-nota" : "dins-error");
+const TEXT_VALORACIO = { "es-nota": `és més gran que el marge d'error del cronòmetre (${coma(LLINDAR, 1)} s): es nota`, "dins-error": `és més petita que el marge d'error del cronòmetre (${coma(LLINDAR, 1)} s): no es pot assegurar que sigui real` };
+// Avís de control de variables: variables que ha canviat l'alumnat entre l'última fila i el muntatge actual.
+const avisCanvis = (ultima, actual) => (ultima ? canvis(ultima, actual) : []);
+
+
+return { AMPLITUDS, G, LLARGADES, LLINDAR, LLINDAR_VEGADES, MASSES, MITJANA_REACCIO, N_OSC, RESOLUCIO, SD_DIF, SD_MESURA, SD_REACCIO, SD_REACCIO_FONT_MS, TEXT_VALORACIO, VARS, VAR_NOMS, agm, arrodoneix, avisCanvis, canvis, coma, efecteAmplitudPct, estatInicial, factorAmplitud, mateixMuntatge, mesuraSimulada, mitjanaDe, oscilacionsCompletes, parelles, pas, periode, periode0, provades, rng, sortida, temps10, valoracio };
+})();
+
+const SCN = (() => {
+// Geometria pura de la figura (unitats del viewBox). Vista de costat (2D): suport amb braç, fil, massa i regla d'1 m.
+// Les mides de la figura surten d'aquí: el viewBox i el codi que dibuixa fan servir les mateixes.
+// Escala: 1 cm del pèndol = ESC unitats del dibuix. El radi de la massa creix amb l'arrel cúbica del pes (volum proporcional al pes, de metall).
+const W = 700;
+const H = 430;
+const PX = 350;             // x del punt de suspensió
+const PY = 52;              // y del punt de suspensió
+const ESC = 3.2;            // unitats per cm
+const R_BASE = 15;          // radi (unitats) d'una massa de 50 g
+const radiMassa = (m) => R_BASE * Math.cbrt(m / 50);
+const RULER = { x: 86, w: 26 };           // regla vertical, amb el zero a l'alçada del punt de suspensió
+const ROD_X = 570;                        // vareta del suport
+const BASE = { x0: 490, x1: 650, y: 404, h: 16 };
+const ARM = { y0: 38, y1: 50 };           // el braç va de la vareta al punt de suspensió
+const R_ARC = 64;                         // radi de l'arc que mostra la separació de sortida
+
+// Posició de la massa per a un angle (rad) i una llargada (cm)
+const posMassa = (L, th) => [PX + L * ESC * Math.sin(th), PY + L * ESC * Math.cos(th)];
+const sortidaPos = (L, adeg) => posMassa(L, (adeg * Math.PI) / 180);
+// Marques de la regla: cada 5 cm una marca curta, cada 25 cm una de llarga
+function marquesRegla(maxCm = 100) {
+  const out = [];
+  for (let cm = 0; cm <= maxCm; cm += 5) out.push({ cm, y: PY + cm * ESC, llarga: cm % 25 === 0 });
+  return out;
+}
+// Arc de la separació de sortida (de la vertical al fil de sortida), com a camí SVG
+function arcSortida(adeg) {
+  const th = (adeg * Math.PI) / 180;
+  const x1 = PX, y1 = PY + R_ARC, x2 = PX + R_ARC * Math.sin(th), y2 = PY + R_ARC * Math.cos(th);
+  return `M${x1} ${y1} A${R_ARC} ${R_ARC} 0 0 0 ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+}
+const puntArc = (adeg) => { const th = (adeg * Math.PI) / 180 / 2; return [PX + R_ARC * Math.sin(th), PY + R_ARC * Math.cos(th)]; };
+
+return { ARM, BASE, ESC, H, PX, PY, ROD_X, RULER, R_ARC, R_BASE, W, arcSortida, marquesRegla, posMassa, puntArc, radiMassa, sortidaPos };
+})();
+
+// Components genèrics d'un laboratori (skill recurs-aula, perfil «Laboratori»): taula de resultats, gràfica de punts i cronòmetre.
+// No saben res del pèndol: el recurs els passa les columnes, els valors i els textos. Escrits perquè es puguin moure a la plantilla.
+// El build els insereix abans del live.js. Tots tres són funcions que reben un element del DOM i retornen un objecte amb mètodes.
+const Lab = (() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const coma = (x, d = 1) => Number(x).toFixed(d).replace(".", ",");
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+
+  // ---- Taula de resultats ----
+  // columnes: [{ clau, titol, curt?, fmt?(valor, fila, files) }]; opcions.avis(fila, anterior) → text d'avís (o "") per a cada fila;
+  // opcions.mitjana: { clau, titol, grup(f, g) → cert si les files són el mateix muntatge } afegeix la mitjana de les repeticions;
+  // opcions.esborra: text del botó per esborrar una fila (cal aria-label). onCanvi(files) s'avisa en afegir o esborrar.
+  function TaulaResultats(el, { columnes, titol, mitjana = null, avis = null, esborra = "Esborra la fila", buida = "Encara no has apuntat cap mesura.", onCanvi = () => {} }) {
+    const files = [];
+    function pinta() {
+      if (!files.length) { el.innerHTML = `<p class="buida">${esc(buida)}</p>`; return; }
+      const cap = columnes.map((c) => `<th scope="col">${esc(c.titol)}</th>`).join("") + (mitjana ? `<th scope="col">${esc(mitjana.titol)}</th>` : "") + `<th scope="col" class="col-x"><span class="nomes-sr">Esborra</span></th>`;
+      const cos = files.map((f, i) => {
+        const a = avis ? avis(f, files[i - 1], i) : "";
+        let m = "";
+        if (mitjana) { const g = files.filter((h) => mitjana.grup(f, h)); m = `<td>${g.length > 1 ? coma(g.reduce((s, h) => s + h[mitjana.valor], 0) / g.length, 1) + " (" + g.length + ")" : "—"}</td>`; }
+        return `<tr${a ? ' class="amb-avis"' : ""}>` + columnes.map((c, k) => (k === 0 ? `<th scope="row">${c.fmt ? c.fmt(f[c.clau], f, files) : esc(f[c.clau])}</th>` : `<td>${c.fmt ? c.fmt(f[c.clau], f, files) : esc(f[c.clau])}</td>`)).join("") + m +
+          `<td><button class="btn mini esborra" type="button" data-i="${i}" aria-label="${esc(esborra)} ${i + 1}">×</button></td></tr>` + (a ? `<tr class="avis-fila"><td colspan="${columnes.length + (mitjana ? 1 : 0) + 1}">${esc(a)}</td></tr>` : "");
+      }).join("");
+      el.innerHTML = `<table class="taula"><caption class="nomes-sr">${esc(titol || "Taula de resultats")}</caption><thead><tr>${cap}</tr></thead><tbody>${cos}</tbody></table>`;
+      const wrap = el.querySelector("table"); if (wrap) el.scrollTop = el.scrollHeight;
+    }
+    el.addEventListener("click", (e) => { const b = e.target.closest("button[data-i]"); if (!b) return; files.splice(+b.dataset.i, 1); pinta(); onCanvi(files); });
+    pinta();
+    return { files, afegeix(f) { files.push(f); pinta(); onCanvi(files); }, pinta, neteja() { files.length = 0; pinta(); onCanvi(files); } };
+  }
+
+  // ---- Gràfica de punts ----
+  // Dibuixa a la mida real de l'element (1 unitat = 1 px), perquè la lletra faci 16 px a qualsevol amplada. Eixos amb marques i punts.
+  // pinta({ punts: [{ x, y, destacat }], xTitol, yTitol, xMarques: [valors], yMin, yMax, fmtX, fmtY, descripcio })
+  function GrafiquePunts(host) {
+    function pinta({ punts, xTitol, yTitol, xMarques, yMin = 0, yMax, fmtX = (v) => coma(v, 0), fmtY = (v) => coma(v, 0), descripcio = "" }) {
+      const w = Math.max(240, host.clientWidth || 320), h = Math.max(180, Math.min(300, Math.round(w * 0.6)));
+      const m = { l: 52, r: 14, t: 12, b: 56 };
+      const xs = xMarques, x0 = Math.min(...xs), x1 = Math.max(...xs);
+      const X = (v) => (x1 === x0 ? m.l + (w - m.l - m.r) / 2 : m.l + ((v - x0) / (x1 - x0)) * (w - m.l - m.r));
+      const Y = (v) => h - m.b - ((v - yMin) / (yMax - yMin)) * (h - m.t - m.b);
+      const s = [];
+      s.push(`<svg xmlns="${NS}" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(descripcio)}">`);
+      const passos = 4;
+      for (let i = 0; i <= passos; i++) { const v = yMin + ((yMax - yMin) * i) / passos; s.push(`<line class="g-xarxa" x1="${m.l}" x2="${w - m.r}" y1="${Y(v)}" y2="${Y(v)}"/><text class="g-text" x="${m.l - 6}" y="${Y(v) + 5}" text-anchor="end">${fmtY(v)}</text>`); }
+      for (const v of xs) s.push(`<line class="g-marca" x1="${X(v)}" x2="${X(v)}" y1="${h - m.b}" y2="${h - m.b + 5}"/><text class="g-text" x="${X(v)}" y="${h - m.b + 22}" text-anchor="middle">${fmtX(v)}</text>`);
+      s.push(`<line class="g-eix" x1="${m.l}" x2="${w - m.r}" y1="${h - m.b}" y2="${h - m.b}"/><line class="g-eix" x1="${m.l}" x2="${m.l}" y1="${m.t}" y2="${h - m.b}"/>`);
+      s.push(`<text class="g-text g-titol" x="${(m.l + w - m.r) / 2}" y="${h - 8}" text-anchor="middle">${esc(xTitol)}</text>`);
+      s.push(`<text class="g-text g-titol" transform="translate(14 ${(m.t + h - m.b) / 2}) rotate(-90)" text-anchor="middle">${esc(yTitol)}</text>`);
+      for (const p of punts) s.push(`<circle class="g-punt${p.destacat ? " destacat" : ""}" cx="${X(p.x)}" cy="${Y(p.y)}" r="6"/>`);
+      s.push("</svg>");
+      host.innerHTML = s.join("");
+    }
+    return { pinta };
+  }
+
+  // ---- Cronòmetre ----
+  // ara(): temps en ms (per defecte performance.now). Estats: "zero", "marxa", "parat". Mostra dècimes de segon.
+  // onCanvi({ estat, ms }) s'avisa a cada canvi d'estat i a cada fotograma mentre va. mostra(ms) → text.
+  function Cronometre({ ara = () => performance.now(), onCanvi = () => {}, resolucio = 0.1 } = {}) {
+    let estat = "zero", t0 = 0, ms = 0, raf = 0;
+    const llegeix = () => (estat === "marxa" ? ara() - t0 : ms);
+    const seg = () => Math.round(llegeix() / 1000 / resolucio) * resolucio;
+    function bucle() { onCanvi({ estat, ms: llegeix() }); if (estat === "marxa") raf = requestAnimationFrame(bucle); }
+    return {
+      engega() { if (estat === "marxa") return; if (estat === "zero") t0 = ara(); else t0 = ara() - ms; estat = "marxa"; cancelAnimationFrame(raf); bucle(); },
+      atura() { if (estat !== "marxa") return; ms = ara() - t0; estat = "parat"; cancelAnimationFrame(raf); onCanvi({ estat, ms }); },
+      zero() { estat = "zero"; ms = 0; cancelAnimationFrame(raf); onCanvi({ estat, ms }); },
+      // fixa un temps (mesura automàtica): el cronòmetre queda parat amb aquest valor
+      fixa(sec) { cancelAnimationFrame(raf); estat = "parat"; ms = sec * 1000; onCanvi({ estat, ms }); },
+      get estat() { return estat; }, get segons() { return seg(); },
+    };
+  }
+
+  return { TaulaResultats, GrafiquePunts, Cronometre, coma };
+})();
+
+const GEOM = {"tx":{"perOpcio":{"a":"Molta gent pensa que amb més pes va més de pressa, però en aquestes mesures el pes no canvia el temps. El que el canvia és la llargada del fil.","b":"Tenies raó: el que fa canviar el temps és la llargada del fil.","c":"Aquesta no és la que més el canvia: entre 10° i 30° el temps canvia tan poc que amb una sola mesura de cada no es pot assegurar. El que el canvia és la llargada del fil."},"senseResposta":"No havies triat cap hipòtesi, però ho pots comprovar: el que fa canviar el temps és la llargada del fil.","frases":{"consell":{"quiet":"Fes una mesura: deixa'l anar, engega el cronòmetre i atura'l quan hagi fet 10 oscil·lacions.","soltat":"Engega el cronòmetre.","marxa":"Compta les oscil·lacions i atura el cronòmetre quan en hagi fet 10.","parat":"Apunta el temps a la taula.","apuntat":"Canvia una sola cosa i fes una altra mesura. Si repeteixes la mateixa, veuràs com varia el temps."},"avisAlhora":"Has canviat {v} alhora: no sabràs quina de les coses ho ha fet.","esperaAuto":"Mesurant…"}},"opcions":{"a":"El pes de la massa: amb més pes, va més de pressa.","b":"La llargada del fil.","c":"La separació amb què el deixes anar."},"etiq":{"suport":"Suport","regla":"Regla","angle":"Sortida","fil":"Fil","massa":"Massa"},"varOpcio":{"a":"m","b":"L","c":"a"}};
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const NS = "http://www.w3.org/2000/svg";
+const svg = $("svg.pend");
+const { W, H, PX, PY, ESC } = SCN;
+const el = (name, attrs = {}, parent) => { const e = document.createElementNS(NS, name); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const coma = Lab.coma;
+const params = new URLSearchParams(location.search);
+const VEL_AUTO = Number(params.get("vel")) || 8;           // la mesura automàtica va a aquesta velocitat (?vel=200 per a les proves)
+const aleatori = M.rng(params.has("llavor") ? Number(params.get("llavor")) : (Math.random() * 2 ** 32) >>> 0);
+
+// ---------- estat ----------
+const st = M.estatInicial();
+// pend: "quiet" (a la sortida), "va" (oscil·la). mode: "manual" o "auto"
+const pend = { estat: "quiet", s: M.sortida(st.a), extrems: 0, vel: 1, mode: "manual", last: 0, tVirtual: 0 };
+let apuntat = false, soltat = false, grafVar = "L";
+
+// ---------- figura: part fixa i part mòbil ----------
+const gFix = $("#fix", svg), gGhost = $("#ghost", svg), gMob = $("#mob", svg);
+function dibuixaFix() {
+  gFix.innerHTML = "";
+  // terra de la taula (línia suau)
+  el("line", { class: "taula-l", x1: 20, x2: W - 20, y1: SCN.BASE.y + SCN.BASE.h, y2: SCN.BASE.y + SCN.BASE.h }, gFix);
+  // suport: base, vareta, braç i pinça
+  el("rect", { class: "suport", x: SCN.BASE.x0, y: SCN.BASE.y, width: SCN.BASE.x1 - SCN.BASE.x0, height: SCN.BASE.h, rx: 4 }, gFix);
+  el("rect", { class: "suport", x: SCN.ROD_X - 6, y: SCN.ARM.y0 - 6, width: 12, height: SCN.BASE.y - SCN.ARM.y0 + 6, rx: 3 }, gFix);
+  el("rect", { class: "suport", x: PX - 8, y: SCN.ARM.y0, width: SCN.ROD_X - PX + 8, height: SCN.ARM.y1 - SCN.ARM.y0, rx: 3 }, gFix);
+  el("circle", { class: "met", cx: SCN.ROD_X, cy: (SCN.ARM.y0 + SCN.ARM.y1) / 2, r: 9 }, gFix);
+  el("rect", { class: "met", x: PX - 5, y: SCN.ARM.y1 - 2, width: 10, height: 8, rx: 2 }, gFix);
+  // regla vertical d'1 m, amb el zero a l'alçada del punt de suspensió
+  const R = SCN.RULER;
+  el("rect", { class: "regla", x: R.x, y: PY, width: R.w, height: 100 * ESC, rx: 2 }, gFix);
+  for (const m of SCN.marquesRegla(100)) el("line", { class: "regla-m", x1: R.x + R.w, x2: R.x + R.w - (m.llarga ? 16 : 8), y1: m.y, y2: m.y }, gFix);
+  el("line", { class: "zero", x1: R.x - 6, x2: PX - 8, y1: PY, y2: PY }, gFix);
+}
+function dibuixaGhost() {
+  gGhost.innerHTML = "";
+  const L = st.L, a = st.a, r = SCN.radiMassa(st.m);
+  // eix vertical (posició de repòs) i arc de la separació
+  el("line", { class: "eix-v", x1: PX, x2: PX, y1: PY, y2: PY + L * ESC + r + 24 }, gGhost);
+  el("path", { class: "arc", d: SCN.arcSortida(a) }, gGhost);
+  // marca de la llargada a la regla: línia de la massa en repòs fins a la regla
+  const yL = PY + L * ESC;
+  el("line", { class: "llarg", x1: SCN.RULER.x + SCN.RULER.w, x2: PX - r - 4, y1: yL, y2: yL }, gGhost);
+  el("rect", { class: "llarg-m", x: SCN.RULER.x - 4, y: yL - 3, width: SCN.RULER.w + 8, height: 6, rx: 2 }, gGhost);
+  // posició de sortida (fantasma)
+  const [gx, gy] = SCN.sortidaPos(L, a);
+  el("line", { class: "fil fantasma", x1: PX, y1: PY + 6, x2: gx, y2: gy }, gGhost);
+  el("circle", { class: "massa fantasma", cx: gx, cy: gy, r }, gGhost);
+}
+function dibuixaMobil() {
+  gMob.innerHTML = "";
+  el("line", { class: "fil", id: "fil", x1: PX, y1: PY + 6, x2: PX, y2: PY + 100 }, gMob);
+  const r = SCN.radiMassa(st.m);
+  el("circle", { class: "massa", id: "massa", cx: PX, cy: PY + 100, r }, gMob);
+  el("circle", { class: "brill", id: "brill", cx: PX, cy: PY + 100, r: r * 0.28 }, gMob);
+}
+function posaMobil() {
+  const [x, y] = SCN.posMassa(st.L, pend.s.th), r = SCN.radiMassa(st.m);
+  const fil = $("#fil", svg), massa = $("#massa", svg), brill = $("#brill", svg);
+  fil.setAttribute("x2", x.toFixed(2)); fil.setAttribute("y2", y.toFixed(2));
+  massa.setAttribute("cx", x.toFixed(2)); massa.setAttribute("cy", y.toFixed(2));
+  brill.setAttribute("cx", (x - r * 0.32).toFixed(2)); brill.setAttribute("cy", (y - r * 0.32).toFixed(2));
+}
+
+// ---------- etiquetes ----------
+const stage = $(".stage");
+function etiquetes() {
+  const L = st.L, [gx, gy] = SCN.sortidaPos(L, st.a), r = SCN.radiMassa(st.m), [ax, ay] = SCN.puntArc(st.a);
+  const mig = [PX + (gx - PX) / 2, PY + 6 + (gy - PY - 6) / 2];
+  Pantalla.etiquetes(stage, svg, [
+    { t: "Suport", pt: [SCN.ROD_X, 150], dx: 0, dy: 50, alt: [[0, -40], [0, 100]] },
+        { t: `Fil, ${L} cm`, pt: mig, dx: 112, dy: -22, alt: [[112, -56], [-130, -8]] },
+        { t: `Massa, ${st.m} g`, pt: [gx, gy], dx: 120, dy: 34, alt: [[120, 70], [-128, 12], [0, 60]] },
+    { t: `Sortida, ${st.a}°`, pt: [ax, ay], dx: -118, dy: 10, alt: [[-118, -30], [110, -6]] },
+    { t: "Regla", pt: [SCN.RULER.x + SCN.RULER.w / 2, PY + 90 * ESC], dx: -2, dy: -34, alt: [[0, 34], [30, 60]] },
+  ]);
+}
+
+// ---------- components ----------
+const taula = Lab.TaulaResultats($("#taula"), {
+  titol: "Taula de resultats",
+  columnes: [
+    { clau: "n", titol: "Núm.", fmt: (v, f, files) => files.indexOf(f) + 1 },
+    { clau: "L", titol: "Fil (cm)", fmt: (v) => v },
+    { clau: "m", titol: "Pes (g)", fmt: (v) => v },
+    { clau: "a", titol: "Sortida (°)", fmt: (v) => v },
+    { clau: "t", titol: "Temps (s)", fmt: (v) => coma(v, 1) },
+  ],
+  mitjana: { titol: "Mitjana (n)", valor: "t", grup: M.mateixMuntatge },
+  avis: (f, ant) => { const c = ant ? M.canvis(f, ant) : []; return c.length >= 2 ? avisAlhora(c) : ""; },
+  esborra: "Esborra la mesura",
+  buida: "Encara no has apuntat cap mesura. Fes-ne una i apunta-la aquí.",
+  onCanvi: () => actualitza(),
+});
+const cron = Lab.Cronometre({ onCanvi: ({ estat, ms }) => { pintaCron(estat, ms); } });
+const grafic = Lab.GrafiquePunts($("#graf"));
+const NOMS_CURTS = { L: "la llargada", m: "el pes", a: "la separació" };
+const noms = (vs) => vs.length < 2 ? NOMS_CURTS[vs[0]] : vs.slice(0, -1).map((v) => NOMS_CURTS[v]).join(", ") + " i " + NOMS_CURTS[vs.at(-1)];
+function avisAlhora(vs) { return GEOM.tx.frases.avisAlhora.replace("{v}", noms(vs)); }
+
+// ---------- cronòmetre i comptador ----------
+function pintaCron(estat, ms) {
+  const sec = Math.round(ms / 1000 / M.RESOLUCIO) * M.RESOLUCIO;
+  $("[data-f=cron]").textContent = pend.mode === "auto" && pend.estat === "va" ? GEOM.tx.frases.esperaAuto : coma(sec, 1) + " s";
+  $$("[data-act=cron]").forEach((b) => { b.textContent = estat === "zero" ? "Engega el cronòmetre" : estat === "marxa" ? "Atura el cronòmetre" : "Posa'l a zero"; b.setAttribute("aria-pressed", String(estat === "marxa")); });
+  const ap = estat === "parat" && ms > 0 && !apuntat;
+  $$("[data-act=apunta]").forEach((b) => b.setAttribute("aria-disabled", String(!ap)));
+  pintaConsell();
+}
+function pintaOsc() {
+  const n = M.oscilacionsCompletes(pend.extrems);
+  const e = $("[data-f=osc]");
+  e.textContent = `Oscil·lacions: ${Math.min(n, 99)} de ${M.N_OSC}`;
+  e.classList.toggle("fet", n >= M.N_OSC);
+}
+function pintaConsell() {
+  const C = GEOM.tx.frases.consell;
+  const e = cron.estat;
+  const t = apuntat ? C.apuntat : e === "parat" ? C.parat : e === "marxa" ? C.marxa : soltat ? C.soltat : C.quiet;
+  $("[data-f=consell]").textContent = t;
+}
+function pintaVariables() {
+  $$("[data-var]").forEach((b) => b.setAttribute("aria-pressed", String(st[b.dataset.var] === Number(b.dataset.val))));
+  const resum = `Fil de ${st.L} cm, massa de ${st.m} g, sortida a ${st.a}°.`;
+  $("[data-f=resum]").textContent = resum;
+  // què es manté i què canvia respecte de l'última mesura
+  const ult = taula.files.at(-1);
+  const canvi = ult ? M.canvis(ult, st) : [];
+  $("#chips").innerHTML = M.VARS.map((v) => {
+    const val = v === "L" ? st.L + " cm" : v === "m" ? st.m + " g" : st.a + "°";
+    const nom = v === "L" ? "Fil" : v === "m" ? "Pes" : "Sortida";
+    const estat = !ult ? "primera mesura" : canvi.includes(v) ? `canviat (era ${ult[v]}${v === "L" ? " cm" : v === "m" ? " g" : "°"})` : "igual";
+    return `<li class="${canvi.includes(v) ? "canvia" : "igual"}"><span class="c-n">${nom}</span> <b>${val}</b> <span class="c-e">${estat}</span></li>`;
+  }).join("");
+  $("[data-f=avisvar]").textContent = canvi.length >= 2 ? avisAlhora(canvi) : "";
+  $("[data-f=avisvar]").classList.toggle("on", canvi.length >= 2);
+}
+
+// ---------- pèndol: moviment a velocitat real ----------
+function reinicia() {
+  pend.estat = "quiet"; pend.s = M.sortida(st.a); pend.extrems = 0; pend.vel = 1; pend.mode = "manual"; pend.last = 0;
+  soltat = false;
+  pintaOsc(); posaMobil();
+}
+function solta(vel, mode) {
+  pend.estat = "va"; pend.s = M.sortida(st.a); pend.extrems = 0; pend.vel = vel; pend.mode = mode; pend.last = performance.now(); pend.tVirtual = 0;
+  soltat = true; apuntat = false;
+  if (mode === "manual") cron.zero(); else cron.zero();
+  pintaOsc(); posaMobil(); pintaConsell();
+}
+function pasFotograma(now) {
+  requestAnimationFrame(pasFotograma);
+  $(".app").dataset.mov = pend.estat === "va" ? "si" : "no";
+  if (pend.estat !== "va") return;
+  let dt = Math.min(0.05, (now - pend.last) / 1000) * pend.vel; pend.last = now;
+  const sub = 0.002;
+  while (dt > 1e-9) {
+    const h = Math.min(sub, dt);
+    const n = M.pas(pend.s, st.L, h);
+    if (pend.s.om !== 0 && Math.sign(n.om) !== Math.sign(pend.s.om)) pend.extrems++;
+    pend.s = n; pend.tVirtual += h; dt -= h;
+    if (pend.mode === "auto" && M.oscilacionsCompletes(pend.extrems) >= M.N_OSC) { acabaAuto(); break; }
+  }
+  pintaOsc(); posaMobil();
+}
+function acabaAuto() {
+  const t = M.mesuraSimulada(st, aleatori);
+  pend.mode = "manual"; pend.vel = 1;      // després de la mesura el pèndol continua a velocitat real
+  cron.fixa(t);
+}
+requestAnimationFrame(pasFotograma);
+
+// ---------- accions ----------
+$$("[data-var]").forEach((b) => b.addEventListener("click", () => {
+  st[b.dataset.var] = Number(b.dataset.val);
+  cron.zero(); apuntat = false; reinicia();
+  dibuixaGhost(); dibuixaMobil(); posaMobil(); etiquetes(); pintaVariables(); actualitza();
+}));
+$$("[data-act=solta]").forEach((b) => b.addEventListener("click", () => solta(1, "manual")));
+$$("[data-act=cron]").forEach((b) => b.addEventListener("click", () => {
+  if (cron.estat === "zero") cron.engega(); else if (cron.estat === "marxa") cron.atura(); else cron.zero();
+  if (cron.estat === "zero") { apuntat = false; pintaCron("zero", 0); }
+}));
+$$("[data-act=apunta]").forEach((b) => b.addEventListener("click", () => {
+  if (b.getAttribute("aria-disabled") === "true" || cron.estat !== "parat" || apuntat) return;
+  apuntat = true;
+  taula.afegeix({ L: st.L, m: st.m, a: st.a, t: cron.segons });
+  pintaCron(cron.estat, cron.segons * 1000); pintaVariables(); actualitza();
+}));
+$$("[data-act=auto]").forEach((b) => b.addEventListener("click", () => { solta(window.__velAuto || VEL_AUTO, "auto"); pintaCron("zero", 0); }));
+
+// ---------- predicció, desbloqueig i panells ----------
+const P = Pantalla.inicia({
+  opcions: GEOM.opcions, correcta: "b",
+  missatges: { perOpcio: GEOM.tx.perOpcio, senseResposta: GEOM.tx.senseResposta },
+  onTab: () => { etiquetes(); },
+  onObre: (id) => { if (id === "p-desc") pintaDades(); if (id === "p-grafica") setTimeout(pintaGrafica, 30); },
+});
+function actualitza() {
+  const prov = M.provades(taula.files);
+  const falta = M.VARS.filter((v) => !prov.includes(v));
+  P.progres(falta.length ? `Falta comparar dues mesures que només es diferenciïn en: ${falta.map((v) => M.VAR_NOMS[v]).join(", ")}.` : "Ja pots respondre la pregunta: obre «Què has descobert?».", falta.length === 0);
+  pintaVariables();
+}
+// Dades de l'alumnat al panell «Què has descobert?»: per cada variable, la parella amb més diferència de la variable, amb mitjanes
+const unitat = { L: " cm", m: " g", a: "°" };
+function pintaDades() {
+  const par = M.parelles(taula.files);
+  const out = [];
+  for (const v of M.VARS) {
+    if (!par[v].length) continue;
+    let millor = par[v][0];
+    for (const p of par[v]) if (Math.abs(p[0][v] - p[1][v]) > Math.abs(millor[0][v] - millor[1][v])) millor = p;
+    const [f, g] = millor[0][v] <= millor[1][v] ? millor : [millor[1], millor[0]];
+    const mf = M.mitjanaDe(taula.files, f).mitjana, mg = M.mitjanaDe(taula.files, g).mitjana;
+    const a = Math.round(mf * 10) / 10, b = Math.round(mg * 10) / 10, dif = Math.round(Math.abs(b - a) * 10) / 10;
+    out.push(`<li><strong>${M.VAR_NOMS[v][0].toUpperCase() + M.VAR_NOMS[v].slice(1)}:</strong> de ${f[v]}${unitat[v]} a ${g[v]}${unitat[v]}, el temps passa de ${coma(a, 1)} s a ${coma(b, 1)} s. La diferència, de ${coma(dif, 1)} s, ${M.TEXT_VALORACIO[M.valoracio(dif)]}.</li>`);
+  }
+  const h = P.prediccio ? GEOM.varOpcio[P.prediccio] : null;
+  let hip = "";
+  if (h && par[h].length) {
+    const clar = par[h].some(([f, g]) => M.valoracio(M.mitjanaDe(taula.files, f).mitjana - M.mitjanaDe(taula.files, g).mitjana) === "es-nota");
+    hip = `<p>La teva hipòtesi era sobre ${M.VAR_NOMS[h]}. ${clar ? "A les teves mesures, aquesta cosa fa canviar el temps de manera que es nota." : "A les teves mesures, aquesta cosa no fa canviar el temps de manera que es nota."}</p>`;
+  }
+  $("#dades").innerHTML = `<ul>${out.join("")}</ul>${hip}`;
+}
+// Gràfica: mesures que només difereixen en la variable triada, respecte de l'última mesura
+function pintaGrafica() {
+  $$("[data-gv]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.gv === grafVar)));
+  const files = taula.files, ult = files.at(-1);
+  const nota = $("#graf-nota");
+  if (!ult) { $("#graf").innerHTML = ""; nota.textContent = "Encara no hi ha mesures."; return; }
+  // es tria la combinació de les altres dues variables amb més valors diferents de la variable triada (a igualtat, la més recent)
+  const altres = M.VARS.filter((v) => v !== grafVar);
+  let pts = [], millorN = -1;
+  for (const f of [...files].reverse()) {
+    const c = files.filter((g) => altres.every((v) => g[v] === f[v])), n = new Set(c.map((g) => g[grafVar])).size;
+    if (n > millorN) { millorN = n; pts = c; }
+  }
+  const ref = pts[0];
+  const valors = { L: M.LLARGADES, m: M.MASSES, a: M.AMPLITUDS }[grafVar];
+  const ys = pts.map((p) => p.t), yMax = Math.ceil((Math.max(...ys, 1) + 1) / 4) * 4;
+  const fixes = altres.map((v) => `${M.VAR_NOMS[v]} ${ref[v]}${unitat[v].trim() === "" ? "" : unitat[v]}`).join(" i ");
+  const distints = new Set(pts.map((p) => p[grafVar]));
+  nota.textContent = distints.size < 2 ? `Només hi ha mesures amb ${M.VAR_NOMS[grafVar]} ${[...distints][0]}${unitat[grafVar]}. Fes-ne amb una altra (mantenint ${fixes}).` : `Es mantenen: ${fixes}. Cada punt és una mesura.`;
+  grafic.pinta({
+    punts: pts.map((p) => ({ x: p[grafVar], y: p.t })),
+    xTitol: `${M.VAR_NOMS[grafVar][0].toUpperCase() + M.VAR_NOMS[grafVar].slice(1)} (${unitat[grafVar].trim() || "°"})`,
+    yTitol: `${M.N_OSC} oscil·lacions (s)`,
+    xMarques: valors, yMin: 0, yMax,
+    fmtX: (v) => String(v), fmtY: (v) => coma(v, 0),
+    descripcio: `Gràfica de punts: temps de ${M.N_OSC} oscil·lacions segons ${M.VAR_NOMS[grafVar]}, amb ${pts.length} mesures.`,
+  });
+}
+$$("[data-gv]").forEach((b) => b.addEventListener("click", () => { grafVar = b.dataset.gv; pintaGrafica(); }));
+
+// ---------- inici ----------
+dibuixaFix(); dibuixaGhost(); dibuixaMobil(); posaMobil();
+pintaCron("zero", 0); pintaOsc(); actualitza(); pintaConsell();
+new ResizeObserver(() => { etiquetes(); if ($("#p-grafica")?.open) pintaGrafica(); }).observe(stage);
+requestAnimationFrame(etiquetes);
+// per a les proves automàtiques (?mesura o ?debug)
+if (/[?&](mesura|debug)/.test(location.search)) window.__lab = { st, taula, cron, pend, mesuraAuto: () => { $("[data-act=auto]").click(); }, aleatori };
+</script></body></html>

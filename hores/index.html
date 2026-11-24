@@ -1,0 +1,1130 @@
+<!doctype html><html lang="ca"><head><meta name="robots" content="noindex"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Les hores en català</title><style>/* Colors dels dos temes. Mateixos noms i valors que el kit d'anatomy (ISO_CSS), perquè una figura feta amb el kit
+   i una feta a mà (mida Esquema) facin servir les mateixes variables. Si la pàgina inclou ISO_CSS, aquest bloc no hi fa nosa. */
+.iso{
+  color-scheme:dark;
+  --anatomy-page:#0b0b0b;--anatomy-card:#131313;--anatomy-text:#a3a3a3;--anatomy-strong:#e6e6e6;--anatomy-muted:#6e6e6e;
+  --anatomy-paper:#131313;--anatomy-face:#1b1b1b;--anatomy-top:#1c1c1c;
+  --anatomy-shade-0:#0f0f0f;--anatomy-shade-1:#121212;--anatomy-shade-2:#151515;--anatomy-shade-3:#181818;
+  --anatomy-hi:#d4d4d4;--anatomy-mid:#6a6a6a;--anatomy-lo:#3e3e3e;--anatomy-faint:#2a2a2a;--anatomy-lit:#ffffff;
+  --anatomy-red:#ff6b6b;--anatomy-green:#6be0a0;--anatomy-blue:#6b9bff;
+}
+.iso[data-theme="light"]{
+  color-scheme:light;
+  --anatomy-page:#f2f2ef;--anatomy-card:#fbfbfa;--anatomy-text:#57575a;--anatomy-strong:#18181a;--anatomy-muted:#8c8c90;
+  --anatomy-paper:#fbfbfa;--anatomy-face:#ffffff;--anatomy-top:#ffffff;
+  --anatomy-shade-0:#dcdcd9;--anatomy-shade-1:#e5e5e2;--anatomy-shade-2:#ededea;--anatomy-shade-3:#f4f4f1;
+  --anatomy-hi:#26262a;--anatomy-mid:#8a8a8f;--anatomy-lo:#b4b4b8;--anatomy-faint:#d4d4d6;--anatomy-lit:#000000;
+  --anatomy-red:#e5484d;--anatomy-green:#30a46c;--anatomy-blue:#3e63dd;
+}
+/* Plantilla de pantalla única (skill recurs-aula). Cos genèric: barra superior, menú de panells, pestanyes del mòbil,
+   figura, controls, lectures i panells. El que és propi del recurs va al seu pagina.css, que es carrega després.
+   Variables que el recurs pot canviar a .app: --lletra (18 px a primària, 16 px a ESO), --ctrl-w (amplada de la columna de controls),
+   --fig-ratio (proporció de la figura al mòbil, p. ex. 760/430). */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:var(--anatomy-page);color:var(--anatomy-text);font:18px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.app{--gap:8px;--lletra:18px;--ctrl-w:290px;--fig-ratio:16/9;display:grid;height:100vh;height:100dvh;padding:var(--gap);gap:var(--gap);color:var(--anatomy-text);font-size:var(--lletra);line-height:1.4;
+  grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto;grid-template-areas:"top" "fig" "ctrl" "lect"}
+.app h1{font-size:22px;line-height:1.15;margin:0;color:var(--anatomy-strong)}
+.app h2{font-size:24px;margin:0;color:var(--anatomy-strong)}
+.app h3{font-size:var(--lletra);margin:0;color:var(--anatomy-strong);font-weight:600}
+.app p{margin:0}
+.app [hidden]{display:none!important}
+
+/* barra superior i menú */
+.top{grid-area:top;display:flex;align-items:center;flex-wrap:wrap;gap:4px 16px;position:relative}
+.top h1{flex:1 1 auto;min-width:0}
+.top .sub{flex:1 1 100%;font-size:var(--lletra);line-height:1.3;margin:0;order:3}
+.menu-nav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-end;flex:0 0 auto;order:2}
+.menu-nav .btn{font-size:16px;padding:6px 9px}
+.menu-toggle{display:none}
+.ind{font-weight:600;color:var(--anatomy-strong)}
+.ind:not(:empty)::before{content:"· ";font-weight:400}
+
+/* botons */
+.btn{appearance:none;font:inherit;font-size:var(--lletra);line-height:1.1;min-height:44px;min-width:44px;padding:6px 14px;color:var(--anatomy-text);background:var(--anatomy-card);border:2px solid var(--anatomy-mid);border-radius:8px;cursor:pointer;font-variant-numeric:tabular-nums}
+.btn:hover{border-color:var(--anatomy-strong);color:var(--anatomy-strong)}
+.btn[aria-pressed="true"]{background:var(--anatomy-strong);color:var(--anatomy-card);border-color:var(--anatomy-strong)}
+.btn[aria-disabled="true"]{opacity:.55;border-style:dashed}
+.btn[data-desc][data-ready="true"]{border-color:var(--anatomy-lit);color:var(--anatomy-strong);font-weight:600}
+.btn:focus-visible,.panell input:focus-visible,.panell a:focus-visible{outline:3px solid var(--anatomy-lit);outline-offset:2px}
+.btn.mini{padding:4px 10px;font-size:16px}
+.btn.gran{padding:8px 22px;font-weight:600}
+.tabs{display:none}
+
+/* figura */
+.fig{grid-area:fig;position:relative;min-height:0;min-width:0;overflow:hidden;border:1px solid var(--anatomy-lo);border-radius:10px;background:var(--anatomy-card);display:flex}
+.visor{margin:0;position:relative}
+.mainv{flex:1;min-width:0;min-height:0}
+.mainv .stage{position:absolute;inset:0;overflow:hidden}
+.mainv .stage>svg:not(.lead){position:absolute;inset:0;width:100%;height:100%}
+
+/* etiquetes: capa HTML sobre la figura (Pantalla.etiquetes) */
+.stage .tags{position:absolute;inset:0;pointer-events:none}
+.tag{position:absolute;font:600 17px/1.25 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:2px 8px;background:var(--anatomy-paper);color:var(--anatomy-strong);border:1.5px solid var(--anatomy-mid);border-radius:6px;white-space:nowrap;transform:translate(-50%,-50%)}
+.lead{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.lead line{stroke:var(--anatomy-strong);stroke-width:2}
+.lead circle{fill:var(--anatomy-strong);stroke:var(--anatomy-paper);stroke-width:1.5}
+
+/* vista ampliada (opcional): requadre dins de la figura */
+.inset{position:absolute;z-index:2;top:8px;left:8px;width:clamp(300px,34%,430px);background:var(--anatomy-card);border:2px solid var(--anatomy-mid);border-radius:10px;overflow:hidden;box-shadow:0 2px 10px #0003}
+.inset .stage{position:relative;overflow:hidden}
+.inset .stage>svg:not(.lead){display:block;width:100%;height:auto}
+.inset-bar{display:flex;align-items:center;gap:6px;padding:3px 6px 3px 10px;border-bottom:1px solid var(--anatomy-lo)}
+.inset-t{flex:1;font-size:16px;font-weight:600;color:var(--anatomy-strong);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inset.gran{width:min(64%,760px);left:50%;transform:translateX(-50%)}
+.mostra{position:absolute;z-index:2;top:8px;left:8px}
+
+/* controls */
+.ctrl{grid-area:ctrl;display:grid;gap:8px 16px;align-content:start;padding:10px 12px;border:1px solid var(--anatomy-lo);border-radius:10px;background:var(--anatomy-card);grid-template-columns:1fr;min-height:0}
+.fila{display:flex;flex-direction:column;gap:4px;min-width:0}
+.etiq{font-size:var(--lletra);font-weight:600;color:var(--anatomy-strong)}
+.grup{display:flex;flex-wrap:wrap;gap:6px}
+.grup .btn{flex:1 1 auto}
+.grup.dos{display:grid;grid-template-columns:1fr 1fr}
+.grup.dos .btn{min-width:0;padding:4px 6px;line-height:1.15}
+.fila>.btn{width:100%}
+.estat{font-size:16px;line-height:1.3}
+.quick{display:none}
+
+/* lectures */
+.lect{grid-area:lect;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+.lectura{border:1px solid var(--anatomy-lo);border-radius:10px;padding:6px 12px 8px;background:var(--anatomy-card);min-width:0}
+.lectura .gran-text{font-size:22px;font-weight:700;color:var(--anatomy-strong);line-height:1.2}
+.lectura .sub{font-size:var(--lletra);line-height:1.25}
+.barra{display:flex;gap:5px;margin-top:5px}
+.barra i{flex:1;height:14px;border:2px solid var(--anatomy-mid);border-radius:4px;background:transparent}
+.barra i.on{background:var(--anatomy-strong);border-color:var(--anatomy-strong)}
+.frase{grid-column:1/-1;padding:2px 4px;font-size:var(--lletra);line-height:1.3}
+.frase .resum{font-weight:600;color:var(--anatomy-strong)}
+
+/* panells */
+.panell{padding:0;border:2px solid var(--anatomy-mid);border-radius:12px;background:var(--anatomy-card);color:var(--anatomy-text);width:min(760px,94vw);max-height:88vh;max-height:88dvh;overflow:hidden;font:inherit;font-size:18px}
+.panell[open]{display:flex;flex-direction:column}
+.panell::backdrop{background:#000a}
+.p-cap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid var(--anatomy-lo)}
+.p-cap h2{font-size:24px;margin:0;color:var(--anatomy-strong)}
+.p-cos{padding:12px 18px 18px;overflow:auto;display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-content:start}
+.p-cos>div{display:grid;gap:12px}
+.p-cos p{margin:0}
+.p-cos h3{font-size:20px;margin:6px 0 0;color:var(--anatomy-strong)}
+.p-cos ul{margin:0;padding-left:1.3em}
+.p-cos li{margin:4px 0}
+.p-cos .peu{position:sticky;bottom:-18px;background:var(--anatomy-card);padding:8px 0 10px;margin:0;border-top:1px solid var(--anatomy-lo)}
+.p-cos a{color:var(--anatomy-strong)}
+.panell p,.panell li{font-size:18px;line-height:1.5}
+.panell .pregunta{font-size:20px;color:var(--anatomy-strong)}
+.panell fieldset.pred{border:1px solid var(--anatomy-lo);border-radius:8px;padding:8px 14px;margin:0}
+.panell fieldset.pred legend{font-size:19px;color:var(--anatomy-strong);padding:0 6px}
+.panell fieldset.pred label{display:flex;align-items:center;gap:12px;min-height:46px;cursor:pointer}
+.panell fieldset.pred input{width:24px;height:24px;flex:0 0 auto;accent-color:var(--anatomy-strong)}
+.avis{border:2px solid var(--anatomy-mid);border-radius:8px;padding:8px 12px}
+.taula{border-collapse:collapse;width:100%;font-size:18px}
+.taula caption{text-align:left;font-weight:600;padding-bottom:6px}
+.taula th,.taula td{border:1px solid var(--anatomy-lo);padding:3px 8px;text-align:right}
+.taula th[scope=row],.taula th[scope=col]:first-child{text-align:left}
+.taula-wrap{overflow-x:auto}
+.p-cos .taula{display:block;overflow-x:auto} /* una taula ampla es desplaça dins del panell en lloc d'eixamplar-lo */
+.p-cos a{overflow-wrap:anywhere}
+
+/* ---- mides ---- */
+/* ordinador i projector: controls en una columna a la dreta */
+@media (min-width:1000px) and (min-height:560px){
+  .app{grid-template-columns:minmax(0,1fr) var(--ctrl-w);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"top top" "fig ctrl" "lect ctrl"}
+  .ctrl{gap:14px}
+}
+/* tauleta: controls en dues columnes sota la figura */
+@media (max-width:999px){
+  .menu-nav{flex:1 1 100%;justify-content:flex-start}
+  .ctrl{grid-template-columns:1fr 1fr}
+  .ctrl>.estat,.ctrl>.peu-ctrl{grid-column:1/-1}
+}
+/* mòbil: menú en un botó i dues pestanyes («a»: figura, «b»: controls i lectures) */
+@media (max-width:600px){
+  .app{--gap:6px;--lletra:16px;grid-template-rows:auto auto minmax(0,1fr) auto auto auto;grid-template-areas:"top" "tabs" "fig" "quick" "ctrl" "lect"}
+  .app h1{font-size:18px;flex:1 1 0}
+  .top .pregunta{display:none}
+  .top .sub:has(.ind:empty){display:none}
+  .ind::before{content:none!important}
+  .menu-toggle{display:inline-block;flex:0 0 auto}
+  .menu-nav{display:none;position:absolute;z-index:6;right:0;top:48px;flex-direction:column;align-items:stretch;background:var(--anatomy-card);border:2px solid var(--anatomy-mid);border-radius:10px;padding:8px;box-shadow:0 4px 16px #0006;min-width:230px}
+  .menu-nav.obert{display:flex}
+  .tabs{grid-area:tabs;display:flex;gap:6px}
+  .tabs .btn{flex:1}
+  .fig{flex-direction:column}
+  .mainv{flex:1 1 auto;width:100%}
+  .fig:has(.inset) .mainv{flex:0 0 auto;height:auto;aspect-ratio:var(--fig-ratio)} /* amb vista ampliada a sota, la figura principal fa la seva proporció */
+  .ctrl{padding:8px 10px;grid-template-columns:1fr;gap:6px}
+  .fila{flex-direction:row;align-items:center;flex-wrap:wrap}
+  .fila>.etiq{flex:0 0 96px}
+  .fila>.grup,.fila>.btn{flex:1}
+  .quick{grid-area:quick;display:grid;gap:4px}
+  .quick .grup{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .quick .btn{min-width:0;padding:4px 6px;line-height:1.1}
+  .lect{grid-template-columns:1fr;gap:4px}
+  .lectura{padding:3px 8px}
+  .lectura .gran-text{font-size:16px}
+  .lectura .sub{display:none}
+  .barra i{height:10px}
+  .inset{width:min(62%,300px)}
+  .app[data-tab="a"] .ctrl,.app[data-tab="a"] .frase{display:none}
+  .app[data-tab="b"] .fig,.app[data-tab="b"] .quick{display:none}
+  .app[data-tab="b"]{grid-template-rows:auto auto 0 0 auto auto;align-content:start}
+  .panell{width:96vw;max-height:92dvh}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* Propi del recurs «Les hores en català». El cos de pantalla és a la plantilla de la skill (plantilla-pantalla/pantalla.css). */
+.app{--lletra:18px;--ctrl-w:300px;--fig-ratio:1/1}
+.iso{--c-quart:#6b9bff;--c-hora:#f0b24a;--c-hora-t:#f0b24a;--c-min:#6be0a0;--c-min-t:#6be0a0;--c-mal:#ff8a8a;--c-sol:#f4c542;--c-lluna:#c9d1ff}
+.iso[data-theme="light"]{--c-quart:#3e63dd;--c-hora:#c27a00;--c-hora-t:#8a5200;--c-min:#1f8a56;--c-min-t:#14673f;--c-mal:#b3282d;--c-sol:#d98a00;--c-lluna:#5a63b8}
+
+/* rellotge */
+svg.rellotge{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-user-select:none;user-select:none}
+.cara{fill:var(--anatomy-paper);stroke:var(--anatomy-mid);stroke-width:3}
+.tic{stroke:var(--anatomy-mid);stroke-width:1.5}
+.tic.llarg{stroke:var(--anatomy-strong);stroke-width:3}
+.num{fill:var(--anatomy-strong);font-weight:700;paint-order:stroke;stroke:var(--anatomy-paper);stroke-width:8px;stroke-linejoin:round}
+.numerals{pointer-events:none}
+.num.destacat{fill:var(--c-hora-t)}
+.etiq-min{fill:var(--anatomy-text);font-weight:600;paint-order:stroke;stroke:var(--anatomy-paper);stroke-width:5px;stroke-linejoin:round}
+.quart{stroke:var(--c-quart);stroke-width:2;stroke-linejoin:round}
+.quart.q1{fill:var(--c-quart);fill-opacity:.38}
+.quart.q0{fill:var(--c-quart);fill-opacity:.2}
+.quart-n{fill:var(--anatomy-strong);font-weight:700;pointer-events:none}
+.extra{fill:var(--c-min);fill-opacity:.5;stroke:var(--c-min);stroke-width:2;stroke-linejoin:round}
+.hora-ve{fill:var(--c-hora);fill-opacity:.25;stroke:var(--c-hora);stroke-width:4}
+.actual{fill:none;stroke:var(--anatomy-mid);stroke-width:2.5;stroke-dasharray:5 4}
+.ma .hit{stroke:transparent;cursor:grab}
+.ma .vis{stroke-linecap:round;pointer-events:none}
+.ma-h .vis{stroke:var(--c-hora);stroke-width:13}
+.ma-m .vis{stroke:var(--anatomy-strong);stroke-width:7}
+.punta{fill:var(--anatomy-card);stroke-width:3;cursor:grab}
+.ma-h .punta{stroke:var(--c-hora)}
+.ma-m .punta{stroke:var(--anatomy-strong)}
+.ma{outline:none}
+.ma:focus-visible .punta{stroke:var(--anatomy-lit);stroke-width:6}
+.ma:focus-visible .vis{stroke:var(--anatomy-lit)}
+.ma.bloq .hit,.ma.bloq .punta{pointer-events:none;cursor:default}
+.ma.bloq .punta{display:none}
+.centre{fill:var(--anatomy-strong);stroke:var(--anatomy-paper);stroke-width:2;pointer-events:none}
+.ma{pointer-events:auto}
+
+/* controls */
+.ctrl{overflow:auto;gap:8px 12px;padding:8px 10px;align-content:start}
+.ctrl .etiq{font-size:17px}
+.grup.nivells{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ctrl .grup .btn{min-width:0;font-size:16px;padding:4px 6px;line-height:1.15}
+.grup.nivells .btn{text-align:left}
+.niv-n{display:inline-block;min-width:1.2em;font-weight:700}
+.niv-desc{font-size:16px;line-height:1.3}
+.estat{font-size:15px;line-height:1.25}
+
+/* lectures */
+@media (min-width:601px){.lect{grid-template-columns:minmax(300px,auto) minmax(0,1fr)}}
+.lectura h3{font-size:17px}
+.digital{display:flex;align-items:center;justify-content:center;gap:3px;margin-top:2px}
+.dig-n{font-size:36px;font-weight:700;line-height:1;min-width:1.9ch;text-align:center;color:var(--anatomy-strong);font-variant-numeric:tabular-nums}
+.dig-dp{font-size:36px;font-weight:700;line-height:1;color:var(--anatomy-strong);margin:0 2px}
+.digital .btn.mini{min-width:44px;min-height:44px;padding:0;font-size:22px;line-height:1}
+.digital .btn[aria-disabled="true"]{opacity:.35;border-style:dashed;cursor:not-allowed}
+.digital.amagat .dig-n{color:var(--anatomy-muted)}
+.part{display:flex;align-items:center;justify-content:center;gap:8px;font-size:18px;font-weight:600;color:var(--anatomy-strong);min-height:0}
+.part:empty{display:none}
+.icona-part{flex:0 0 auto}
+.peces{font-size:24px;line-height:1.9;color:var(--anatomy-strong)}
+.peca{display:inline-block;padding:0 8px;border-radius:8px;background:var(--anatomy-paper);border:2px solid var(--anatomy-lo);border-bottom-width:6px;font-weight:600;line-height:1.35}
+.p-quarts{border-color:var(--c-quart);border-bottom-color:var(--c-quart)}
+.p-hora{border-color:var(--c-hora);border-bottom-color:var(--c-hora)}
+.p-minuts,.p-punt{border-color:var(--c-min);border-bottom-color:var(--c-min)}
+.p-verb,.p-part{border-color:var(--anatomy-lo);font-weight:500}
+.punt-final{font-weight:700}
+.pista,.altra,.explicacio{font-size:17px;line-height:1.35}
+.altra{color:var(--anatomy-text)}
+.altra:empty{display:none}
+.enunciat{font-size:19px;font-weight:600;color:var(--anatomy-strong);line-height:1.25}
+.opcions{display:grid;gap:6px;margin-top:4px}
+.opcio{color:var(--anatomy-strong);text-align:left;font-size:19px;min-height:46px;padding:6px 12px;line-height:1.2}
+.veredicte{font-size:19px;font-weight:700}
+.veredicte.ok{color:var(--c-min-t)}
+.veredicte.mal{color:var(--c-mal)}
+.fila-feed,.fila-comprova,.fila-veu{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.fila-veu:has(button[hidden]){display:none}
+.feed,.final{display:grid;gap:2px}
+.feed .peces{font-size:20px;line-height:1.7}
+.gran-enunciat{font-size:24px}
+.nomes-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.panell code{font-size:.95em}
+
+@media (max-width:999px){.grup.nivells{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:600px){
+  .app[data-tab="b"] .lect{display:none}
+  .peces{font-size:20px;line-height:1.75}
+  .feed .peces{font-size:18px;line-height:1.6}
+  .gran-enunciat{font-size:20px}
+  .dig-n{font-size:30px}
+  .dig-dp{font-size:30px}
+  .digital .btn.mini{min-width:44px}
+  .icona-part{width:44px;height:28px}
+  .part{font-size:16px}
+  .lectura{padding:4px 8px 6px}
+  .lectura h3{font-size:16px}
+  .pista,.altra,.explicacio{font-size:16px}
+  .enunciat{font-size:17px}
+  .opcio{font-size:17px;min-height:44px;padding:4px 10px}
+  .veredicte{font-size:17px}
+  .lectura .sub{display:block}
+}
+</style></head><body class="iso" data-theme="light"><div class="app" data-tab="a">
+<header class="top">
+<h1>Les hores en català</h1>
+<button class="btn menu-toggle" type="button" aria-expanded="false" aria-controls="menu">Menú</button>
+<nav class="menu-nav" id="menu" aria-label="Panells"><button class="btn menu" type="button" data-open="p-pred" >La pregunta</button><button class="btn menu" type="button" data-open="p-desc" aria-disabled="true" aria-describedby="estat-desc" data-desc>Què has descobert?</button><button class="btn menu" type="button" data-open="p-repte" >Reptes</button><button class="btn menu" type="button" data-open="p-model" >Sobre aquest model</button><button class="btn menu" type="button" data-open="p-docent" >Per al docent</button></nav>
+<p class="sub"><span class="pregunta">Com es diu l'hora en català? Per què «dos quarts de nou» són les 8:30?</span> <span class="ind" data-f="ind" aria-live="polite"></span></p>
+</header>
+<div class="tabs" role="group" aria-label="Vista"><button class="btn" type="button" data-tab-btn="a" aria-pressed="true">Rellotge</button><button class="btn" type="button" data-tab-btn="b" aria-pressed="false">Nivells i controls</button></div>
+<section class="fig" aria-label="Rellotge"><figure class="visor mainv"><div class="stage"><svg class="rellotge" viewBox="0 0 400 400" role="group" aria-label="Rellotge analògic de dotze hores. L'agulla petita marca les hores i l'agulla gran els minuts; es poden moure arrossegant-les o amb les fletxes del teclat." preserveAspectRatio="xMidYMid meet"></svg><div class="tags" aria-hidden="true"></div></div></figure></section>
+<section class="ctrl" aria-label="Controls">
+<div class="fila"><span class="etiq">Nivell</span><div class="grup nivells" role="group" aria-label="Nivell"><button class="btn" type="button" data-niv="1" aria-pressed="false"><span class="niv-n">1</span> En punt<span class="niv-ok" aria-hidden="true"></span></button><button class="btn" type="button" data-niv="2" aria-pressed="false"><span class="niv-n">2</span> Quarts<span class="niv-ok" aria-hidden="true"></span></button><button class="btn" type="button" data-niv="3" aria-pressed="false"><span class="niv-n">3</span> I cinc<span class="niv-ok" aria-hidden="true"></span></button><button class="btn" type="button" data-niv="4" aria-pressed="false"><span class="niv-n">4</span> I deu<span class="niv-ok" aria-hidden="true"></span></button><button class="btn" type="button" data-niv="5" aria-pressed="false"><span class="niv-n">5</span> Parts del dia<span class="niv-ok" aria-hidden="true"></span></button><button class="btn" type="button" data-niv="6" aria-pressed="false"><span class="niv-n">6</span> 24 hores<span class="niv-ok" aria-hidden="true"></span></button></div></div>
+<div class="fila"><span class="etiq">Què vols fer?</span><div class="grup dos" role="group" aria-label="Mode"><button class="btn" type="button" data-mode="explora" aria-pressed="true">Explora</button><button class="btn" type="button" data-mode="practica" aria-pressed="false">Practica</button></div></div>
+<div class="grup dos"><button class="btn" type="button" data-act="ajuda" aria-pressed="true">Ajuda al rellotge</button><button class="btn" type="button" data-act="nova">Sèrie nova</button></div>
+<p class="niv-desc" data-f="nivdesc"></p>
+<p class="estat" id="estat-desc" data-f="estat"></p>
+<div class="grup dos peu-ctrl"></div>
+</section>
+
+<section class="lect" aria-label="Lectures">
+<div class="lectura ld"><h3>Rellotge digital</h3>
+<div class="digital" id="digital" role="group" aria-label="Rellotge digital">
+<button class="btn mini" type="button" data-d="h-" aria-label="Una hora menys" aria-disabled="false">−</button><span class="dig-n" data-h>08</span><button class="btn mini" type="button" data-d="h+" aria-label="Una hora més" aria-disabled="false">+</button>
+<span class="dig-dp" aria-hidden="true">:</span>
+<button class="btn mini" type="button" data-d="m-" aria-label="Menys minuts" aria-disabled="false">−</button><span class="dig-n" data-m>30</span><button class="btn mini" type="button" data-d="m+" aria-label="Més minuts" aria-disabled="false">+</button>
+</div>
+<p class="part" data-f="part" aria-live="polite"></p><span class="nomes-sr" data-f="digital-sr" aria-live="polite"></span></div>
+<div class="lectura lf" id="lf"><h3 data-f="titolf">Com es diu</h3>
+<div class="vista-explora" data-vista="explora">
+<p class="peces" data-f="peces" aria-live="polite"></p>
+<p class="altra" data-f="altra"></p>
+<p class="pista" data-f="pista"></p>
+<p class="fila-veu"><button class="btn mini" type="button" data-act="escolta" hidden>Escolta</button></p>
+</div>
+<div class="vista-practica" data-vista="practica" hidden>
+<p class="enunciat" data-f="enunciat"></p>
+<p class="peces gran-enunciat" data-f="enunciat-frase" hidden></p>
+<div class="opcions" data-f="opcions" role="group" aria-label="Opcions"></div>
+<p class="fila-comprova"><button class="btn gran" type="button" data-act="comprova" hidden>Comprova</button></p>
+<div class="feed" data-f="feed" role="status" aria-live="polite" hidden><p class="veredicte" data-f="veredicte"></p><p class="explicacio" data-f="explicacio"></p><p class="peces" data-f="feed-peces"></p><p class="fila-feed"><button class="btn" type="button" data-act="seguent">Següent</button><button class="btn mini" type="button" data-act="escolta" hidden>Escolta</button></p></div>
+<div class="final" data-f="final" hidden><p class="veredicte" data-f="final-text"></p><p class="fila-feed"><button class="btn" type="button" data-act="nova">Sèrie nova</button><button class="btn" type="button" data-act="explora-niv">Explora el nivell</button><button class="btn" type="button" data-act="seguent-niv">Nivell següent</button></p></div>
+</div></div>
+
+</section>
+<dialog class="panell" id="p-pred" aria-labelledby="p-pred-t"><div class="p-cap"><h2 id="p-pred-t">Abans de provar-ho</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<p class="pregunta">Com es diu l'hora en català? Per què «dos quarts de nou» són les 8:30?</p>
+<p>Aquest rellotge diu l'hora amb paraules, en català. Pots moure les agulles amb el ratolí, amb el dit o amb el teclat, i veure com canvia la frase.</p>
+<fieldset class="pred"><legend>A les 8:30, com es diu l'hora amb quarts?</legend><label><input type="radio" name="pred" value="a"> Dos quarts de vuit</label><label><input type="radio" name="pred" value="b"> Dos quarts de nou</label><label><input type="radio" name="pred" value="c"> Un quart de nou</label></fieldset>
+<p class="nota">Tria el que et sembli. Després ho comprovaràs al rellotge.</p>
+<p class="peu"><button class="btn gran" type="button" data-pred-ok>Desa la resposta i prova-ho</button></p></div></dialog>
+<dialog class="panell" id="p-desc" aria-labelledby="p-desc-t"><div class="p-cap"><h2 id="p-desc-t">Què has descobert?</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<div data-locked>
+<p>Encara no ho pots dir. Mou les agulles en un nivell, o fes una sèrie de pràctica, i després torna aquí.</p>
+<p data-f="estat2"></p>
+
+</div>
+<div data-unlocked hidden>
+<p data-f="havies"></p>
+
+<ul>
+<li><strong>Els quarts conten cap a l'hora que ve.</strong> A les 8:30, l'agulla petita és entre el 8 i el 9, i es diu «dos quarts de nou». El 9 és l'hora que ve.</li>
+<li>Un quart és la quarta part d'una volta de l'agulla gran; dos quarts són mitja volta; tres quarts són tres quarts de volta.</li>
+<li>Quan l'agulla gran és al 12, diem «en punt». Després de les hores i dels quarts, cada marca de l'agulla gran afegeix cinc minuts: «i cinc», «i deu».</li>
+<li>L'agulla petita avança mentre l'agulla gran gira: no salta d'un número a l'altre. Per això, a «dos quarts de nou» és a mig camí entre el 8 i el 9.</li>
+<li>L'hora de 24 hores es llegeix igual, però cal saber la part del dia: a les 17:30 són dos quarts de sis de la tarda.</li>
+</ul>
+<h3>Com s'escriu</h3>
+<p>Davant de «una», «la» no s'apostrofa: «és la una en punt». Però «de» sí: «És un quart d'una» i «És un quart d'onze».</p>
+</div></div></dialog>
+<dialog class="panell" id="p-repte" aria-labelledby="p-repte-t"><div class="p-cap"><h2 id="p-repte-t">Reptes</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos"><p><strong>Primer repte.</strong> Són les 9:45. Com ho diries amb quarts? Entre quins números és l'agulla petita?</p>
+<p><button class="btn" type="button" data-answer="1">Mostra la resposta</button></p>
+<p data-f="resposta" data-r="1" hidden>Són tres quarts de deu. L'agulla petita és entre el 9 i el 10, i els quarts conten cap al 10.</p>
+<p><strong>Segon repte.</strong> A la 1:15, per què no es diu «un quart de la una»?</p>
+<p><button class="btn" type="button" data-answer="2">Mostra la resposta</button></p>
+<p data-f="resposta" data-r="2" hidden>És un quart de dues. Els quarts conten cap a l'hora que ve, i després de la una ve les dues.</p>
+<p><strong>Tercer repte.</strong> Són les 22:20 de la nit. Com ho diries amb la part del dia?</p>
+<p><button class="btn" type="button" data-answer="3">Mostra la resposta</button></p>
+<p data-f="resposta" data-r="3" hidden>És un quart i cinc d'onze de la nit. A partir de les 22.15 ja és de nit.</p></div></dialog>
+
+<dialog class="panell" id="p-model" aria-labelledby="p-model-t"><div class="p-cap"><h2 id="p-model-t">Sobre aquest model</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<p>Les frases de la pàgina les genera una funció del model (<code>frase</code>) i es comproven amb una prova que repassa les 288 hores del dia (de 5 en 5 minuts, 24 hores) contra una taula escrita a mà a partir de les fonts. Les fonts són el document de l'Institut d'Estudis Catalans «Les notacions horàries en els textos de l'IEC» (5.1.2), taules 1 i 2, llegit sencer, i el <em>Diccionari de la llengua catalana</em> tal com el cita l'article de Torres i Vilatarsana a <em>Caplletra</em> 30. Les fonts i els nivells de verificació són a FONTS.md; aquí hi ha el resum.</p>
+<ul>
+<li><strong>Sistema de quarts.</strong> És el sistema tradicional del català central, també anomenat sistema de campanar. L'IEC diu que no s'utilitza a tot el domini lingüístic i que pot provocar confusions en qui no hi està avesat, però que té un gran abast a Catalunya i que és el que s'ensenya. Els quarts conten cap a l'hora que ve. A Mallorca, València i altres territoris es fan servir altres formes.</li>
+<li><strong>Dos ordres.</strong> Quan hi ha minuts després d'un quart, hi ha dues maneres d'ordenar la frase. La pàgina fa servir la de l'escola: quarts, minuts, «de» i l'hora que ve («un quart i cinc de nou», «dos quarts i deu de nou», «tres quarts i cinc de nou»; amb la part del dia: «un quart i cinc de nou del vespre»). És la forma habitual a l'escola, la que ha triat el docent, i la recull el <em>Diccionari de la llengua catalana</em> (entrada «quart», 2.4: «a un quart i cinc de nou», 8 h 20 min), citat per Torres i Vilatarsana a <em>Caplletra</em> 30 (2001). L'altre ordre és el de la taula 2 de l'IEC («dos quarts de nou i cinc», «un quart de nou del vespre i cinc minuts»): és igual de vàlid i surt a la línia «També es diu»; la pràctica no el dona mai per erroni. Les hores en punt i «les vuit i cinc», «les vuit i deu» no canvien.</li>
+<li><strong>Què s'ensenya.</strong> Hores en punt, un quart, dos quarts i tres quarts, amb «i cinc» o «i deu» després dels quarts o de l'hora. El mateix document de l'IEC omet «minuts» en alguns exemples; la pàgina també l'omet.</li>
+<li><strong>«Menys» i «mig quart».</strong> L'IEC dona «són les nou menys quart» i «les nou menys cinc» com a altres varietats; la pàgina només les mostra a «També es diu», sense practicar-les. El mig quart (7 o 8 minuts) no hi és perquè el rellotge va de 5 en 5 minuts. El sistema de rellotge («les vuit i vint») també és a la font, però no s'ensenya.</li>
+<li><strong>Parts del dia.</strong> Els límits són els de la taula 1 de l'IEC, que els defineix com una tria simplificada per als textos formals: en l'ús real, les franges es superposen i varien amb l'època de l'any.</li>
+<li><strong>L'hora de 24 hores.</strong> L'IEC escriu «17.30 h» (amb punt); la pantalla del rellotge digital mostra «17:30», com els aparells.</li>
+<li><strong>Agulles.</strong> L'agulla gran fa 6 graus per minut. L'agulla petita fa 30 graus per hora i mig grau per minut: avança mentre l'agulla gran gira, com en un rellotge real.</li>
+<li><strong>Veu.</strong> El botó «Escolta» només hi és si el navegador té una veu catalana; fa servir la síntesi de veu de l'aparell i no envia res a ningú.</li>
+<li><strong>Simplificacions.</strong> Els minuts van de 5 en 5. Un nivell es dona per superat amb 8 encerts de 10: és un criteri de la pàgina, no una norma. No es desa res de l'alumnat: el recompte es perd en tancar la pàgina.</li>
+<li><strong>Autoria i revisió.</strong> Fet amb IA generativa a partir del model i les fonts d'aquest quadre. Versió de prova, pendent de revisió humana del model, dels textos i de les fonts. Autoria: Fundació Jesuïtes Educació, amb assistència de la IA. Llicència: continguts CC BY-SA 4.0 i codi MIT. No hi ha material aliè ni cap petició a tercers.</li>
+</ul>
+<div class="taula-wrap"><table class="taula"><caption>Les parts del dia (IEC, taula 1)</caption><thead><tr><th scope="col">Part del dia</th><th scope="col">Quan</th></tr></thead><tbody><tr><th scope="row">matinada</th><td>de les 0.15 a les 5.14</td></tr><tr><th scope="row">matí</th><td>de les 5.15 a les 11.14</td></tr><tr><th scope="row">migdia</th><td>de les 11.15 a les 14.14</td></tr><tr><th scope="row">tarda</th><td>de les 14.15 a les 18.14</td></tr><tr><th scope="row">vespre</th><td>de les 18.15 a les 22.14</td></tr><tr><th scope="row">nit</th><td>de les 22.15 a les 0.14</td></tr></tbody></table></div></div></dialog>
+<dialog class="panell" id="p-docent" aria-labelledby="p-docent-t"><div class="p-cap"><h2 id="p-docent-t">Per al docent</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<ul>
+<li><strong>Per a qui.</strong> Cicle inicial i mitjà de primària i aula d'acollida. Sis nivells, de les hores en punt a l'hora de 24 hores amb la part del dia: es pot obrir qualsevol. Cada nivell té dues parts: «Explora» (moure les agulles i veure la frase) i «Practica» (10 preguntes, de tres menes: rellotge o hora digital cap a la frase, frase cap a les agulles, hora digital cap a les agulles o rellotge cap a l'hora digital). Un nivell es dona per superat amb 8 encerts de 10.</li>
+<li><strong>Abans.</strong> Un rellotge de paret o de joguina amb agulles. Pregunteu quina hora és i com ho diuen a casa.</li>
+<li><strong>Durant.</strong> En parelles. Un alumne diu l'hora i l'altre mou les agulles. Comenceu per l'explorador: l'agulla gran fa tres quarts de volta i l'agulla petita és entre dos números. Que expliquin per què «dos quarts de nou» no són les vuit, i que provin «tres quarts de nou» (les 8:45) i «dos quarts i cinc de nou» (les 8:35).</li>
+<li><strong>Després.</strong> Comparar amb el rellotge de l'aula. Les 17:30 són dos quarts de sis de la tarda: parlar de les parts del dia.</li>
+<li><strong>Correcció.</strong> Quan hi ha un error, la pàgina diu on és l'agulla i què en resulta, no només «incorrecte».</li>
+<li><strong>Altres maneres de dir-ho.</strong> A casa de l'alumnat potser es diu «les nou menys quart», «les vuit i vint» o «dos quarts de nou i cinc». La pàgina mostra l'ordre de l'IEC i les formes amb «menys» a la línia «També es diu» quan és el cas, perquè l'IEC les dona; no les practica i no les dona mai per errònies.</li>
+<li><strong>Català central.</strong> El sistema de quarts és sobretot del català central. A l'aula d'acollida, el mateix alumnat pot venir d'un sistema diferent (el de 24 hores, el de «les vuit i mitja»). Cal dir-ho amb respecte: és una altra manera, no una errada.</li>
+<li><strong>Veu.</strong> El botó «Escolta» només apareix si l'aparell té una veu catalana (a molts Chromebooks i tauletes no n'hi ha).</li>
+<li><strong>Privadesa.</strong> No es demana cap dada ni es desa res de l'alumnat: el recompte d'encerts es perd en tancar la pàgina.</li>
+<li><strong>Currículum.</strong> Mesura del temps a matemàtiques i expressió de l'hora a llengua catalana de cicle inicial i mitjà (no confirmat: cal revisar el decret).</li>
+</ul></div></dialog>
+</div><script type="module">// Plantilla de pantalla única (skill recurs-aula): comportament genèric. El build l'insereix abans del live.js del recurs.
+// No sap res del model: el recurs li diu quan s'ha provat tot (progres) i què ha de redibuixar en canviar de pestanya.
+//
+//   const P = Pantalla.inicia({ opcions, correcta, missatges, onTab, onObre });
+//   P.progres("Falta provar: …", fet)   // actualitza l'estat i desbloqueja «Què has descobert?» quan fet és cert
+//   Pantalla.etiquetes(stage, svg, [{ t, pt: [x, y], dx, dy, alt: [[dx, dy], …] }])
+//   Pantalla.vistaAmpliada({ minAmplada: 900, onCanvi })
+//   ?mesura o ?debug a l'adreça: window.__mesura() i window.__panells() per a la verificació de la fase 6.
+const Pantalla = (() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const NS = "http://www.w3.org/2000/svg";
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const senseFinal = (s) => s.replace(/[.:;]$/, "");
+
+  function inicia({ opcions = {}, correcta = null, missatges = {}, onTab = () => {}, onObre = () => {}, obrePrediccio = true } = {}) {
+    const app = $(".app");
+    let prediccio = null, vista = false, revelat = false, opener = null;
+
+    // ---- predicció i descoberta ----
+    const ind = $("[data-f=ind]");
+    const mostraInd = () => { if (ind) ind.textContent = prediccio ? "Predicció: " + opcions[prediccio] : vista ? "Predicció: sense resposta" : ""; };
+    function missatge() {
+      const m = missatges.perOpcio?.[prediccio];
+      if (m) return m;
+      if (!prediccio) return missatges.senseResposta ?? "";
+      return prediccio === correcta ? missatges.encert ?? "" : missatges.error ?? "";
+    }
+    function pintaDescoberta() {
+      const box = $("#p-desc"); if (!box) return;
+      $("[data-locked]", box).hidden = revelat;
+      $("[data-unlocked]", box).hidden = !revelat;
+      if (!revelat) return;
+      const h = $("[data-f=havies]", box);
+      if (h) h.textContent = prediccio ? "Havies triat «" + senseFinal(opcions[prediccio]) + "». " + missatge() : missatge();
+    }
+    function desbloqueja() {
+      revelat = true;
+      const b = $("[data-desc]"); if (b) { b.setAttribute("aria-disabled", "false"); b.dataset.ready = "true"; }
+      pintaDescoberta();
+    }
+    function progres(text, fet) {
+      $$("[data-f=estat], [data-f=estat2]").forEach((e) => { e.textContent = text; });
+      if (fet && !revelat) desbloqueja();
+    }
+
+    // ---- panells ----
+    const nav = $("#menu"), tog = $(".menu-toggle");
+    const tancaMenu = () => { if (!nav) return; nav.classList.remove("obert"); tog?.setAttribute("aria-expanded", "false"); };
+    function obre(id, from) {
+      const d = document.getElementById(id);
+      if (!d || d.open) return;
+      opener = from || document.activeElement;
+      if (id === "p-desc") pintaDescoberta();
+      onObre(id);
+      d.showModal(); tancaMenu();
+    }
+    $$("dialog.panell").forEach((d) => {
+      d.addEventListener("close", () => {
+        if (d.id === "p-pred") { vista = true; mostraInd(); }
+        if (opener && opener.isConnected) opener.focus();
+        opener = null;
+      });
+      d.addEventListener("click", (e) => { if (e.target === d) d.close(); }); // clic al fons
+      $("[data-close]", d)?.addEventListener("click", () => d.close());
+    });
+    $$("[data-open]").forEach((b) => b.addEventListener("click", () => obre(b.dataset.open, b)));
+    $$('input[name="pred"]').forEach((e) => e.addEventListener("change", () => { prediccio = e.value; mostraInd(); pintaDescoberta(); }));
+    $("[data-pred-ok]")?.addEventListener("click", () => $("#p-pred").close());
+    $("[data-reveal]")?.addEventListener("click", (e) => { desbloqueja(); obre("p-desc", e.currentTarget); });
+    $("[data-reveal2]")?.addEventListener("click", () => desbloqueja());
+    $$("[data-answer]").forEach((b) => b.addEventListener("click", () => {
+      const r = $(`[data-f=resposta][data-r="${b.dataset.answer}"]`); if (r) r.hidden = false;
+      b.hidden = true; r?.setAttribute("tabindex", "-1"); r?.focus();
+    }));
+
+    // ---- menú del mòbil i pestanyes ----
+    tog?.addEventListener("click", () => { const o = nav.classList.toggle("obert"); tog.setAttribute("aria-expanded", String(o)); if (o) $("button", nav)?.focus(); });
+    $$("[data-tab-btn]").forEach((b) => b.addEventListener("click", () => {
+      app.dataset.tab = b.dataset.tabBtn;
+      $$("[data-tab-btn]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      setTimeout(() => onTab(app.dataset.tab), 0);
+    }));
+
+    // ---- Esc propi: tanca el panell obert o el menú (l'Esc sintètic de les proves no tanca un <dialog>) ----
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      const d = $("dialog.panell[open]");
+      if (d) { e.preventDefault(); d.close(); return; }
+      if (nav?.classList.contains("obert")) { tancaMenu(); tog.focus(); }
+    });
+
+    if (obrePrediccio) requestAnimationFrame(() => obre("p-pred", $("[data-open=p-pred]")));
+    return { obre, progres, desbloqueja, get prediccio() { return prediccio; }, get revelat() { return revelat; } };
+  }
+
+  // ---- etiquetes: capa HTML sobre la figura, de 16-22 px reals a qualsevol amplada ----
+  // stage: element posicionat que conté l'SVG i un .tags; pt: punt de la peça en coordenades de l'SVG;
+  // dx, dy: desplaçament de l'etiqueta en píxels de pantalla; alt: altres desplaçaments per si toca una altra etiqueta.
+  // Una etiqueta que no troba lloc no es mostra i queda apuntada a window.__etiquetesAmagades (es revisa a la verificació).
+  function etiquetes(stage, svg, llista) {
+    const capa = $(".tags", stage); if (!capa) return;
+    capa.innerHTML = "";
+    const m = svg.getScreenCTM(); if (!m) return;
+    const box = stage.getBoundingClientRect();
+    if (!box.width || !box.height) return; // figura amagada (pestanya de controls al mòbil): es recol·loquen en tornar-hi
+    const lead = document.createElementNS(NS, "svg"); lead.setAttribute("class", "lead"); capa.appendChild(lead);
+    const proj = ([x, y]) => [m.a * x + m.c * y + m.e - box.left, m.b * x + m.d * y + m.f - box.top];
+    const posades = [], amagades = [];
+    for (const l of llista) {
+      const [px, py] = proj(l.pt);
+      const tag = document.createElement("span"); tag.className = "tag"; tag.textContent = l.t; capa.appendChild(tag);
+      const w = tag.offsetWidth, h = tag.offsetHeight;
+      let lloc = null;
+      for (const [dx, dy] of [[l.dx ?? 0, l.dy ?? 0], ...(l.alt || [])]) {
+        const tx = clamp(px + dx, w / 2 + 4, box.width - w / 2 - 4), ty = clamp(py + dy, h / 2 + 4, box.height - h / 2 - 4);
+        if (!posades.some((q) => Math.abs(q.x - tx) < (q.w + w) / 2 + 4 && Math.abs(q.y - ty) < (q.h + h) / 2 + 2)) { lloc = [tx, ty]; break; }
+      }
+      if (!lloc) { tag.remove(); amagades.push(l.t); continue; }
+      const [tx, ty] = lloc;
+      posades.push({ x: tx, y: ty, w, h });
+      tag.style.left = tx.toFixed(1) + "px"; tag.style.top = ty.toFixed(1) + "px";
+      const ln = document.createElementNS(NS, "line");
+      ln.setAttribute("x1", tx); ln.setAttribute("y1", ty); ln.setAttribute("x2", px); ln.setAttribute("y2", py);
+      lead.insertBefore(ln, lead.firstChild);
+      const c = document.createElementNS(NS, "circle"); c.setAttribute("cx", px); c.setAttribute("cy", py); c.setAttribute("r", 4); lead.appendChild(c);
+    }
+    window.__etiquetesAmagades = amagades;
+  }
+
+  // ---- vista ampliada (opcional): requadre #inset amb botons data-inset="gran|amaga|mostra" ----
+  // Si la figura fa menys de minAmplada px, comença amagada perquè no tapi l'objecte.
+  function vistaAmpliada({ minAmplada = 900, onCanvi = () => {} } = {}) {
+    const inset = $("#inset"), mostra = $("[data-inset=mostra]"), gran = $("[data-inset=gran]"), fig = $(".fig");
+    if (!inset) return;
+    const nom = inset.dataset.nom || "la vista ampliada";
+    $$("[data-inset]").forEach((b) => b.addEventListener("click", () => {
+      const k = b.dataset.inset;
+      if (k === "gran") { const g = inset.classList.toggle("gran"); gran.setAttribute("aria-pressed", String(g)); gran.textContent = g ? "Redueix" : "Amplia"; gran.setAttribute("aria-label", (g ? "Redueix " : "Amplia ") + nom); }
+      if (k === "amaga") { inset.hidden = true; mostra.hidden = false; mostra.focus(); }
+      if (k === "mostra") { inset.hidden = false; mostra.hidden = true; gran.focus(); }
+      onCanvi(!inset.hidden);
+    }));
+    if (getComputedStyle(inset).position === "absolute" && fig.clientWidth < minAmplada) { inset.hidden = true; mostra.hidden = false; onCanvi(false); }
+  }
+
+  // ---- mesura per a la verificació (fase 6) ----
+  // Amb overflow:hidden, scrollHeight <= innerHeight sempre és cert: aquí es mira que cada bloc visible acabi dins de la pantalla,
+  // que no tingui contingut tallat i que cap fill en sobresurti.
+  // cert si entre l'element i el bloc hi ha un contenidor que es desplaça (overflow auto o scroll)
+  const dinsDeDesplacament = (c, bloc) => { for (let p = c.parentElement; p && p !== bloc; p = p.parentElement) { const o = getComputedStyle(p); if (/(auto|scroll)/.test(o.overflowX) || /(auto|scroll)/.test(o.overflowY)) return true; } return false; };
+  const BLOCS = [".top", ".tabs", ".fig", ".quick", ".ctrl", ".lect"];
+  function mesura() {
+    const problemes = [];
+    const de = document.documentElement;
+    if (de.scrollWidth > innerWidth + 1) problemes.push(`desplaçament horitzontal: ${de.scrollWidth} > ${innerWidth}`);
+    for (const sel of BLOCS) {
+      const e = $(sel); if (!e || e.offsetParent === null || getComputedStyle(e).display === "none") continue;
+      const r = e.getBoundingClientRect();
+      if (r.bottom > innerHeight + 1 || r.right > innerWidth + 1) problemes.push(`${sel} surt de la pantalla (${Math.round(r.right)} × ${Math.round(r.bottom)})`);
+      if (sel !== ".fig" && e.scrollHeight > e.clientHeight + 1) problemes.push(`${sel} té contingut tallat (${e.scrollHeight} > ${e.clientHeight})`);
+      for (const c of e.querySelectorAll("*")) {
+        if (c.closest("svg") || c.closest(".tags") || c.closest("[hidden]") || getComputedStyle(c).position === "absolute") continue;
+        if (dinsDeDesplacament(c, e)) continue; // dins d'un contenidor amb desplaçament propi (una taula llarga): sobresortir-ne és el seu ofici
+        const q = c.getBoundingClientRect();
+        if (q.width && (q.bottom > r.bottom + 1 || q.right > r.right + 1)) { problemes.push(`${sel} > ${c.tagName.toLowerCase()}${c.className ? "." + String(c.className).split(" ")[0] : ""} sobresurt`); break; }
+      }
+    }
+    // al mòbil, que alguna etiqueta no hi càpiga és un avís per revisar en captura; a partir de tauleta, és un problema
+    const avisos = [];
+    const figVisible = $(".fig") && $(".fig").offsetParent !== null && getComputedStyle($(".fig")).display !== "none";
+    if (figVisible && window.__etiquetesAmagades?.length) (innerWidth <= 600 ? avisos : problemes).push("etiquetes amagades per manca de lloc: " + window.__etiquetesAmagades.join(", "));
+    const fig = $(".fig")?.getBoundingClientRect();
+    // la figura és el centre del recurs: si els controls o les lectures l'aixafen, cal treure'ls espai, no reduir-la
+    const minFig = innerWidth > 600 ? 0.3 : 0.22;
+    if (fig && fig.height > 0 && fig.height < minFig * innerHeight) problemes.push(`figura massa petita: ${Math.round(fig.height)} px d'alçada (mínim ${Math.round(minFig * innerHeight)})`);
+    return { mida: `${innerWidth}×${innerHeight}`, figura: fig ? `${Math.round(fig.width)}×${Math.round(fig.height)}` : null, ok: problemes.length === 0, problemes, avisos };
+  }
+  function panells() {
+    return $$("dialog.panell").map((d) => {
+      const obert = d.open; if (!obert) d.showModal();
+      const r = d.getBoundingClientRect(), c = $(".p-cos", d);
+      const ok = r.top >= -1 && r.bottom <= innerHeight + 1 && r.right <= innerWidth + 1 && c.scrollWidth <= c.clientWidth + 1;
+      const res = { id: d.id, ok, alt: `${Math.round(r.height)}/${innerHeight}`, desplacaInterior: c.scrollHeight > c.clientHeight + 1 };
+      if (!obert) d.close();
+      return res;
+    });
+  }
+  if (/[?&](mesura|debug)/.test(location.search)) { window.__mesura = mesura; window.__panells = panells; }
+
+  return { inicia, etiquetes, vistaAmpliada, mesura, panells };
+})();
+
+const M = (() => {
+// Model de l'hora en català (sistema de quarts). Tot el que es dibuixa, es diu o es corregeix a la pàgina surt d'aquí.
+// Font principal: IEC, «Les notacions horàries en els textos de l'IEC» (5.1.2), taules 1 i 2. Vegeu FONTS.md.
+// El temps és t = minuts des de mitjanit (0..1439), sempre múltiple de 5.
+
+// ---------- noms ----------
+const NOMS = ["dotze", "una", "dues", "tres", "quatre", "cinc", "sis", "set", "vuit", "nou", "deu", "onze"]; // índex = numeral % 12
+const num12 = (h) => (h % 12) || 12;                       // numeral del rellotge (1..12) d'una hora 0..23
+const art = (n) => (n === 1 ? "la una" : "les " + NOMS[n % 12]);   // «la una», «les dues»
+const de = (n) => (n === 1 ? "d'una" : n === 11 ? "d'onze" : "de " + NOMS[n % 12]); // «d'una», «d'onze», «de nou»
+const deArt = (n) => (n === 1 ? "de la una" : "de les " + NOMS[n % 12]);
+const EXTRA = { 5: "cinc", 10: "deu" };
+const QUARTS = ["", "un quart", "dos quarts", "tres quarts"];
+const marca = (m) => (m === 0 ? 12 : m / 5);               // número del rellotge on és l'agulla dels minuts
+
+// ---------- parts del dia (IEC, taula 1; límits en minuts des de mitjanit) ----------
+const PARTS = [
+  { k: "matinada", nom: "matinada", de: "de la matinada", ini: 15, fi: 315, lim: "de les 0.15 a les 5.14" },
+  { k: "mati", nom: "matí", de: "del matí", ini: 315, fi: 675, lim: "de les 5.15 a les 11.14" },
+  { k: "migdia", nom: "migdia", de: "del migdia", ini: 675, fi: 855, lim: "de les 11.15 a les 14.14" },
+  { k: "tarda", nom: "tarda", de: "de la tarda", ini: 855, fi: 1095, lim: "de les 14.15 a les 18.14" },
+  { k: "vespre", nom: "vespre", de: "del vespre", ini: 1095, fi: 1335, lim: "de les 18.15 a les 22.14" },
+  { k: "nit", nom: "nit", de: "de la nit", ini: 1335, fi: 1455, lim: "de les 22.15 a les 0.14" },
+];
+const partDia = (t) => { const x = t < 15 ? t + 1440 : t; return PARTS.find((p) => x >= p.ini && x < p.fi); };
+const partPerClau = (k) => PARTS.find((p) => p.k === k);
+
+// ---------- anàlisi i frase ----------
+// q: quarts complets (0..3) dins de l'hora; extra: minuts de més (0, 5, 10); n: numeral de l'hora a què es refereix la frase.
+function analitza(t) {
+  if (!Number.isInteger(t) || t < 0 || t > 1439 || t % 5) throw new Error("hora no vàlida: " + t);
+  const h = Math.floor(t / 60), m = t % 60, q = Math.floor(m / 15), extra = m - 15 * q;
+  return { t, h, m, q, extra, h12: num12(h), n: num12(q > 0 ? h + 1 : h), part: partDia(t).k };
+}
+// peces: [{ k: "verb"|"quarts"|"hora"|"part"|"minuts"|"punt", t }]
+function construeix({ q, extra, n, part }, ambPart = false) {
+  const p = [];
+  if (q === 0) {
+    p.push({ k: "verb", t: n === 1 ? "És" : "Són" }, { k: "hora", t: art(n) });
+    if (ambPart) p.push({ k: "part", t: partPerClau(part).de });
+    p.push(extra === 0 ? { k: "punt", t: "en punt" } : { k: "minuts", t: "i " + EXTRA[extra] });
+  } else {   // forma de l'escola: quarts + minuts + «de» + hora + part del dia (Caplletra 30, DLC «quart» 2.4: «un quart i cinc de nou»)
+    p.push({ k: "verb", t: q === 1 ? "És" : "Són" }, { k: "quarts", t: QUARTS[q] });
+    if (extra > 0) p.push({ k: "minuts", t: "i " + EXTRA[extra] });
+    p.push({ k: "hora", t: de(n) });
+    if (ambPart) p.push({ k: "part", t: partPerClau(part).de });
+  }
+  return p;
+}
+const text = (peces) => peces.map((x) => x.t).join(" ") + ".";
+const frase = (t, ambPart = false) => text(construeix(analitza(t), ambPart));
+const pecesFrase = (t, ambPart = false) => construeix(analitza(t), ambPart);
+// Altres maneres de dir-ho (IEC, taula 2): l'ordre de l'IEC («dos quarts de nou i cinc») i les formes amb «menys» per a :40, :45, :50 i :55
+const MENYS = { 40: "vint", 45: "quart", 50: "deu", 55: "cinc" };
+function fraseIEC(t, ambPart = false) {       // ordre de l'IEC: quarts + hora + part + minuts
+  const c = analitza(t);
+  if (c.q === 0 || c.extra === 0) return frase(t, ambPart);
+  const p = construeix({ ...c, extra: 0 }, ambPart);
+  p.push({ k: "minuts", t: "i " + EXTRA[c.extra] });
+  return text(p);
+}
+function altres(t, ambPart = false) {         // llista de frases (sense verb ni punt) per a «També es diu»
+  const { m, h, q, extra } = analitza(t), out = [];
+  if (q > 0 && extra > 0) out.push(fraseIEC(t, ambPart).replace(/^(És|Són) /, "").replace(/\.$/, ""));
+  if (MENYS[m]) out.push(`${art(num12(h + 1))} menys ${MENYS[m]}`);
+  return out;
+}
+const altra = (t) => (MENYS[t % 60] ? `${art(num12(Math.floor(t / 60) + 1))} menys ${MENYS[t % 60]}` : null);
+
+// ---------- hora digital ----------
+const dos = (x) => String(x).padStart(2, "0");
+const digital = (t, h24 = true) => { const h = Math.floor(t / 60); return (h24 ? dos(h) : String(num12(h))) + ":" + dos(t % 60); };
+
+// ---------- agulles ----------
+const angleMinuts = (t) => 6 * (t % 60);
+const angleHores = (t) => 0.5 * (t % 720);       // 30° per hora + 0,5° per minut: l'agulla petita avança amb els minuts
+
+// ---------- nivells ----------
+const TOTS = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+const NIVELLS = [
+  { id: 1, curt: "En punt", nom: "L'hora en punt", minuts: [0], h24: false, desc: "Les hores en punt: l'agulla gran és al 12 i l'agulla petita diu l'hora." },
+  { id: 2, curt: "Quarts", nom: "Els quarts", minuts: [0, 15, 30, 45], h24: false, desc: "Un quart, dos quarts i tres quarts: els quarts conten cap a l'hora que ve." },
+  { id: 3, curt: "I cinc", nom: "Els quarts i «i cinc»", minuts: [0, 5, 15, 20, 30, 35, 45, 50], h24: false, desc: "Cinc minuts després de l'hora o d'un quart: «i cinc»." },
+  { id: 4, curt: "I deu", nom: "Tots els minuts de cinc en cinc", minuts: TOTS, h24: false, desc: "També «i deu»: tots els minuts de cinc en cinc." },
+  { id: 5, curt: "Parts del dia", nom: "Les parts del dia", minuts: [0, 15, 30, 45], h24: true, desc: "Hora digital de 24 hores i la part del dia: matinada, matí, migdia, tarda, vespre i nit." },
+  { id: 6, curt: "24 hores", nom: "L'hora de 24 hores completa", minuts: TOTS, h24: true, desc: "Totes les hores de 24 hores, de cinc en cinc minuts." },
+];
+const SUPERAT = 8, PREGUNTES = 10;                  // criteri: 8 encerts de 10
+const horesNivell = (niv) => Array.from({ length: niv.h24 ? 24 : 12 }, (_, i) => i);
+const tempsNivell = (niv) => horesNivell(niv).flatMap((h) => niv.minuts.map((m) => h * 60 + m));
+
+// ---------- generador amb llavor ----------
+function rng(seed) {
+  let s = seed >>> 0;
+  const u = () => { s = (s + 0x6d2b79f5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  return { u, int: (n) => Math.floor(u() * n), mescla(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(u() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; } };
+}
+
+// ---------- opcions errònies (cada una és una frase vàlida d'una altra hora) ----------
+const permet = (niv, q, extra) => niv.minuts.includes(15 * q + extra);
+function distractors(t, niv, r, quants = 2) {
+  const c = analitza(t), ambPart = niv.h24, cand = [];
+  const nMes = c.n % 12 + 1, nMenys = ((c.n + 10) % 12) + 1;
+  if (c.q > 0) cand.push({ ...c, n: c.h12 === c.n ? nMenys : c.h12, prio: 1 });      // els quarts amb l'hora de l'agulla petita, no l'hora que ve
+  cand.push({ ...c, n: nMes }, { ...c, n: nMenys });
+  for (const q of [0, 1, 2, 3]) if (q !== c.q && permet(niv, q, c.extra)) cand.push({ ...c, q });
+  for (const e of [0, 5, 10]) if (e !== c.extra && permet(niv, c.q, e)) cand.push({ ...c, extra: e });
+  if (ambPart) for (const p of PARTS) if (p.k !== c.part) cand.push({ ...c, part: p.k, prio: p.k === "mati" || p.k === "tarda" ? 1 : 0 });
+  const vistos = new Set([frase(t, ambPart)]), triats = [];
+  const ordenats = [...r.mescla(cand.filter((x) => x.prio)), ...r.mescla(cand.filter((x) => !x.prio))];
+  for (const x of ordenats) {
+    const f = text(construeix(x, ambPart));
+    if (vistos.has(f)) continue;
+    vistos.add(f); triats.push(x);
+    if (triats.length === quants) break;
+  }
+  return triats;
+}
+
+// ---------- explicacions (surten del model) ----------
+const sv = (c, ambPart = false) => construeix(c, ambPart).slice(1).map((x) => x.t).join(" ");   // frase sense verb
+// Explicació de l'hora, per a l'explorador i per a després d'una correcció
+function pista(t) {
+  const c = analitza(t), s = [];
+  if (c.q === 0) {
+    if (c.extra === 0) s.push(`L'agulla gran és al 12: és l'hora en punt. L'agulla petita assenyala el ${c.n}.`);
+    else s.push(`L'agulla gran és al ${marca(c.m)}: han passat ${EXTRA[c.extra]} minuts de ${art(c.n)}. Per això diem «i ${EXTRA[c.extra]}».`);
+  } else {
+    s.push(`L'agulla petita ja ha passat el ${c.h12} i va cap al ${c.n}. Els quarts conten cap a l'hora que ve: per això diem «${sv(c)}».`);
+    s.push(`L'agulla gran ha fet ${QUARTS[c.q]} de volta${c.extra ? " i " + EXTRA[c.extra] + " minuts més" : ""}.`);
+  }
+  return s.join(" ");
+}
+// Explicació d'un error quan l'alumne tria una frase (la frase «triat» són els camps d'una altra hora)
+function explicaFrase(t, triat, ambPart) {
+  const c = analitza(t), s = [];
+  if (c.part !== triat.part && ambPart) {
+    const p = partPerClau(c.part);
+    s.push(`A les ${digital(t)} és ${p.nom}: ${p.lim}. La frase porta «${p.de}».`);
+  }
+  if (triat.n !== c.n) {
+    if (c.q > 0 && triat.n === c.h12) s.push(`Els quarts conten cap a l'hora que ve. Aquí l'agulla petita és entre el ${c.h12} i el ${c.n}: es diu «${sv(c)}», no «${sv({ ...c, n: triat.n })}».`);
+    else if (c.q > 0) s.push(`L'agulla petita és entre el ${c.h12} i el ${c.n}, i els quarts conten cap al ${c.n}: «${sv(c)}».`);
+    else s.push(`L'agulla petita assenyala el ${c.n}: «${art(c.n)}».`);
+  }
+  if (triat.q !== c.q) s.push(c.q === 0 ? `L'agulla gran encara no ha arribat al 3: no hi ha cap quart complet.` : `L'agulla gran ha fet ${QUARTS[c.q]} de volta: és ${c.q === 1 ? "al 3 o una mica més endavant" : c.q === 2 ? "al 6 o una mica més endavant" : "al 9 o una mica més endavant"}.`);
+  if (triat.extra !== c.extra) s.push(c.extra === 0 ? `L'agulla gran és just en un número de quart o d'hora: no hi ha minuts de més, no cal «i ${EXTRA[triat.extra] || "…"}».` : `Després de ${c.q === 0 ? "l'hora" : "l'últim quart"}, l'agulla gran té ${EXTRA[c.extra]} minuts més: «i ${EXTRA[c.extra]}».`);
+  return s.slice(0, 2).join(" ");
+}
+// Explicació d'un error quan l'alumne posa les agulles (ts = hora que ha posat, t = la correcta); 12 hores
+function explicaAgulles(t, ts, ambPart) {
+  const c = analitza(t), d = analitza(ts % 1440), s = [];
+  s.push(`Has posat les agulles a l'hora de «${text(construeix(d, ambPart)).replace(/\.$/, "")}».`);
+  if (c.m === d.m && c.q > 0 && d.h12 === c.n) s.push(`A «${sv(c)}» l'agulla petita és entre el ${c.h12} i el ${c.n}, no al ${c.n}: el ${c.n} és l'hora que ve, però l'agulla petita encara no hi ha arribat.`);
+  else if (c.m === d.m) s.push(c.q > 0 ? `L'agulla petita ha de ser entre el ${c.h12} i el ${c.n}.` : `L'agulla petita ha d'assenyalar el ${c.n}.`);
+  else if (c.h12 === d.h12) s.push(c.m === 0 ? `L'agulla gran ha de ser al 12.` : `L'agulla gran ha de ser al ${marca(c.m)}: ${c.q ? QUARTS[c.q] + " de volta" + (c.extra ? " i " + EXTRA[c.extra] + " minuts més" : "") : EXTRA[c.extra] + " minuts"}.`);
+  else s.push(pista(t));
+  return s.join(" ");
+}
+// Explicació d'un error quan l'alumne posa l'hora digital (24 hores)
+function explicaDigital(t, ts) {
+  const c = analitza(t), p = partPerClau(c.part);
+  if ((ts % 720) === (t % 720)) return `El rellotge és igual a les ${digital(ts)} i a les ${digital((ts + 720) % 1440)}. La imatge diu que és ${p.nom} (${p.lim}): són les ${digital(t)}.`;
+  return `Són les ${digital(t)}. ${pista(t)}`;
+}
+
+// ---------- sèrie d'exercicis ----------
+// dir: "A" rellotge o digital → frase (tria); "B" frase → agulles; "C" digital → agulles (12 h) o rellotge i part del dia → digital (24 h)
+function generaSerie(niv, r, n = PREGUNTES) {
+  const hores = r.mescla(tempsNivell(niv)).slice(0, n);
+  const dirs = r.mescla(["A", "A", "A", "A", "B", "B", "B", "C", "C", "C"]).slice(0, n);
+  return hores.map((t, i) => {
+    const ex = { dir: dirs[i], t };
+    if (ex.dir === "A") {
+      const ds = distractors(t, niv, r);
+      const opcions = r.mescla([{ camps: analitza(t), ok: true }, ...ds.map((camps) => ({ camps, ok: false }))]).map((o) => ({ ...o, text: text(construeix(o.camps, niv.h24)) }));
+      ex.opcions = opcions;
+      ex.fonts = niv.h24 ? "digital" : "analogic";     // al nivell 24 hores l'enunciat és l'hora digital
+    }
+    return ex;
+  });
+}
+// Correcció d'una resposta: retorna { ok, explicacio }
+function corregeix(niv, ex, resposta) {
+  const ambPart = niv.h24;
+  if (ex.dir === "A") {
+    const o = ex.opcions[resposta];
+    return o.ok ? { ok: true, explicacio: pista(ex.t) } : { ok: false, explicacio: explicaFrase(ex.t, o.camps, ambPart) };
+  }
+  if (ex.dir === "C" && niv.h24) {                         // resposta = hora digital (24 h)
+    return resposta === ex.t ? { ok: true, explicacio: pista(ex.t) } : { ok: false, explicacio: explicaDigital(ex.t, resposta) };
+  }
+  // B i C de 12 hores: resposta = hora de les agulles; la part del dia no compta (l'analògic no la té)
+  return (resposta % 720) === (ex.t % 720) ? { ok: true, explicacio: pista(ex.t) } : { ok: false, explicacio: explicaAgulles(ex.t, resposta, ambPart) };
+}
+
+
+// ---------- moure les agulles (la graella de minuts depèn del nivell) ----------
+// Següent hora (dir = 1) o anterior (dir = -1) amb minuts dins de la graella; passar pel 12 canvia l'hora.
+function seguentGrid(t, minuts, dir) {
+  for (let k = 1; k <= 288; k++) { const x = (((t + dir * 5 * k) % 1440) + 1440) % 1440; if (minuts.includes(x % 60)) return x; }
+  return t;
+}
+// Minut de la graella més proper a un angle de l'agulla gran (en minuts, 0..60), comptant que 60 és 0.
+function minutProper(raw, minuts) {
+  let best = minuts[0], d0 = 99;
+  for (const g of minuts) { const d = Math.min(Math.abs(raw - g), 60 - Math.abs(raw - g)); if (d < d0) { d0 = d; best = g; } }
+  return best;
+}
+// Nou t en moure l'agulla gran fins a un angle: es tria el desplaçament més curt, de manera que passar pel 12 canvia l'hora.
+function moulMinuts(t, angle, minuts) {
+  const nou = minutProper(angle / 6, minuts);
+  let d = nou - (t % 60);
+  if (d > 30) d -= 60; if (d < -30) d += 60;
+  return (((t + d) % 1440) + 1440) % 1440;
+}
+// Nou t en moure l'agulla petita fins a un angle (0..360): l'hora més propera de la graella dins de les 12 hores; passar pel 12 canvia matí i tarda.
+function moulHores(t, angle, minuts, hores = 12) {
+  const T = angle * 2; let best = 0, d0 = 1e9;
+  for (let h = 0; h < 12; h++) for (const m of minuts) { const c = h * 60 + m, d = Math.min(Math.abs(T - c), 720 - Math.abs(T - c)); if (d < d0) { d0 = d; best = c; } }
+  let d = best - (t % 720);
+  if (d > 360) d -= 720; if (d <= -360) d += 720;
+  return (((t + d) % 1440) + 1440) % 1440;
+}
+
+
+return { NIVELLS, NOMS, PARTS, PREGUNTES, SUPERAT, altra, altres, analitza, angleHores, angleMinuts, art, construeix, corregeix, de, deArt, digital, distractors, explicaAgulles, explicaDigital, explicaFrase, frase, fraseIEC, generaSerie, horesNivell, marca, minutProper, moulHores, moulMinuts, num12, partDia, pecesFrase, pista, rng, seguentGrid, tempsNivell, text };
+})();
+
+const SCN = (() => {
+// Geometria del rellotge (mida Esquema, 2D). Tots els números del dibuix surten d'aquí; el viewBox i el codi que dibuixa fan servir les mateixes constants.
+const W = 400, H = 400, C = 200;
+const R = { cara: 192, tic: 190, ticLlarg: 170, ticCurt: 180, etiqMin: 157, hora: 112, sector: 92, manH: 78, manM: 136, nexe: 7, cercleHora: 21 };
+const FONT = { hora: 32, min: 17 };
+const polar = (ang, r) => [C + r * Math.sin((ang * Math.PI) / 180), C - r * Math.cos((ang * Math.PI) / 180)];
+const sector = (a0, a1, r = R.sector) => {
+  const [x0, y0] = polar(a0, r), [x1, y1] = polar(a1, r);
+  return `M${C} ${C}L${x0.toFixed(2)} ${y0.toFixed(2)}A${r} ${r} 0 ${a1 - a0 > 180 ? 1 : 0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}Z`;
+};
+const posNumeral = (n) => polar(30 * (n % 12), R.hora);       // n = 1..12
+const posEtiqMin = (n) => polar(30 * (n % 12), R.etiqMin);    // etiqueta de minuts al costat del numeral n: 5·n (0 al 12)
+const etiqMin = (n) => (n % 12) * 5;
+const puntaH = (angle) => polar(angle, R.manH);
+const puntaM = (angle) => polar(angle, R.manM);
+
+return { C, FONT, H, R, W, etiqMin, polar, posEtiqMin, posNumeral, puntaH, puntaM, sector };
+})();
+
+// Components genèrics (skill recurs-aula, perfil «Pràctica»): rellotge analògic amb agulles que es poden arrossegar (ratolí, dit i teclat),
+// rellotge digital amb botons, icona de la part del dia, sèrie d'exercicis amb correcció i veu opcional.
+// No saben res de les frases en català: el recurs els passa el model (SCN per a la geometria, M per al temps). Es poden moure a la plantilla.
+// El build els insereix després del model i de l'escena.
+const Hores = (() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (nom, attrs = {}, pare) => { const e = document.createElementNS(NS, nom); for (const k in attrs) e.setAttribute(k, attrs[k]); if (pare) pare.appendChild(e); return e; };
+
+  // ---- Rellotge analògic ----
+  // opcions: { grid: [minuts permesos], onMou(t), noms: { m, h } }
+  function Rellotge(svg, { grid = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55], onMou = () => {}, valorText = (t) => String(t) } = {}) {
+    const { C, R, FONT } = SCN;
+    let t = 0, minuts = grid, bloq = { m: false, h: false }, arrossega = null;
+    svg.innerHTML = "";
+    svg.style.touchAction = "none";
+    const g = (cls) => el("g", { class: cls }, svg);
+    el("circle", { class: "cara", cx: C, cy: C, r: R.cara }, svg);
+    const gTics = g("tics"), gSectors = g("sectors"), gRes = g("resalt"), gNum = g("numerals"), gMans = g("mans");
+    svg.appendChild(gNum); // els números van per sobre de les agulles (amb un contorn del color de l'esfera), perquè l'agulla gran no els tapi
+    for (let k = 0; k < 60; k++) {
+      const [x0, y0] = SCN.polar(6 * k, k % 5 ? R.ticCurt : R.ticLlarg), [x1, y1] = SCN.polar(6 * k, R.tic);
+      el("line", { class: k % 5 ? "tic" : "tic llarg", x1: x0, y1: y0, x2: x1, y2: y1 }, gTics);
+    }
+    const numerals = {}, etiqs = {};
+    for (let n = 1; n <= 12; n++) {
+      const [x, y] = SCN.posNumeral(n);
+      const tx = el("text", { class: "num", x, y, "text-anchor": "middle", "dominant-baseline": "central", "font-size": FONT.hora }, gNum); tx.textContent = n; numerals[n] = tx;
+      const [ex, ey] = SCN.posEtiqMin(n);
+      const em = el("text", { class: "etiq-min", x: ex, y: ey, "text-anchor": "middle", "dominant-baseline": "central", "font-size": FONT.min }, gNum); em.textContent = SCN.etiqMin(n); etiqs[n] = em;
+    }
+    // agulles: una zona de contacte ampla (invisible), la agulla i un cercle a la punta que convida a agafar-la
+    const mans = {};
+    for (const [k, nom, cls, long] of [["h", "Agulla petita (hores)", "ma-h", R.manH], ["m", "Agulla gran (minuts)", "ma-m", R.manM]]) {
+      const gr = el("g", { class: "ma " + cls, tabindex: 0, role: "slider", "aria-label": nom, "aria-valuemin": 0, "aria-valuemax": 1439 }, gMans);
+      const hit = el("line", { class: "hit", x1: C, y1: C - (k === "m" ? 84 : 12), x2: C, y2: C - (k === "m" ? long : 84), "stroke-width": 44 }, gr); // zones de contacte consecutives: l'agulla petita fins a 84, la gran des de 84
+      const vis = el("line", { class: "vis", x1: C, y1: C, x2: C, y2: C - long }, gr);
+      const nus = el("circle", { class: "punta", cx: C, cy: C - long, r: R.nexe + (k === "h" ? 3 : 1) }, gr);
+      mans[k] = { gr, hit, vis, nus, long };
+    }
+    el("circle", { class: "centre", cx: C, cy: C, r: 8 }, gMans);
+
+    const punt = (ev) => { const p = svg.createSVGPoint(); p.x = ev.clientX; p.y = ev.clientY; const q = p.matrixTransform(svg.getScreenCTM().inverse()); return (Math.atan2(q.x - C, C - q.y) * 180 / Math.PI + 360) % 360; };
+    const canvia = (nou, origen) => { if (nou !== t) { t = nou; pinta(); onMou(t, origen); } };
+    for (const k of ["m", "h"]) {
+      const { gr } = mans[k];
+      gr.addEventListener("pointerdown", (e) => { if (bloq[k]) return; arrossega = k; gr.setPointerCapture(e.pointerId); gr.focus({ preventScroll: true }); e.preventDefault(); });
+      gr.addEventListener("pointermove", (e) => { if (arrossega !== k) return; const a = punt(e); canvia(k === "m" ? M.moulMinuts(t, a, minuts) : M.moulHores(t, a, minuts), "ratolí"); });
+      const fi = (e) => { if (arrossega === k) { arrossega = null; try { gr.releasePointerCapture(e.pointerId); } catch {} } };
+      gr.addEventListener("pointerup", fi); gr.addEventListener("pointercancel", fi);
+      gr.addEventListener("keydown", (e) => {
+        if (bloq[k]) return;
+        const dir = e.key === "ArrowRight" || e.key === "ArrowUp" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowDown" ? -1 : 0;
+        if (dir) { e.preventDefault(); canvia(k === "m" ? M.seguentGrid(t, minuts, dir) : (t + dir * 60 + 1440) % 1440, "teclat"); }
+        else if (e.key === "PageUp" || e.key === "PageDown") { e.preventDefault(); canvia((t + (e.key === "PageUp" ? 60 : -60) + 1440) % 1440, "teclat"); }
+      });
+    }
+
+    function pinta(opt = {}) {
+      const { ajuda = ajudaActual } = opt; ajudaActual = ajuda;
+      const am = M.angleMinuts(t), ah = M.angleHores(t), a = M.analitza(t);
+      for (const [k, ang] of [["m", am], ["h", ah]]) { mans[k].gr.setAttribute("transform", `rotate(${ang} ${C} ${C})`); mans[k].gr.setAttribute("aria-valuenow", t); mans[k].gr.setAttribute("aria-valuetext", valorText(t, k)); }
+      gSectors.innerHTML = ""; gRes.innerHTML = "";
+      for (const n in numerals) numerals[n].setAttribute("class", "num");
+      if (!ajuda) return;
+      for (let q = 1; q <= a.q; q++) {
+        el("path", { class: "quart q" + (q % 2), d: SCN.sector(90 * (q - 1), 90 * q) }, gSectors);
+        const [x, y] = SCN.polar(90 * (q - 1) + 45, R.sector - 22);
+        const tx = el("text", { class: "quart-n", x, y, "text-anchor": "middle", "dominant-baseline": "central", "font-size": 22 }, gSectors); tx.textContent = q;
+      }
+      if (a.extra) el("path", { class: "extra", d: SCN.sector(90 * a.q, 90 * a.q + 6 * a.extra) }, gSectors);
+      if (a.q > 0) { const [x, y] = SCN.posNumeral(a.h12); el("circle", { class: "actual", cx: x, cy: y, r: R.cercleHora }, gRes); }
+      const [x, y] = SCN.posNumeral(a.n); el("circle", { class: "hora-ve", cx: x, cy: y, r: R.cercleHora }, gRes);
+      numerals[a.n].setAttribute("class", "num destacat");
+    }
+    let ajudaActual = true;
+    pinta();
+    return {
+      set(nou, opt) { t = nou; pinta(opt); },
+      get t() { return t; },
+      setGrid(g) { minuts = g; },
+      bloqueja(b) { bloq = { m: !!b.m, h: !!b.h }; for (const k of ["m", "h"]) { mans[k].gr.classList.toggle("bloq", bloq[k]); mans[k].gr.setAttribute("tabindex", bloq[k] ? -1 : 0); mans[k].gr.setAttribute("aria-disabled", String(bloq[k])); } },
+      ajuda(v) { pinta({ ajuda: v }); },
+      mans,
+      // per a la verificació: geometria real del DOM
+      geometria() { const r = (k) => { const l = mans[k].vis, m = mans[k].gr.transform.baseVal.consolidate().matrix; const x = Number(l.getAttribute("x2")), y = Number(l.getAttribute("y2")); return [m.a * x + m.c * y + m.e, m.b * x + m.d * y + m.f]; }; return { m: r("m"), h: r("h"), numerals: Object.fromEntries(Object.entries(numerals).map(([n, e]) => [n, [Number(e.getAttribute("x")), Number(e.getAttribute("y"))]])), sectors: [...gSectors.querySelectorAll("path")].map((p) => p.getAttribute("class")), destacat: Object.keys(numerals).filter((n) => numerals[n].getAttribute("class").includes("destacat")).map(Number) }; },
+    };
+  }
+
+  // ---- Rellotge digital amb botons: hores −/+ i minuts −/+ ----
+  // arrel: element amb [data-h], [data-m] (els números) i botons [data-d="h-"], [data-d="h+"], [data-d="m-"], [data-d="m+"]
+  function Digital(arrel, { onMou = () => {}, grid, h24 = true } = {}) {
+    let t = 0, minuts = grid, actiu = true, amaga = false, h24v = h24;
+    const $h = arrel.querySelector("[data-h]"), $m = arrel.querySelector("[data-m]");
+    const botons = [...arrel.querySelectorAll("[data-d]")];
+    const pinta = () => {
+      if (amaga) { $h.textContent = "··"; $m.textContent = "··"; }
+      else { const [h, m] = M.digital(t, h24v).split(":"); $h.textContent = h; $m.textContent = m; }
+      arrel.classList.toggle("amagat", amaga);
+      for (const b of botons) { b.setAttribute("aria-disabled", String(!actiu)); }
+    };
+    botons.forEach((b) => b.addEventListener("click", () => {
+      if (!actiu) return;
+      const d = b.dataset.d;
+      t = d === "h+" ? (t + 60) % 1440 : d === "h-" ? (t + 1380) % 1440 : M.seguentGrid(t, minuts, d === "m+" ? 1 : -1);
+      pinta(); onMou(t, "botó");
+    }));
+    pinta();
+    return { set(nou, opt = {}) { t = nou; if (opt.h24 !== undefined) h24v = opt.h24; pinta(); }, get t() { return t; }, setGrid(g) { minuts = g; }, actiu(v) { actiu = v; pinta(); }, amaga(v) { amaga = v; pinta(); } };
+  }
+
+  // ---- Icona de la part del dia: el sol (o la lluna) al llarg d'un arc ----
+  const POS = { matinada: [9, 28, "lluna"], mati: [14, 17, "sol"], migdia: [28, 7, "sol"], tarda: [42, 16, "sol"], vespre: [48, 26, "sol"], nit: [28, 9, "lluna"] };
+  function iconaPart(k) {
+    const [x, y, tipus] = POS[k];
+    const astre = tipus === "sol"
+      ? `<circle cx="${x}" cy="${y}" r="6" fill="var(--c-sol)"/>` + [0, 45, 90, 135, 180, 225, 270, 315].map((a) => `<line x1="${x + 8.5 * Math.sin(a * Math.PI / 180)}" y1="${y - 8.5 * Math.cos(a * Math.PI / 180)}" x2="${x + 11 * Math.sin(a * Math.PI / 180)}" y2="${y - 11 * Math.cos(a * Math.PI / 180)}" stroke="var(--c-sol)" stroke-width="1.6" stroke-linecap="round"/>`).join("")
+      : `<circle cx="${x}" cy="${y}" r="6.5" fill="var(--c-lluna)"/><circle cx="${x + 3.2}" cy="${y - 2}" r="5.6" fill="var(--anatomy-card)"/>` + (k === "nit" ? `<circle cx="42" cy="12" r="1.4" fill="var(--c-lluna)"/><circle cx="14" cy="16" r="1.2" fill="var(--c-lluna)"/>` : "");
+    return `<svg class="icona-part" viewBox="0 0 56 36" width="56" height="36" aria-hidden="true" focusable="false"><path d="M6 30Q28 -14 50 30" fill="none" stroke="var(--anatomy-lo)" stroke-width="1.5" stroke-dasharray="3 3"/><line x1="2" y1="30" x2="54" y2="30" stroke="var(--anatomy-mid)" stroke-width="2"/>${astre}</svg>`;
+  }
+
+  // ---- Peces de la frase (xips de colors) ----
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const xips = (peces) => peces.map((p) => `<span class="peca p-${p.k}">${esc(p.t)}</span>`).join(" ") + `<span class="punt-final">.</span>`;
+
+  // ---- Veu (millora progressiva): només si el navegador té una veu catalana ----
+  function Veu(botons) {
+    const troba = () => { try { return (window.speechSynthesis?.getVoices?.() || []).find((v) => /^ca\b|^ca[-_]/i.test(v.lang)) || null; } catch { return null; } };
+    let veu = null;
+    const actualitza = () => { veu = troba(); botons.forEach((b) => { b.hidden = !veu; }); };
+    try { window.speechSynthesis?.addEventListener?.("voiceschanged", actualitza); } catch {}
+    actualitza();
+    return {
+      actualitza,
+      get disponible() { return !!veu; },
+      diu(text) { if (!veu) return false; const u = new SpeechSynthesisUtterance(text); u.voice = veu; u.lang = veu.lang; u.rate = 0.9; window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); return true; },
+    };
+  }
+
+  return { Rellotge, Digital, iconaPart, xips, Veu, esc };
+})();
+
+const GEOM = {"tx":{"perOpcio":{"a":"Molta gent ho pensa, perquè l'agulla petita és al 8. Però els quarts conten cap a l'hora que ve: a les 8:30 es diu «dos quarts de nou».","b":"Tenies raó: a les 8:30 l'agulla petita és entre el 8 i el 9, i els quarts conten cap al 9.","c":"Un quart són només quinze minuts. A les 8:30 ja han passat dos quarts, que són mitja volta de l'agulla gran."},"senseResposta":"No havies triat cap resposta. Ho pots veure al rellotge: a les 8:30 es diu «dos quarts de nou».","frases":{"esperaMou":"Mou les agulles i mira com canvia la frase.","progres":"Falta: moure les agulles o fer una sèrie de pràctica.","progresOk":"Ja pots obrir «Què has descobert?»."}},"opcions":{"a":"Dos quarts de vuit","b":"Dos quarts de nou","c":"Un quart de nou"}};
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const F = (nom) => $(`[data-f="${nom}"]`);
+const params = new URLSearchParams(location.search);
+const llavor = params.has("llavor") ? Number(params.get("llavor")) : (Math.random() * 2 ** 32) >>> 0;
+const alea = M.rng(llavor);
+
+// ---------- estat ----------
+const INICIAL = { 1: 8 * 60, 2: 8 * 60 + 30, 3: 8 * 60 + 35, 4: 8 * 60 + 35, 5: 17 * 60 + 30, 6: 17 * 60 + 35 };
+let niv = M.NIVELLS[0], mode = "explora", tExp = INICIAL[1];
+let ajudaExp = true, ajudaPra = false;
+const superats = new Set(), explorats = new Set();
+let serieAcabada = false;
+let serie = [], idx = 0, encerts = 0, fase = "pregunta", ex = null, triat = null;
+
+const P = Pantalla.inicia({
+  opcions: GEOM.opcions, correcta: "b",
+  missatges: { encert: GEOM.tx.perOpcio.b, error: "", perOpcio: GEOM.tx.perOpcio, senseResposta: GEOM.tx.senseResposta },
+});
+const clk = Hores.Rellotge($("svg.rellotge"), { grid: niv.minuts, onMou: (t, o) => alMoure(t, o), valorText: (t) => M.digital(t, niv.h24).replace(/^0/, "") });
+const dig = Hores.Digital($("#digital"), { grid: niv.minuts, h24: niv.h24, onMou: (t, o) => alMoure(t, o) });
+const veu = Hores.Veu($$("[data-act=escolta]"));
+
+// ---------- explorador i resposta: les dues vistes del rellotge (analògic i digital) van lligades ----------
+function alMoure(t, origen) {
+  clk.set(t); dig.set(t, { h24: niv.h24 });
+  if (mode === "explora") { tExp = t; explorats.add(t); pintaExplora(); }
+  else if (fase === "pregunta") triat = t;
+  progres();
+}
+function progres() {
+  const fet = explorats.size >= 4 || serieAcabada;
+  P.progres(fet ? GEOM.tx.frases.progresOk : GEOM.tx.frases.progres, fet);
+}
+function mostraPart(t, ambNom = true) {   // ambNom fals: només la icona (a la pregunta «hora digital → frase» el nom donaria la resposta)
+  const e = F("part");
+  e.innerHTML = t === null || !niv.h24 ? "" : Hores.iconaPart(M.partDia(t).k) + (ambNom ? `<span>${M.partDia(t).nom}</span>` : "");
+  e.dataset.k = t === null || !niv.h24 ? "" : M.partDia(t).k;
+}
+function vista(k) { $$("[data-vista]").forEach((e) => { e.hidden = e.dataset.vista !== k; }); }
+
+function pintaExplora() {
+  vista("explora");
+  F("titolf").textContent = "Com es diu";
+  F("peces").innerHTML = Hores.xips(M.pecesFrase(tExp, niv.h24));
+  const altres = M.altres(tExp, niv.h24);
+  F("altra").textContent = altres.length ? `També es diu: ${altres.map((x) => "«" + x + "»").join("; ")}.` : "";
+  F("pista").textContent = M.pista(tExp);
+  F("digital-sr").textContent = M.digital(tExp, niv.h24) + ". " + M.frase(tExp, niv.h24);
+  mostraPart(tExp);
+}
+
+// ---------- tauler de controls ----------
+function pintaControls() {
+  $$("[data-niv]").forEach((b) => {
+    const n = Number(b.dataset.niv);
+    b.setAttribute("aria-pressed", String(n === niv.id));
+    const ok = superats.has(n);
+    $(".niv-ok", b).textContent = ok ? " ✓" : "";
+    b.setAttribute("aria-label", `Nivell ${n}: ${M.NIVELLS[n - 1].nom}${ok ? ", superat" : ""}`);
+  });
+  $$("[data-mode]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.mode === mode)));
+  F("nivdesc").textContent = niv.desc;
+  const a = $("[data-act=ajuda]"); a.setAttribute("aria-pressed", String(mode === "explora" ? ajudaExp : ajudaPra));
+  clk.setGrid(niv.minuts); dig.setGrid(niv.minuts);
+}
+
+function entra() {            // canvi de nivell o de mode
+  pintaControls();
+  if (mode === "explora") {
+    clk.bloqueja({ m: niv.id === 1, h: false }); dig.actiu(true); dig.amaga(false);
+    clk.set(tExp, { ajuda: ajudaExp }); dig.set(tExp, { h24: niv.h24 });
+    pintaExplora();
+  } else iniciaSerie();
+  progres();
+}
+
+// ---------- pràctica ----------
+function iniciaSerie() {
+  serie = M.generaSerie(niv, alea); idx = 0; encerts = 0;
+  pintaControls(); pregunta();
+}
+const neutre = (t) => ((t % 720) === 360 ? 0 : 360);
+function pregunta() {
+  ex = serie[idx]; fase = "pregunta"; triat = null;
+  vista("practica");
+  F("titolf").textContent = `Pregunta ${idx + 1} de ${serie.length} · ${encerts} ${encerts === 1 ? "encert" : "encerts"}`;
+  F("feed").hidden = true; F("final").hidden = true;
+  const op = F("opcions"); op.innerHTML = ""; op.hidden = true;
+  const comprova = $("[data-act=comprova]"); comprova.hidden = true;
+  const enF = F("enunciat-frase"); enF.hidden = true;
+  const en = F("enunciat");
+  clk.bloqueja({ m: false, h: false }); dig.actiu(false); dig.amaga(false);
+  const ajuda = ajudaPra;
+  if (ex.dir === "A") {
+    en.textContent = niv.h24 ? "Quina frase diu aquesta hora?" : "Quina frase diu l'hora d'aquest rellotge?";
+    clk.set(ex.t, { ajuda }); clk.bloqueja({ m: true, h: true });
+    dig.set(ex.t, { h24: niv.h24 }); dig.amaga(!niv.h24); mostraPart(niv.h24 ? ex.t : null, false);
+    op.hidden = false;
+    ex.opcions.forEach((o, i) => { const b = document.createElement("button"); b.type = "button"; b.className = "btn opcio"; b.textContent = o.text; b.addEventListener("click", () => respon(i, o.text)); op.appendChild(b); });
+  } else if (ex.dir === "B") {
+    en.textContent = "Posa les agulles perquè el rellotge digui:";
+    enF.innerHTML = Hores.xips(M.pecesFrase(ex.t, niv.h24)); enF.hidden = false;
+    clk.set(neutre(ex.t), { ajuda }); dig.set(neutre(ex.t), { h24: niv.h24 }); dig.amaga(true); mostraPart(null);
+    comprova.hidden = false; triat = neutre(ex.t);
+  } else if (!niv.h24) {
+    en.textContent = "Posa les agulles a l'hora que marca el rellotge digital.";
+    dig.set(ex.t, { h24: false }); clk.set(neutre(ex.t), { ajuda }); mostraPart(null);
+    comprova.hidden = false; triat = neutre(ex.t);
+  } else {
+    en.textContent = "Mira el rellotge i la part del dia. Quina hora digital és? Posa-la amb els botons.";
+    clk.set(ex.t, { ajuda }); clk.bloqueja({ m: true, h: true });
+    const ini = ex.t === 720 ? 0 : 720; dig.set(ini, { h24: true }); dig.actiu(true); mostraPart(ex.t);
+    comprova.hidden = false; triat = ini;
+  }
+}
+function respon(resposta, textTriat) {
+  if (fase !== "pregunta") return;
+  fase = "feedback";
+  const c = M.corregeix(niv, ex, resposta);
+  if (c.ok) encerts++;
+  F("opcions").hidden = true; $("[data-act=comprova]").hidden = true; F("enunciat-frase").hidden = true;
+  clk.bloqueja({ m: true, h: true }); dig.actiu(false); dig.amaga(false);
+  clk.set(ex.t, { ajuda: true }); dig.set(ex.t, { h24: niv.h24 }); mostraPart(niv.h24 ? ex.t : null);
+  F("veredicte").textContent = c.ok ? "Correcte." : (textTriat ? `No és això. Has triat «${textTriat.replace(/\.$/, "")}».` : "No és això.");
+  F("veredicte").className = "veredicte " + (c.ok ? "ok" : "mal");
+  F("explicacio").textContent = c.explicacio;
+  F("feed-peces").innerHTML = Hores.xips(M.pecesFrase(ex.t, niv.h24));
+  $("[data-act=seguent]").textContent = idx + 1 < serie.length ? "Següent" : "Veure el resultat";
+  F("feed").hidden = false;
+  F("titolf").textContent = `Pregunta ${idx + 1} de ${serie.length} · ${encerts} ${encerts === 1 ? "encert" : "encerts"}`;
+  $("[data-act=seguent]").focus({ preventScroll: true });
+  progres();
+}
+function seguent() {
+  if (idx + 1 < serie.length) { idx++; pregunta(); return; }
+  fase = "final"; serieAcabada = true;
+  const ok = encerts >= M.SUPERAT;
+  if (ok) superats.add(niv.id);
+  pintaControls();
+  F("feed").hidden = true; F("final").hidden = false; F("opcions").hidden = true; F("enunciat").textContent = ""; F("enunciat-frase").hidden = true;
+  F("titolf").textContent = "Resultat";
+  F("final-text").textContent = `Has encertat ${encerts} de ${serie.length}. ` + (ok ? "Nivell superat." : `Per superar el nivell calen ${M.SUPERAT} encerts de ${M.PREGUNTES}. Pots tornar-ho a provar.`);
+  $("[data-act=seguent-niv]").hidden = !(ok && niv.id < M.NIVELLS.length);
+  progres();
+}
+
+// ---------- esdeveniments ----------
+const canviaNivell = (n) => { niv = M.NIVELLS[n - 1]; tExp = INICIAL[n]; dig.set(tExp, { h24: niv.h24 }); entra(); };
+$$("[data-niv]").forEach((b) => b.addEventListener("click", () => canviaNivell(Number(b.dataset.niv))));
+$$("[data-mode]").forEach((b) => b.addEventListener("click", () => { mode = b.dataset.mode; entra(); }));
+$("[data-act=ajuda]").addEventListener("click", () => {
+  if (mode === "explora") ajudaExp = !ajudaExp; else ajudaPra = !ajudaPra;
+  pintaControls(); clk.ajuda(fase === "feedback" ? true : mode === "explora" ? ajudaExp : ajudaPra);
+});
+$$("[data-act=nova]").forEach((b) => b.addEventListener("click", () => { mode = "practica"; pintaControls(); iniciaSerie(); }));
+$("[data-act=comprova]").addEventListener("click", () => { if (fase === "pregunta") respon(ex.dir === "C" && niv.h24 ? dig.t : clk.t); });
+$("[data-act=seguent]").addEventListener("click", seguent);
+$("[data-act=explora-niv]").addEventListener("click", () => { mode = "explora"; entra(); });
+$("[data-act=seguent-niv]").addEventListener("click", () => canviaNivell(niv.id + 1));
+$$("[data-act=escolta]").forEach((b) => b.addEventListener("click", () => veu.diu(M.frase(mode === "explora" ? tExp : ex.t, niv.h24))));
+
+entra();
+if (/[?&](mesura|debug)/.test(location.search)) window.__hores = { clk, dig, M, veu, estat: () => ({ niv: niv.id, mode, fase, idx, encerts, ex, serie, superats: [...superats] }), nivell: canviaNivell, respon, seguent };
+</script></body></html>
