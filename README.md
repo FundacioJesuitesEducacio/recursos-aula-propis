@@ -13,6 +13,10 @@ Adreça: https://fundaciojesuiteseducacio.github.io/recursos-aula-propis/
 
 A cada carpeta, `index.html` és el tema clar i `fosc.html` el tema fosc.
 
+La carpeta `cataleg/` és el catàleg de recursos d'aula: només hi ha els recursos publicables segons el protocol de revisió, amb les fitxes i les captures. Les fitxes i les puntuacions s'han generat amb IA i encara no s'han validat; les valoracions del professorat es desen només al navegador de cada docent.
+
+Adreça del catàleg: https://fundaciojesuiteseducacio.github.io/recursos-aula-propis/cataleg/
+
 **Versió de prova:**
 - encara falten la revisió d'un docent de cada matèria i les proves amb alumnat;
 - les pàgines porten `noindex`, perquè els cercadors no les indexin mentrestant.

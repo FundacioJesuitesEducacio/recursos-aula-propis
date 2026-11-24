@@ -1,0 +1,1274 @@
+<!doctype html>
+<html lang="ca">
+<head><meta name="robots" content="noindex">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recursos d'aula · proposta de catàleg</title>
+<style>
+  :root {
+    --fons: #faf7f4; --paper: #ffffff; --camp: #ffffff; --tinta: #221c18; --suau: #6f645c; --linia: #ebe4dd;
+    --accent: #d9482b; --accent-clar: #fdece6; --calid: #9a5b00; --calid-clar: #fff3d6; --segell: #ffb627; --segell-tinta: #2a1a00; --franja: #332b26; --franja-tinta: #fbf6f1;
+    --ok: #1f8a54; --no: #8b3a2f; --ombra: 0 1px 2px rgba(34,28,24,.05), 0 8px 24px rgba(34,28,24,.07);
+    --radi: 14px; color-scheme: light;
+  }
+  :root[data-tema="fosc"] {
+    --fons: #0f0c0a; --paper: #2b2420; --camp: #1c1714; --tinta: #f3ece6; --suau: #b8aca2; --linia: #4a3f38;
+    --accent: #ff8a66; --accent-clar: #3a231c; --calid: #ffc65c; --calid-clar: #33270f; --segell: #ffb627; --segell-tinta: #2a1a00; --franja: #7d6c61; --franja-tinta: #fbf6f1;
+    --ok: #4ac48a; --no: #d98a7a; --ombra: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--fons); color: var(--tinta); font: 16px/1.5 "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif; }
+  button, input, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  a { color: var(--accent); }
+  .ample { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
+
+  /* Capçalera compacta */
+  .barra { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--fons) 94%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--linia); padding: 10px 0 8px; }
+  .fila-barra { display: flex; align-items: center; gap: 10px; }
+  .marca { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 24px; letter-spacing: -.015em; color: var(--accent); text-decoration: none; white-space: nowrap; }
+  .marca svg { width: 34px; height: 34px; }
+  .camp { flex: 1; position: relative; min-width: 0; }
+  .camp input { width: 100%; padding: 10px 14px 10px 40px; border: 1.5px solid var(--linia); border-radius: 999px; background: var(--camp); color: var(--tinta); font-size: 15.5px; }
+  .camp input:focus { outline: 3px solid var(--accent-clar); border-color: var(--accent); }
+  .camp svg { position: absolute; left: 14px; top: 50%; translate: 0 -50%; width: 18px; height: 18px; color: var(--suau); }
+  .boto { border: 0; border-radius: 999px; padding: 10px 16px; font-weight: 600; font-size: 14.5px; background: var(--accent); color: var(--paper); white-space: nowrap; }
+  .boto:hover { filter: brightness(1.08); }
+  .boto.segon { background: var(--paper); color: var(--accent); border: 1.5px solid var(--linia); }
+  .tema { border: 1.5px solid var(--linia); background: var(--paper); color: var(--suau); border-radius: 999px; padding: 9px 12px; font-size: 13px; white-space: nowrap; }
+  .ico { position: relative; flex: none; width: 42px; height: 42px; display: inline-grid; place-items: center; padding: 0; border: 1.5px solid var(--linia); border-radius: 50%; background: var(--paper); color: var(--tinta); }
+  .ico:hover, .boto.segon:hover { border-color: var(--accent); }
+  .ico svg, #filtres svg { width: 19px; height: 19px; flex: none; }
+  #filtres { display: inline-flex; align-items: center; justify-content: center; gap: 7px; }
+  #filtres.actiu { border-color: var(--accent); color: var(--accent); }
+  .b2 { display: none; }
+  body[data-barra="2"] .b2 { display: inline-grid; }
+  body[data-barra="2"] #tema, body[data-barra="2"] #com, body[data-barra="2"] #variants, body[data-barra="2"] #barres { display: none; }
+  .p-sec .ajuda { display: flex; flex-wrap: wrap; gap: 8px; }
+  .p-sec .nota-p { font-size: 13.5px; color: var(--suau); margin: 6px 0 0; }
+  .demApp { position: fixed; right: 16px; bottom: 16px; z-index: 5; max-width: 340px; background: var(--paper); color: var(--tinta); border: 1px solid var(--linia); border-radius: var(--radi); box-shadow: 0 10px 30px rgba(0,0,0,.22); padding: 14px 16px; display: grid; gap: 10px; font-size: 14.5px; }
+  .demApp b { font-size: 15px; }
+  .demApp div { display: flex; gap: 8px; flex-wrap: wrap; }
+  .demApp .boto { padding: 8px 16px; }
+  footer .enllac { margin-left: 6px; }
+  .boleta { background: var(--accent); color: var(--paper); font-size: 11.5px; font-weight: 700; line-height: 1; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; display: inline-grid; place-items: center; }
+  .ico .boleta { position: absolute; top: -4px; right: -4px; }
+  .salt { display: none; }
+  .xip { flex: none; border: 1.5px solid var(--linia); background: var(--paper); color: var(--tinta); border-radius: 999px; padding: 5px 13px; font-size: 14px; }
+  .xip:hover:not(:disabled) { border-color: var(--accent); }
+  .xip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+  .xip.dest[aria-pressed="true"] { background: var(--segell); border-color: var(--segell); color: var(--segell-tinta); }
+  .xip:disabled { opacity: .55; cursor: not-allowed; }
+  .xip i { font-style: normal; font-size: 11.5px; font-weight: 600; color: var(--suau); margin-left: 6px; font-variant-numeric: tabular-nums; }
+  .xip[aria-pressed="true"] i { color: inherit; opacity: .85; }
+  .xip.buit { opacity: .4; }
+  dialog.petit.ample-f { width: min(760px, calc(100vw - 24px)); }
+  .p-filtres .p-cos { gap: 0; }
+  .p-filtres .p-cos h2 { margin-bottom: 4px; }
+  .p-filtres .p-intro { margin: 0 0 6px; color: var(--suau); font-size: 13.5px; }
+  .p-filtres .p-sec { padding: 14px 0; border-top: 1px solid var(--linia); }
+  .p-filtres .p-sec h3 { display: flex; align-items: baseline; gap: 10px; }
+  .p-filtres .p-sec h3 button { margin-left: auto; border: 0; background: none; padding: 0; color: var(--accent); font: inherit; font-size: 12px; text-transform: none; letter-spacing: 0; text-decoration: underline; }
+  .menu { position: relative; }
+  .menu-b { display: inline-flex; align-items: center; gap: 10px; padding: 7px 14px; cursor: pointer; }
+  .menu-b svg { width: 14px; height: 14px; flex: none; transition: transform .15s; }
+  .menu.obert .menu-b { border-color: var(--accent); }
+  .menu.obert .menu-b svg { transform: rotate(180deg); }
+  .menu-ll { display: none; position: absolute; z-index: 5; top: calc(100% + 6px); left: 0; width: min(380px, calc(100vw - 60px)); max-height: 296px; overflow: auto; overscroll-behavior: contain; background: var(--paper); border: 1.5px solid var(--linia); border-radius: 14px; box-shadow: var(--ombra); padding: 6px; }
+  .menu.obert .menu-ll { display: block; }
+  .opm { display: flex; width: 100%; align-items: baseline; justify-content: space-between; gap: 14px; text-align: left; border: 0; background: none; color: var(--tinta); padding: 8px 11px; border-radius: 9px; font-size: 14px; }
+  .opm:hover { background: var(--accent-clar); }
+  .opm[aria-pressed="true"] { background: var(--accent); color: var(--paper); font-weight: 600; }
+  .opm i { font-style: normal; font-size: 12px; font-weight: 600; color: var(--suau); font-variant-numeric: tabular-nums; }
+  .opm[aria-pressed="true"] i { color: inherit; opacity: .85; }
+  .opm.buit { opacity: .4; }
+  .opm.tot { color: var(--suau); border-bottom: 1px solid var(--linia); border-radius: 9px 9px 0 0; margin-bottom: 4px; }
+  .xip small { display: block; font-size: 11px; color: var(--suau); line-height: 1.2; }
+  .sel { border: 1.5px solid var(--linia); background: var(--paper); color: var(--tinta); border-radius: 999px; padding: 6px 12px; font-size: 14px; max-width: 100%; }
+  .sel.actiu { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  @media (max-width: 820px) { .marca span, #atzar { display: none; } .tema { display: none; } }
+
+  /* Panells de filtres i avisos */
+  dialog.petit { width: min(560px, calc(100vw - 24px)); }
+  .p-cos { padding: 22px 24px 8px; display: grid; gap: 16px; }
+  .p-cos h2 { margin: 0 44px 0 0; font-size: 24px; }
+  .p-sec h3 { margin: 0 0 7px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--suau); }
+  .xips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .xips + .xips { margin-top: 8px; }
+  .p-peu { position: sticky; bottom: 0; z-index: 2; display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 12px 24px calc(12px + env(safe-area-inset-bottom, 0px)); background: var(--paper); border-top: 1px solid var(--linia); box-shadow: 0 -6px 16px rgba(0,0,0,.08); margin-top: 10px; }
+  .p-peu .boto { flex: 1 1 auto; }
+  .aviso { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; padding: 10px 0; border-top: 1px solid var(--linia); }
+  .aviso > div:first-child { flex: 1 1 200px; min-width: 0; }
+  .aviso b { display: block; line-height: 1.3; }
+  .aviso small { color: var(--suau); text-transform: uppercase; letter-spacing: .05em; font-weight: 600; font-size: 11.5px; }
+  .aviso .botons { display: flex; flex-wrap: wrap; gap: 6px; }
+  .aviso .boto { padding: 7px 14px; font-size: 14px; }
+  .p-sec p { margin: 0 0 6px; color: var(--suau); font-size: 14.5px; }
+  .p-sec > p:last-child { margin-bottom: 0; }
+
+  .resum { display: flex; align-items: baseline; gap: 14px; margin: 14px 0 12px; color: var(--suau); }
+  .resum .lema { font-size: 14px; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .resum span:first-child { white-space: nowrap; }
+  .resum b { color: var(--tinta); font-size: 20px; }
+  .resum button { white-space: nowrap; border: 0; background: none; color: var(--accent); font-weight: 600; text-decoration: underline; }
+  .resum .actius { font-size: 13.5px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .graella { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 22px; padding-bottom: 60px; }
+  .fitxa { background: var(--paper); border-radius: var(--radi); overflow: hidden; box-shadow: var(--ombra); display: flex; flex-direction: column; text-align: left; border: 0; padding: 0; transition: translate .18s, box-shadow .18s; }
+  :root[data-tema="fosc"] .fitxa { box-shadow: 0 0 0 1px var(--linia), var(--ombra); }
+  .fitxa:hover, .fitxa:focus-visible { translate: 0 -4px; box-shadow: 0 2px 4px rgba(28,36,48,.08), 0 18px 40px rgba(28,36,48,.16); outline: none; }
+  .imatge { aspect-ratio: 16 / 10; background: var(--accent-clar) center top / cover no-repeat; position: relative; }
+  .imatge.buida { display: grid; place-items: center; font: 700 44px/1 "Segoe UI", sans-serif; color: color-mix(in srgb, var(--accent) 45%, transparent); background: linear-gradient(135deg, var(--accent-clar), var(--calid-clar)); }
+  .segell { position: absolute; left: 12px; top: 12px; background: var(--segell); color: var(--segell-tinta); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+  .nota { position: absolute; right: 12px; top: 12px; display: inline-flex; align-items: center; gap: 4px; background: var(--paper); color: var(--tinta); font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 999px; border: 1.5px solid var(--paper); box-shadow: 0 2px 6px rgba(0,0,0,.25); }
+  .nota svg { width: 14px; height: 14px; color: var(--segell); }
+  .nota.ia { border: 1.5px dashed var(--suau); gap: 6px; align-items: baseline; padding-left: 11px; padding-right: 11px; line-height: 1.5; }
+  .nota.ia small { font-size: 14.5px; line-height: 1; font-weight: 700; letter-spacing: .06em; font-variant: small-caps; text-transform: lowercase; color: var(--suau); }
+  .cos { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .materia { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); }
+  .fitxa h2 { font-size: 18px; line-height: 1.25; margin: 0; }
+  .fitxa p { margin: 0; font-size: 14.5px; color: var(--suau); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .peu { margin-top: auto; padding-top: 8px; font-size: 13px; color: var(--suau); white-space: nowrap; overflow: hidden; display: flex; gap: 8px; align-items: center; }
+  .peu b { color: var(--tinta); font-weight: 600; }
+  .peu .llengues { margin-left: auto; flex: none; font-size: 12px; font-weight: 600; letter-spacing: .04em; }
+  .peu .llengues.junt { margin-left: 0; }
+  /* Mode fosc: el codi de llengua del peu, més clar; i la puntuació sobre la imatge, amb vora clara perquè no es confongui amb captures fosques */
+  :root[data-tema="fosc"] .peu:not(.franja) .llengues { color: var(--tinta); }
+  :root[data-tema="fosc"] .nota:not(.linia):not(.or) { border-color: var(--tinta); box-shadow: 0 0 0 1px rgba(0,0,0,.55), 0 2px 8px rgba(0,0,0,.5); }
+  :root[data-tema="fosc"] .nota.ia:not(.linia):not(.or) small { color: var(--tinta); }
+  .peu .llengues.junt::before { content: "· "; font-weight: 400; }
+  .peu.franja { margin: auto -16px -16px; padding: 10px 16px; background: var(--franja); color: var(--franja-tinta); gap: 10px; }
+  .peu.franja b { color: var(--franja-tinta); }
+  .pdest { align-self: flex-start; margin: auto 0 -6px -16px; display: inline-flex; align-items: center; gap: 4px; background: var(--segell); color: var(--segell-tinta); font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; padding: 4px 11px 3px 16px; border-radius: 0 9px 0 0; }
+  .pdest svg { width: 11px; height: 11px; }
+  .fitxa p:has(+ .pdest) { margin-bottom: 8px; }
+  .pdest + .peu.franja { margin-top: 0; }
+  .llengues.xips { margin-left: 0; display: inline-flex; gap: 4px; letter-spacing: .03em; }
+  .llengues.xips span { border: 1px solid color-mix(in srgb, currentColor 55%, transparent); border-radius: 4px; padding: 0 4px; font-size: 10.5px; line-height: 16px; font-weight: 600; }
+  .banderes.linia { position: static; gap: 4px; }
+  .banderes.linia svg, .banderes.linia b { height: 14px; outline-width: 1px; box-shadow: none; border-radius: 2px; }
+  .banderes.linia svg { width: 20px; }
+  .peu.franja .banderes.linia b { color: var(--tinta); line-height: 14px; font-size: 10px; }
+  #ajuda { position: fixed; left: 0; top: 0; z-index: 50; max-width: 270px; white-space: pre-line; background: var(--tinta); color: var(--paper); padding: 9px 13px 10px; border-radius: 10px; font-size: 12.5px; line-height: 1.35; box-shadow: 0 8px 24px rgba(0,0,0,.3); pointer-events: none; opacity: 0; transform: translateY(4px); transition: opacity .13s, transform .13s; }
+  #ajuda.veu { opacity: 1; transform: none; }
+  #ajuda b { display: block; font-size: 13px; }
+  #ajuda b + span { display: block; margin-top: 2px; opacity: .78; }
+  #ajuda::after { content: ""; position: absolute; left: var(--x, 50%); bottom: -4px; width: 10px; height: 10px; background: inherit; border-radius: 2px; transform: translateX(-50%) rotate(45deg); }
+  #ajuda.sota::after { bottom: auto; top: -4px; }
+  .peu.franja.dest { background: var(--segell); color: var(--segell-tinta); }
+  .peu.franja.dest b { color: var(--segell-tinta); }
+  .peu.franja .nota.linia { background: var(--paper); color: var(--tinta); border: 1.5px solid var(--paper); }
+  .peu.franja .nota.linia.ia { border: 1.5px dashed var(--suau); }
+  .peu.franja .nota.linia small { color: var(--suau); }
+  .peu.franja .nota.linia svg { color: var(--segell); }
+  .nota.esq { left: 12px; right: auto; }
+  .nota.or { background: var(--segell); color: var(--segell-tinta); border-color: var(--segell); }
+  .nota.or svg, .nota.or.ia small { color: var(--segell-tinta); }
+  .nota.or.ia { border: 1.5px dashed var(--segell-tinta); }
+  .nota.linia { position: static; margin-left: auto; flex: none; box-shadow: none; padding: 2px 9px; }
+  .nota.linia:not(.or):not(.ia) { border-color: var(--linia); }
+  .banderes { position: absolute; right: 12px; top: 12px; display: flex; gap: 5px; align-items: center; }
+  .banderes svg, .banderes b { height: 17px; border-radius: 3px; outline: 1.5px solid #fff; box-shadow: 0 1px 5px rgba(0,0,0,.4); }
+  .banderes svg { width: 25px; display: block; }
+  .banderes b { background: var(--paper); color: var(--tinta); font-size: 10.5px; line-height: 17px; padding: 0 4px; }
+  .banderes.pindola { top: 15px; gap: 0; width: 44px; height: 22px; border-radius: 999px; overflow: hidden; outline: 1.5px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.35); align-items: stretch; }
+  .banderes.pindola.mes { width: 56px; }
+  .banderes.pindola svg, .banderes.pindola b { height: 100%; border-radius: 0; outline: 0; box-shadow: none; }
+  .banderes.pindola svg { flex: 1 1 0; width: 0; min-width: 0; }
+  .banderes.pindola svg + svg, .banderes.pindola b { border-left: 1.5px solid #fff; }
+  .banderes.pindola b { flex: none; line-height: 22px; padding: 0 5px 0 3px; font-size: 10px; }
+  .variants { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; white-space: nowrap; }
+  .resum .variants button { text-decoration: none; border: 1.5px solid var(--linia); background: var(--paper); color: var(--tinta); border-radius: 999px; width: 28px; height: 28px; font-weight: 600; }
+  .resum .variants button[aria-pressed="true"] { background: var(--tinta); border-color: var(--tinta); color: var(--paper); }
+  .res { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--suau); }
+
+  /* Detall */
+  dialog { border: 0; padding: 0; border-radius: 18px; width: min(980px, calc(100vw - 24px)); max-height: calc(100vh - 24px); background: var(--paper); color: var(--tinta); box-shadow: 0 30px 80px rgba(0,0,0,.35); }
+  dialog::backdrop { background: rgba(28,36,48,.55); backdrop-filter: blur(3px); }
+  .tanca { position: sticky; top: 12px; float: right; margin: 12px 12px 0 0; z-index: 2; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--linia); background: var(--paper); color: var(--tinta); box-shadow: var(--ombra); font-size: 20px; line-height: 1; }
+  .dalt { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 26px; padding: 26px 28px 8px; align-items: start; }
+  .gran { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; display: block; background: var(--accent-clar); border-radius: 12px; border: 1px solid var(--linia); }
+  .detall { padding: 14px 28px 30px; }
+  .dalt h2 { font: 700 27px/1.15 "Segoe UI Variable Display", "Segoe UI", sans-serif; letter-spacing: -.01em; margin: 6px 44px 8px 0; }
+  .dalt .intro { font-size: 15.5px; margin: 0 0 14px; }
+  .info { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px 22px; margin: 14px 28px 0; padding: 14px 18px; background: var(--fons); border: 1px solid var(--linia); border-radius: var(--radi); font-size: 14.5px; }
+  .info div { min-width: 0; overflow-wrap: anywhere; }
+  .info small { display: block; font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--suau); }
+  .puntuacio { display: flex; flex-wrap: wrap; gap: 10px 32px; align-items: flex-start; margin: 14px 28px 0; padding: 12px 18px; background: var(--paper); border: 1px solid var(--linia); border-radius: var(--radi); font-size: 14.5px; }
+  .puntuacio > div { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .puntuacio small { font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--suau); }
+  .puntuacio .estrelles { align-items: center; }
+  .puntuacio .estrella { font-size: 26px; padding: 2px 3px; }
+  .puntuacio .enllac { font-size: 13.5px; font-weight: 400; color: var(--suau); }
+  .puntuacio .sota { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; }
+  .demana { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 18px 28px 0; padding: 12px 16px; background: var(--calid-clar); border: 1.5px solid var(--segell); border-radius: var(--radi); }
+  .demana > span { flex: 1 1 240px; font-weight: 600; }
+  .demana .botons { display: flex; flex-wrap: wrap; gap: 8px; }
+  .demana .boto { padding: 8px 16px; }
+  .accions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 18px 28px 0; padding-bottom: 14px; border-bottom: 1px solid var(--linia); }
+  .accions .boto { padding: 11px 20px; }
+  .accions .boto:first-child { margin-right: 0; }
+  .obre-fix { display: none; }
+  .pestanyes { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+  .pestanya { padding: 10px 16px; border-radius: 999px; border: 1.5px solid var(--linia); background: var(--paper); color: var(--tinta); font-weight: 600; font-size: 14.5px; }
+  .pestanya[aria-selected="true"] { background: var(--tinta); border-color: var(--tinta); color: var(--paper); }
+  .boto:disabled { opacity: .45; cursor: not-allowed; }
+  .dalt .segell { position: static; margin-left: 8px; box-shadow: none; }
+  .dades { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; font-size: 13px; }
+  .dades span { background: var(--fons); border: 1px solid var(--linia); border-radius: 999px; padding: 2px 10px; color: var(--suau); }
+  .idea { background: var(--accent-clar); border-radius: var(--radi); padding: 14px 18px; margin: 0 0 14px; }
+  .avis { background: var(--calid-clar); border-radius: var(--radi); padding: 14px 18px; margin: 0 0 14px; }
+  .idea strong, .avis strong, .bloc > strong { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+  .idea strong { color: var(--accent); } .avis strong { color: var(--calid); } .bloc > strong { color: var(--suau); }
+  .bloc { margin: 0 0 14px; }
+  /* Alerta d'ús recomanat: triangle groc (gris si la privadesa no està confirmada), sempre amb text al costat */
+  .tri { display: inline-flex; vertical-align: -3px; margin-right: 6px; color: var(--segell); }
+  .tri.gris { color: var(--suau); }
+  .avis.neutre { background: var(--fons); border: 1px solid var(--linia); } .avis.neutre strong { color: var(--suau); }
+  .avis strong .tri { vertical-align: -4px; }
+  .alerta { display: inline-flex; align-items: center; border: 1.5px solid var(--segell); background: var(--calid-clar); color: var(--tinta); border-radius: 999px; padding: 9px 11px; }
+  .alerta.gris { border-color: var(--linia); background: var(--fons); }
+  .alerta:hover { filter: brightness(1.05); }
+  .alerta .tri { vertical-align: 0; margin-right: 0; }
+  .info .alerta-linia { display: block; margin-top: 2px; font-weight: 600; }
+  .obre-fix .alerta-linia { display: block; text-align: center; font-size: 13.5px; font-weight: 600; margin-bottom: 8px; }
+  .peces { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .peces a { text-decoration: none; background: var(--fons); border: 1px solid var(--linia); padding: 6px 12px; border-radius: 999px; font-size: 14px; }
+  .peces a:hover { border-color: var(--accent); }
+  details { border-top: 1px solid var(--linia); margin-top: 18px; padding-top: 14px; }
+  summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; font-size: 14.5px; margin: 14px 0 0; }
+  dt { color: var(--suau); } dd { margin: 0; overflow-wrap: anywhere; }
+  dd ul { margin: 0; padding-left: 18px; }
+  .rubrica { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 14px; }
+  .grup { background: var(--fons); border: 1px solid var(--linia); border-radius: var(--radi); padding: 12px 16px; }
+  .grup h3 { margin: 0 0 8px; font-size: 14.5px; display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+  .grup h3 b { font-size: 18px; color: var(--accent); white-space: nowrap; }
+  .criteri { display: flex; align-items: center; gap: 10px; font-size: 14px; padding: 5px 0; }
+  .criteri > span:first-child { flex: 1; }
+  .criteri em { display: block; font-style: normal; font-size: 12.5px; color: var(--suau); line-height: 1.35; }
+  .enllac { border: 0; background: none; padding: 0; color: var(--accent); font-weight: 600; text-decoration: underline; font-size: inherit; }
+  .com { padding: 26px 28px 30px; }
+  .com h2 { margin: 0 44px 6px 0; font-size: 26px; }
+  .com > p { color: var(--suau); margin: 0 0 6px; }
+  .com details { margin-top: 0; padding: 12px 0; }
+  .com details:first-of-type { border-top: 0; }
+  .com summary { font-size: 16.5px; }
+  .com details > *:not(summary) { font-size: 15px; }
+  .com h4 { margin: 14px 0 4px; font-size: 14.5px; }
+  .com ul, .com ol { margin: 6px 0; padding-left: 20px; } .com li { margin: 3px 0; }
+  .com table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 6px 0 10px; }
+  .com th, .com td { text-align: left; vertical-align: top; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--linia); }
+  .com th { color: var(--suau); font-weight: 600; width: 11em; }
+  .com .taula { overflow-x: auto; }
+  .com .xifres { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
+  .com .xifres div { background: var(--fons); border: 1px solid var(--linia); border-radius: 12px; padding: 8px 14px; font-size: 13px; color: var(--suau); }
+  .com .xifres b { display: block; font-size: 22px; color: var(--tinta); }
+  .form .tria { display: flex; gap: 8px; flex-wrap: wrap; }
+  .form .tria label { display: flex; gap: 6px; align-items: center; font-weight: 400; border: 1.5px solid var(--linia); border-radius: 999px; padding: 6px 14px; }
+  .form .tria input { width: auto; }
+  .form .camps:not([hidden]) { display: grid; gap: 14px; }
+  .insignia { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--suau); border: 1px solid var(--linia); border-radius: 999px; padding: 1px 7px; }
+  .form .avis-pendent { margin: 0; font-size: 14px; color: var(--suau); border-left: 3px solid var(--linia); padding: 2px 0 2px 12px; }
+  .form label.compromis { display: flex; gap: 8px; align-items: flex-start; font-weight: 400; }
+  .form label.compromis input { width: auto; margin-top: 3px; }
+  .pista { width: 70px; height: 8px; border-radius: 4px; background: var(--linia); overflow: hidden; flex: none; }
+  .pista i { display: block; height: 100%; border-radius: 4px; background: var(--accent); }
+  .criteri small { color: var(--suau); width: 3.6em; text-align: right; white-space: nowrap; }
+  .global { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; margin: 0; font-size: 14.5px; color: var(--suau); }
+  .global b { font-size: 24px; color: var(--tinta); }
+  .nota-rubrica { color: var(--suau); font-size: 13px; margin: 8px 0 0; }
+
+  /* Valoració */
+  .valora { border: 1px solid var(--linia); background: var(--fons); border-radius: var(--radi); padding: 14px 18px; display: grid; gap: 12px; }
+  .valora.crida { border-color: var(--segell); animation: resplendor .7s ease-in-out 2; }
+  @keyframes resplendor { 0%, 100% { box-shadow: 0 0 0 0 transparent; } 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--segell) 50%, transparent); } }
+  .valora h3 { margin: 0; font-size: 15px; }
+  .valora p { margin: 0; font-size: 14px; color: var(--suau); }
+  .valora label { display: grid; gap: 5px; font-weight: 600; font-size: 14.5px; }
+  .estrelles { display: inline-flex; gap: 2px; }
+  .estrella { border: 0; background: none; padding: 2px 3px; font-size: 32px; line-height: 1; color: var(--suau); }
+  .estrella.plena { color: var(--segell); }
+  .pregunta { display: flex; align-items: center; gap: 10px; padding: 4px 0; flex-wrap: wrap; }
+  .pregunta > span { flex: 1 1 200px; font-weight: 600; }
+  .pregunta label { display: flex; align-items: center; gap: 6px; font-size: 14.5px; color: var(--suau); font-weight: 400; }
+  .polze { height: 38px; padding: 0 14px; border-radius: 999px; border: 1.5px solid var(--linia); background: var(--paper); color: var(--tinta); display: inline-flex; align-items: center; gap: 7px; font-size: 14px; }
+  .polze svg { width: 18px; height: 18px; }
+  .polze.avall svg { rotate: 180deg; }
+  .polze[aria-pressed="true"] { background: var(--ok); border-color: var(--ok); color: var(--paper); }
+  .polze.avall[aria-pressed="true"] { background: var(--no); border-color: var(--no); }
+  .gracies { color: var(--ok); font-weight: 600; font-size: 14px; }
+  textarea, .form input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--linia); border-radius: 10px; background: var(--camp); color: var(--tinta); }
+  .form { padding: 26px 28px 30px; display: grid; gap: 14px; }
+  .form h2 { margin: 0; font-size: 26px; }
+  .form label { display: grid; gap: 5px; font-weight: 600; font-size: 14.5px; }
+  .form small { color: var(--suau); font-weight: 400; }
+
+  footer { border-top: 1px solid var(--linia); padding: 26px 0 50px; color: var(--suau); font-size: 14px; }
+  @media (max-width: 760px) { .dalt { grid-template-columns: 1fr; padding: 18px 18px 4px; } .info, .accions, .puntuacio, .demana { margin-inline: 18px; } .puntuacio > div:first-child { flex: 1 0 100%; } .info { grid-template-columns: 1fr 1fr; gap: 8px 16px; padding: 12px 16px; } .pestanyes { margin-left: 0; }
+    .accions > a.boto { display: none; }
+    .obre-fix { display: block; position: sticky; bottom: 0; z-index: 2; padding: 10px 18px calc(10px + env(safe-area-inset-bottom, 0px)); background: var(--paper); border-top: 1px solid var(--linia); box-shadow: 0 -6px 16px rgba(0,0,0,.08); }
+    .obre-fix .boto { display: block; text-align: center; padding: 13px 20px; text-decoration: none; } }
+  @media (max-width: 600px) { body[data-barra="2"] #temaIco, body[data-barra="2"] #comIco { display: none; } .demApp { left: 12px; right: 12px; max-width: none; } .detall, .form, .com { padding: 18px; } .resum .lema { display: none; } .resum { justify-content: space-between; flex-wrap: wrap; } .com th { width: 7.5em; } dl { grid-template-columns: 1fr; }
+    .fila-barra { flex-wrap: wrap; } .salt { display: block; order: 1; flex: 0 0 100%; height: 0; margin: -4px 0; }
+    #filtres, #proposa { order: 2; flex: 1 1 0; min-width: 0; } .p-cos { padding: 18px 18px 6px; } .p-peu { padding-inline: 18px; } .resum .actius { flex: 1 0 100%; order: 3; } }
+  /* Barra 2 a l'escriptori: primer les accions amb text i després les icones, de més a menys ús: avisos, ajuda, mode i configuració. */
+  @media (min-width: 601px) { body[data-barra="2"] #avisos { order: 5; } body[data-barra="2"] #comIco { order: 6; } body[data-barra="2"] #temaIco { order: 7; } body[data-barra="2"] #config { order: 8; } }
+  @media (prefers-reduced-motion: reduce) { .fitxa { transition: none; } .valora.crida { animation: none; } html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+
+<header class="barra">
+  <div class="ample fila-barra">
+    <a class="marca" href="#" aria-label="Recursos d'aula, inici">
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M16 4 28 10 16 16 4 10z"/><path d="M4 16l12 6 12-6M4 22l12 6 12-6" opacity=".55"/></svg>
+      <span>Recursos d'aula</span>
+    </a>
+    <div class="camp">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+      <input id="q" type="search" placeholder="Què vols treballar? Motor, cèl·lula, sintaxi, Roma…" autocomplete="off" aria-label="Cerca recursos">
+    </div>
+    <button class="boto segon" id="filtres" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg><span>Filtres</span><b class="boleta" hidden></b></button>
+    <button class="ico" id="avisos" type="button" aria-label="Avisos, 0 pendents"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></svg><b class="boleta" hidden>0</b></button>
+    <button class="ico b2" id="config" type="button" aria-label="Configuració"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+    <span class="salt" aria-hidden="true"></span>
+    <button class="boto segon" id="atzar">Sorprèn-me</button>
+    <button class="boto segon" id="proposa">Proposa un recurs</button>
+    <button class="tema" id="tema" type="button" aria-label="Canvia entre mode clar i fosc">Mode fosc</button>
+    <button class="ico b2" id="temaIco" type="button" aria-label="Canvia entre mode clar i fosc"></button>
+    <button class="ico b2" id="comIco" type="button" aria-label="Com funciona"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.2 9.2a3 3 0 0 1 5.7 1c0 2-2.9 2.4-2.9 4.3M12 17.6v.01"/></svg></button>
+  </div>
+</header>
+
+<main class="ample">
+  <div class="resum"><span><b id="n">0</b> recursos</span><span class="lema">Simulacions, laboratoris i explicacions interactives. Gratuïts, sense registre de l'alumnat i revisats abans d'entrar.</span><span class="actius" id="actius" hidden></span><button id="neteja" hidden>Treu els filtres</button><span class="variants" id="variants">Targeta</span><span class="variants" id="barres">Barra</span><button id="com">Com funciona</button></div>
+  <div class="graella" id="graella"></div>
+</main>
+
+<footer><div class="ample">Proposta de disseny del catàleg. Les valoracions i les propostes d'aquesta pàgina es desen només en aquest navegador; a l'aplicació definitiva arribaran a l'equip que manté el catàleg. <button class="enllac" id="valApp" type="button">Valora el catàleg</button></div></footer>
+<div class="demApp" id="demApp" role="status" hidden></div>
+
+<dialog id="dlg"></dialog>
+
+<template id="tCom">
+  <div class="com">
+    <h2>Com funciona el catàleg</h2>
+    <p>Què hi entra, com es troben i s'avaluen els recursos, què volen dir les puntuacions i com hi pots participar.</p>
+    <div class="xifres">
+      <div><b data-x="examinats"></b>recursos examinats</div>
+      <div><b data-x="descartats"></b>descartats</div>
+      <div><b data-x="publicats"></b>al catàleg</div>
+      <div><b data-x="destacats"></b>destacats</div>
+    </div>
+
+    <details data-s="entra">
+      <summary>Què hi entra i què no</summary>
+      <p>El catàleg recull recursos interactius per a l'aula: simulacions, laboratoris virtuals, explicacions manipulables, eines i visors de dades. Un recurs extern queda fora, per bo que sigui, si:</p>
+      <ul>
+        <li>és de pagament o té funcions essencials de pagament;</li>
+        <li>demana registre o identificació a l'alumnat (un compte opcional per al docent és acceptable);</li>
+        <li>demana dades personals de l'alumnat que s'envien a un servidor;</li>
+        <li>té publicitat invasiva;</li>
+        <li>cal instal·lar programari;</li>
+        <li>no és accessible o presenta dades inventades com a fets.</li>
+      </ul>
+      <p>Els recursos creats dins de la Fundació poden tenir altres condicions (per exemple, identificació amb el compte del centre); en aquest cas la fitxa ho indica.</p>
+    </details>
+
+    <details data-s="cerca">
+      <summary>Com es troben els recursos</summary>
+      <p>La cerca es fa amb un assistent d'IA que treballa amb un protocol escrit, sempre el mateix, i que genera per a cada recurs una fitxa amb l'evidència recollida. No és un robot que rastreja la xarxa de manera contínua: són tandes de cerca encarregades per l'equip del catàleg.</p>
+      <h4>Les quatre tandes fetes fins ara</h4>
+      <ol>
+        <li><b>Per àmbits i etapes</b>: ciències, matemàtiques i tecnologia, socials, llengües i arts, i famílies d'FP.</li>
+        <li><b>Per origen</b>: repositoris de codi obert, universitats i institucions científiques, i projectes personals.</li>
+        <li><b>Per autors i directoris</b>: a partir de recursos de referència molt bons, se'n segueixen els autors i els llocs on es publiquen treballs semblants. És la via que ha donat més bons resultats.</li>
+        <li><b>Per temes del currículum</b> de 1r, 2n i 3r d'ESO, amb atenció a llengües i socials, on hi ha menys oferta.</li>
+      </ol>
+      <h4>Què es fa amb cada candidat</h4>
+      <ol>
+        <li>S'obre el recurs real, no només la portada.</li>
+        <li>Se'n llegeix contingut: una peça sencera, o com a mínim tres de temes diferents si és una col·lecció. Quan la pàgina no es pot mostrar, es llegeixen els textos, les fórmules i les dades del codi.</li>
+        <li>S'hi busquen errors concrets: fórmules, unitats, valors, mecanismes mal explicats, simplificacions no declarades. Quan hi ha números, se'n recalcula algun.</li>
+        <li>Es comproven preu, registre, dades personals, publicitat, analítica, llengües, llicència i autoria. El que no es pot confirmar s'escriu «no confirmat».</li>
+      </ol>
+      <p>La majoria de fitxes s'han fet llegint codi i dades, no veient el recurs en pantalla. Per això cada fitxa diu què s'ha revisat i amb quin nivell de verificació.</p>
+    </details>
+
+    <details data-s="puntua">
+      <summary>Com s'avaluen: criteris i puntuació</summary>
+      <p>Cada recurs rep sis puntuacions, en dos grups. El primer grup decideix si entra; el segon ajuda a destacar-lo. El protocol té quatre nivells per criteri, que a la fitxa es mostren en una escala d'1 a 5: <b>5</b>, <b>3,7</b>, <b>2,3</b> i <b>1</b>. El total de cada grup, i el de la targeta, és la mitjana dels criteris puntuats.</p>
+      <h4>Grup 1 · Qualitat del contingut i didàctica</h4>
+      <div class="taula"><table>
+        <tr><th>Rigor epistemològic</th><td>Si el que ensenya és correcte segons la disciplina: conceptes, fórmules, unitats, dades i mecanismes. <b>5</b>: cap error a les peces revisades. <b>3,7</b>: errors menors o simplificacions que el mateix recurs declara. <b>2,3</b>: errors que afecten el que l'alumnat aprèn. <b>1</b>: dades inventades o errors generalitzats.</td></tr>
+        <tr><th>Fonts i simplificacions declarades</th><td>Si el recurs diu d'on surt la informació i què simplifica, exagera o deixa fora respecte de la realitat (tot model ho fa: una simulació sense fregament, un mapa que deforma). <b>5</b>: declara les dues coses. <b>3,7</b>: una de les dues. <b>2,3</b>: cap, però l'autoria és experta i el contingut es pot contrastar. <b>1</b>: contingut que no es pot contrastar.</td></tr>
+        <tr><th>Disseny didàctic</th><td>Si està pensat per aprendre i no només per mostrar. <b>5</b>: fa predir, provar i explicar, o parteix d'una pregunta o d'una idea errònia habitual. <b>3,7</b>: explica bé, sense guia ni preguntes. <b>2,3</b>: mostra el fenomen sense explicar-lo; tot depèn del docent. <b>1</b>: sense valor per aprendre.</td></tr>
+      </table></div>
+      <h4>Grup 2 · Disseny i funcionament</h4>
+      <div class="taula"><table>
+        <tr><th>Claredat de la representació</th><td>Si el que es veu fa entendre el mecanisme o la relació; no es valora que sigui bonic. <b>5</b>: fidel i revelador. <b>3,7</b>: correcte però esquemàtic o carregat. <b>2,3</b>: confús. <b>1</b>: enganyós.</td></tr>
+        <tr><th>Interactivitat</th><td>Què pot fer l'alumnat. <b>5</b>: canvia variables i n'observa l'efecte. <b>3,7</b>: tria opcions o activa capes. <b>2,3</b>: només gira, amplia o avança pantalles. <b>1</b>: estàtic.</td></tr>
+        <tr><th>Ús pràctic a l'aula</th><td><b>5</b>: s'entén en un minut i funciona en projector i tauleta. <b>3,7</b>: demana preparació o només va bé en ordinador. <b>2,3</b>: interfície densa. <b>1</b>: inviable en una sessió.</td></tr>
+      </table></div>
+      <h4>Què vol dir cada resultat</h4>
+      <ul>
+        <li><b>Entra al catàleg</b> si no incompleix cap condició, té 3,7 o més en rigor epistemològic, una mitjana de 3,2 o més al grup 1 i 3,7 o més en disseny didàctic. Aquest darrer mínim no s'aplica a eines, visors i simuladors, on la seqüència didàctica la posa el docent.</li>
+        <li><b>Destacat</b>: a més, una mitjana de 4,1 o més a cada grup. Cap acabat visual compensa un contingut fluix: sense 4,1 al grup 1 no es destaca.</li>
+        <li>La llengua, la llicència, la privadesa i els requisits tècnics <b>no puntuen</b>: són etiquetes, perquè diuen si el pots fer servir, no si és bo.</li>
+      </ul>
+      <p id="xClaredat"></p>
+    </details>
+
+    <details data-s="etiquetes">
+      <summary>Etiquetes, filtres i cercador</summary>
+      <ul>
+        <li>Els filtres són al botó <b>Filtres</b>, de la barra superior, per apartats. El botó avisa de quants filtres hi ha d'actius i sota la barra en surt la llista.</li>
+        <li><b>Etapa i curs</b>: l'etapa és on es pot fer servir el recurs (primària, ESO, Batxillerat, FP). El curs és on encaixa el contingut segons el currículum; surt en triar primària, ESO o Batxillerat i és més restrictiu que l'etapa: un recurs útil a tota l'ESO pot encaixar només a 2n i 3r. A FP, en lloc de curs es tria la família professional.</li>
+        <li><b>Matèria</b>: es dedueix de la matèria de la fitxa. Un recurs pot ser de dos àmbits.</li>
+        <li><b>Tipus de recurs</b>: explicació visual, explicació interactiva, simulador, eina o visor de dades i mapes.</li>
+        <li><b>Llengua</b>: la de la interfície i els textos. Dos de cada tres recursos són només en anglès; el filtre de català o castellà els amaga. A la targeta la llengua surt en codis (CA, ES, EN…) i la llista completa és a «Més detalls» de la fitxa.</li>
+        <li><b>Ús recomanat</b>: diu si el recurs es pot obrir als dispositius de l'alumnat o si és millor projectar-lo des del dispositiu del docent. A la fitxa, un triangle groc al costat del botó i el text «Només per projectar» a la casella «Condicions» avisen quan el recurs és només per projectar; «Amb precaucions» surt a «Condicions» com a text, sense triangle. Es dedueix de la privadesa: un recurs amb analítica d'altres empreses, publicitat o un identificador persistent queda com a «només per projectar». El filtre «Per als dispositius de l'alumnat» amaga aquests i els que tenen la privadesa sense confirmar. És un criteri prudent i provisional, pendent de validació pel delegat de protecció de dades.</li>
+        <li><b>Només destacats</b>: segons la regla de puntuació de l'apartat anterior.</li>
+        <li><b>Ordena per</b>: recomanats (per defecte), més ben valorats pels docents o revisió amb IA més alta.</li>
+      </ul>
+      <p>El cercador busca en el títol, la descripció, la matèria, el tema de currículum, les peces recomanades i la idea d'aula. No distingeix accents ni majúscules, i amb diverses paraules les demana totes.</p>
+      <p>L'ordre recomanat no prioritza cap matèria: primer els destacats, i dins de cada grup un recurs de cada àmbit per torn, perquè els àmbits amb menys oferta no quedin al final.</p>
+    </details>
+
+    <details data-s="proposa">
+      <summary>Proposar un recurs, trobat o creat per tu</summary>
+      <p>Qualsevol docent pot proposar un recurs que hagi trobat o que hagi creat. Només cal l'adreça; la fitxa no l'has d'omplir tu.</p>
+      <ol>
+        <li><b>Proposta</b>: adreça, i si vols matèria, curs i per què el recomanes.</li>
+        <li><b>Condicions</b>: es comprova que sigui gratuït, sense registre de l'alumnat i sense recollida de dades. Si és creat a la Fundació, es comprova on és allotjat i quines dades tracta.</li>
+        <li><b>Revisió</b>: es genera la fitxa amb el mateix protocol que per a la resta.</li>
+        <li><b>Decisió</b>: una persona de l'equip del catàleg la valida. Si no entra, reps el motiu.</li>
+      </ol>
+      <h4>Demanar un recurs nou (pendent)</h4>
+      <p>Quan no trobes cap recurs que serveixi, podràs demanar que l'equip del catàleg en creï un. Tu expliques què ha d'entendre l'alumnat, què li costa i quina idea errònia hi porta; l'equip el fa i tu en revises el contingut abans que es publiqui. Els recursos creats passen el mateix protocol que la resta. Aquesta opció encara no està en marxa.</p>
+      <p>En aquesta proposta de disseny el formulari encara no envia res.</p>
+    </details>
+
+    <details data-s="valora">
+      <summary>Revisió amb IA i valoració del professorat</summary>
+      <p>Cada targeta mostra una sola puntuació: «IA 4,8» mentre cap docent no l'ha valorat, i «★» amb la mitjana i el nombre de docents quan n'hi ha. No s'han de confondre:</p>
+      <ul>
+        <li><b>Revisió amb IA</b>: la mitjana, sobre 5, dels sis criteris del protocol. S'ha generat amb IA i encara no l'ha validat cap persona.</li>
+        <li><b>Valoració del professorat</b>: la mitjana d'estrelles i quants docents han valorat el recurs.</li>
+      </ul>
+      <p>A l'apartat «Valoració» de cada fitxa es demana una puntuació d'1 a 5 estrelles i un comentari, tots dos obligatoris. Qui ha fet servir el recurs a l'aula pot dir, a més, si li ha funcionat, amb un polze amunt o avall.</p>
+      <p>Perquè la valoració sigui fàcil, el catàleg fa un petit seguiment: quan obres un recurs des d'una fitxa, en queda constància en aquest navegador. En tornar al catàleg se't pregunta, una sola vegada, si el vols valorar; pots dir «No és de la meva matèria». Els recursos oberts i encara no valorats surten a la campana d'avisos, a la barra superior. Les estrelles de la fitxa són la teva valoració; la del conjunt de docents es mostra en xifra.</p>
+      <p>La revisió diu si un recurs és correcte i ben fet; només el professorat pot dir si serveix amb alumnat real. En aquesta versió de prova la valoració es desa només al teu navegador i per això el recompte és, com a molt, d'un docent.</p>
+    </details>
+
+    <details data-s="ia">
+      <summary>Ús d'IA en aquest catàleg: qui ha fet cada cosa</summary>
+      <p>El catàleg s'ha elaborat amb IA generativa (Claude, d'Anthropic). Segons l'escala de delegació del marc de Jesuïtes Educació (N0–N5):</p>
+      <div class="taula"><table>
+        <tr><th>Propòsit, condicions i decisions de disseny</th><td>L'equip. La IA ha generat propostes i l'equip ha triat i corregit. <b>N3, cocreació.</b></td></tr>
+        <tr><th>Protocol, pàgina i textos</th><td>Generats amb IA a partir d'instruccions de l'equip, que els ha revisat i reorientat. <b>N4, delegació supervisada.</b></td></tr>
+        <tr><th>Cerca, fitxes, puntuacions, cursos i captures</th><td>Generats amb agents d'IA seguint el protocol escrit, sense revisió fitxa a fitxa. <b>N5, agència autònoma, amb la validació humana pendent.</b></td></tr>
+      </table></div>
+      <p>Per això cada targeta diu «Revisió amb IA»: fins que docents de cada àmbit validin les fitxes, les puntuacions són una proposta.</p>
+    </details>
+
+    <details data-s="limits">
+      <summary>Què cal saber d'aquesta versió</summary>
+      <ul>
+        <li>Les fitxes i les puntuacions s'han generat amb assistència d'IA seguint el protocol. La validació per part d'una persona encara no s'ha fet: fins llavors, les puntuacions són una proposta.</li>
+        <li>La claredat de la representació s'ha puntuat a partir de captures de pantalla, no fent servir el recurs.</li>
+        <li>Hi ha poca oferta en sintaxi, ortografia i mètrica, edat mitjana i moderna, cos humà i cèl·lula.</li>
+        <li>Les valoracions i les propostes es desen només al teu navegador.</li>
+      </ul>
+    </details>
+  </div>
+</template>
+
+<script src="dades.js"></script>
+<script>
+'use strict';
+const R = window.RECURSOS || [];
+const $ = (id) => document.getElementById(id);
+const BUIT = () => ({ q: '', etapa: '', curs: '', familia: '', area: [], tipus: [], llengua: [], dest: false, nota: '', errors: false, priv: false, llic: false, alum: false, meu: '' });
+const estat = { ...BUIT(), ordre: 'rec' };
+
+function el(etq, props, ...fills) {
+  const n = document.createElement(etq);
+  for (const [k, v] of Object.entries(props || {})) {
+    if (k === 'class') n.className = v;
+    else if (k.startsWith('on')) n.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) n.setAttribute(k, v === true ? '' : v);
+  }
+  for (const f of fills.flat()) if (f != null && f !== false) n.append(f);
+  return n;
+}
+const senseAccents = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const POLZE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M7 11v9H4v-9zM7 11l4-8a2.5 2.5 0 0 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.300 20H7"/></svg>';
+
+// ---------- Filtres ----------
+// Dins d'un apartat de tria múltiple (matèria, tipus, llengua) n'hi ha prou que el recurs en compleixi un; entre apartats s'han de complir tots.
+const llistaUnica = (f) => [...new Set(R.flatMap(f))].sort((a, b) => a.localeCompare(b, 'ca'));
+const NOMS_LL = { CA: 'Català', ES: 'Castellà', EN: 'Anglès', FR: 'Francès', DE: 'Alemany', IT: 'Italià', PT: 'Portuguès', altres: 'Altres llengües' };
+const MULTI = ['area', 'tipus', 'llengua'];
+const BOOL = ['dest', 'errors', 'priv', 'llic', 'alum'];
+const NOMS_MEU = { pendent: 'Oberts i per valorar', valorat: 'Ja valorats per mi', nou: 'Encara no oberts' };
+// Derivats del text de la fitxa (aproximats fins que siguin camps propis a la base de dades).
+const llicOberta = (r) => { const t = (r.llicencia || '').trim(); return /CC0|domini públic|CC BY|Creative Commons|\bMIT\b|GPL|Apache|\bBSD\b/i.test(t) && !/^(sense|no |©|copyright|tots els drets|propiet)/i.test(t); };
+const senseRastre = (r) => /^Sense analítica/i.test(r.privadesa || '');
+const actiu = (c, v) => BOOL.includes(c) ? estat[c] : MULTI.includes(c) ? estat[c].includes(v) : estat[c] === v;
+function filtresActius() {
+  const a = [];
+  if (estat.etapa) a.push(estat.etapa);
+  if (estat.curs) a.push(estat.curs.split(' ')[0]);
+  if (estat.familia) a.push(estat.familia);
+  a.push(...estat.area, ...estat.tipus, ...estat.llengua.map((c) => NOMS_LL[c]));
+  if (estat.dest) a.push('Destacats');
+  if (estat.nota) a.push('Revisió amb IA ' + estat.nota.replace('.', ',') + ' o més');
+  if (estat.errors) a.push('Sense errors detectats');
+  if (estat.priv) a.push('Sense analítica ni publicitat');
+  if (estat.llic) a.push('Llicència oberta');
+  if (estat.alum) a.push("Per als dispositius de l'alumnat");
+  if (estat.meu) a.push(NOMS_MEU[estat.meu]);
+  return a;
+}
+function netejaFiltres() {
+  Object.assign(estat, BUIT());
+  $('q').value = ''; pinta();
+}
+function posa(clau, valor) {
+  if (BOOL.includes(clau)) estat[clau] = !estat[clau];
+  else if (clau === 'ordre') estat.ordre = valor;
+  else if (MULTI.includes(clau)) estat[clau] = estat[clau].includes(valor) ? estat[clau].filter((x) => x !== valor) : [...estat[clau], valor];
+  else estat[clau] = estat[clau] === valor ? '' : valor;
+  if (clau === 'etapa') { estat.curs = ''; estat.familia = ''; }
+  pinta();
+}
+// Quants recursos quedarien amb aquesta opció, mantenint els filtres dels altres apartats.
+function quants(clau, valor) {
+  const desat = { ...estat };
+  estat[clau] = BOOL.includes(clau) ? true : MULTI.includes(clau) ? [valor] : valor;
+  if (clau === 'etapa') { estat.curs = ''; estat.familia = ''; }
+  const n = R.filter(passa).length;
+  Object.assign(estat, desat);
+  return n;
+}
+const GRUPS = { nivell: ['etapa', 'curs', 'familia'], area: ['area'], tipus: ['tipus'], llengua: ['llengua'], qualitat: ['dest', 'nota', 'errors'], condicions: ['priv', 'llic', 'alum'], meu: ['meu'] };
+function refrescaFiltres() {
+  const p = document.querySelector('.p-filtres');
+  if (!p) return;
+  p.querySelectorAll('.xip, .opm[data-clau]').forEach((b) => {
+    const c = b.dataset.clau, v = b.dataset.valor, premut = !!actiu(c, v);
+    b.setAttribute('aria-pressed', String(premut));
+    const i = b.querySelector('i');
+    if (i) { const n = quants(c, v); i.textContent = n; b.classList.toggle('buit', !n && !premut); }
+  });
+  const mf = p.querySelector('#pFam .menu-b'); mf.firstChild.textContent = estat.familia || "Totes les famílies d'FP"; mf.classList.toggle('actiu', !!estat.familia);
+  p.querySelectorAll('[data-etapa]').forEach((g) => { g.hidden = estat.etapa !== g.dataset.etapa; });
+  p.querySelectorAll('[data-grup]').forEach((b) => { b.hidden = !GRUPS[b.dataset.grup].some((c) => MULTI.includes(c) ? estat[c].length : estat[c]); });
+  const n = Number($('n').textContent);
+  p.querySelector('.mostra').textContent = 'Mostra ' + n + (n === 1 ? ' recurs' : ' recursos');
+  p.querySelector('.treu').disabled = !(estat.q || filtresActius().length);
+}
+function obreFiltres() {
+  const dlg = $('dlg');
+  const xip = (clau, valor, nom, apagat) => el('button', { class: 'xip' + (clau === 'dest' ? ' dest' : ''), type: 'button', 'aria-pressed': 'false', 'data-clau': clau, 'data-valor': valor,
+    disabled: !!apagat, onclick: () => posa(clau, valor) }, nom, apagat ? el('small', null, 'encara sense recursos') : clau === 'ordre' ? null : el('i'));
+  const buida = (grup) => { for (const c of GRUPS[grup]) estat[c] = BUIT()[c]; pinta(); };
+  const sec = (titol, grup, ...fills) => el('section', { class: 'p-sec' },
+    el('h3', null, titol, grup ? el('button', { type: 'button', 'data-grup': grup, hidden: true, onclick: () => buida(grup) }, 'Treu') : null), ...fills);
+  const tancaMenu = () => document.querySelectorAll('.menu.obert').forEach((m) => { m.classList.remove('obert'); m.querySelector('.menu-b').setAttribute('aria-expanded', 'false'); });
+  const fam = el('div', { class: 'menu', id: 'pFam' },
+    el('button', { class: 'sel menu-b', type: 'button', 'aria-haspopup': 'true', 'aria-expanded': 'false', 'aria-label': 'Família professional',
+      onclick: (ev) => { const m = ev.currentTarget.parentNode, o = m.classList.toggle('obert'); ev.currentTarget.setAttribute('aria-expanded', String(o)); if (o) m.querySelector('.menu-ll').scrollIntoView({ block: 'nearest' }); } }, el('span')),
+    el('div', { class: 'menu-ll' },
+      el('button', { class: 'opm tot', type: 'button', onclick: () => { tancaMenu(); estat.familia = ''; pinta(); } }, "Totes les famílies d'FP"),
+      llistaUnica((r) => r.families).map((f) => el('button', { class: 'opm', type: 'button', 'aria-pressed': 'false', 'data-clau': 'familia', 'data-valor': f, onclick: () => { tancaMenu(); posa('familia', f); } }, el('span', null, f), el('i')))));
+  fam.querySelector('.menu-b').insertAdjacentHTML('beforeend', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>');
+  const cursos = (e, noms) => el('div', { class: 'xips', 'data-etapa': e }, noms.map((c) => xip('curs', c + ' ' + e, c)));
+  const fila = (...x) => el('div', { class: 'xips' }, ...x);
+  dlg.className = 'petit ample-f';
+  dlg.replaceChildren(
+    el('button', { class: 'tanca', 'aria-label': 'Tanca', onclick: () => dlg.close() }, '×'),
+    el('div', { class: 'p-filtres' },
+      el('div', { class: 'p-cos' },
+        el('h2', null, 'Filtres'),
+        el('p', { class: 'p-intro' }, 'A matèria, tipus i llengua en pots marcar més d\'un. El nombre de cada opció és quants recursos hi trobaràs.'),
+        sec('Etapa i curs', 'nivell',
+          fila(xip('etapa', 'Infantil', 'Infantil', true), xip('etapa', 'Primària', 'Primària'),
+            xip('etapa', 'ESO', 'ESO'), xip('etapa', 'Batxillerat', 'Batxillerat'), xip('etapa', 'FP', 'FP')),
+          cursos('Primària', ['1r', '2n', '3r', '4t', '5è', '6è']), cursos('ESO', ['1r', '2n', '3r', '4t']), cursos('Batxillerat', ['1r', '2n']),
+          el('div', { class: 'xips', 'data-etapa': 'FP' }, fam)),
+        sec('Matèria', 'area', fila(llistaUnica((r) => r.arees).map((a) => xip('area', a, a)))),
+        sec('Tipus de recurs', 'tipus', fila(llistaUnica((r) => [r.tipus]).map((t) => xip('tipus', t, t)))),
+        sec('Llengua', 'llengua', fila(Object.entries(NOMS_LL).map(([c, nom]) => xip('llengua', c, nom)))),
+        sec('Qualitat', 'qualitat', fila(xip('dest', '1', 'Només destacats'), xip('nota', '4', 'Revisió amb IA de 4 o més'), xip('nota', '4.5', 'De 4,5 o més'), xip('errors', '1', 'Sense errors detectats'))),
+        sec('Condicions d\'ús', 'condicions', fila(xip('priv', '1', 'Sense analítica ni publicitat'), xip('llic', '1', 'Llicència oberta declarada'), xip('alum', '1', "Per als dispositius de l'alumnat"))),
+        sec('El meu seguiment', 'meu', fila(Object.entries(NOMS_MEU).map(([c, nom]) => xip('meu', c, nom)))),
+        sec('Ordena per', null, fila(xip('ordre', 'rec', 'Recomanats'), xip('ordre', 'val', 'Més ben valorats pels docents'), xip('ordre', 'ia', 'Revisió amb IA més alta'),
+          xip('ordre', 'nous', 'Afegits fa poc'), xip('ordre', 'az', 'Alfabètic')))),
+      el('div', { class: 'p-peu' },
+        el('button', { class: 'boto mostra', type: 'button', onclick: () => dlg.close() }),
+        el('button', { class: 'boto segon treu', type: 'button', onclick: netejaFiltres }, 'Treu els filtres'))));
+  dlg.querySelector('.p-filtres').addEventListener('click', (ev) => { if (!ev.target.closest('.menu')) tancaMenu(); });
+  refrescaFiltres();
+  if (!dlg.open) dlg.showModal();
+  dlg.scrollTop = 0;
+}
+$('filtres').addEventListener('click', obreFiltres);
+
+function passa(r) {
+  if (estat.etapa && !r.etapes.includes(estat.etapa)) return false;
+  if (estat.curs && !r.cursos.includes(estat.curs)) return false;
+  if (estat.familia && !r.families.includes(estat.familia)) return false;
+  if (estat.area.length && !estat.area.some((a) => r.arees.includes(a))) return false;
+  if (estat.tipus.length && !estat.tipus.includes(r.tipus)) return false;
+  if (estat.dest && !r.destacat) return false;
+  if (estat.nota && !(notaIA(r) >= Number(estat.nota))) return false;
+  if (estat.errors && r.errors && r.errors.length) return false;
+  if (estat.priv && !senseRastre(r)) return false;
+  if (estat.llic && !llicOberta(r)) return false;
+  if (estat.alum && !/^alumnat/.test(r.us || '')) return false;
+  if (estat.llengua.length) {
+    const c = codisLlengua(r);
+    const te = (l) => l === 'altres' ? c.some((x) => !(x in NOMS_LL)) || /altres|llengües més|idiomes/i.test(r.idiomes || '')
+      : c.includes(l) || (l === 'CA' && r.catala) || (l === 'ES' && r.castella);
+    if (!estat.llengua.some(te)) return false;
+  }
+  if (estat.meu) {
+    const m = llegeixVots()[r.id];
+    if (estat.meu === 'pendent' ? !perValorar(m) : estat.meu === 'valorat' ? !valorat(m) : !!(m && m.obert)) return false;
+  }
+  if (estat.q) {
+    const mots = senseAccents(estat.q).split(/\s+/).filter(Boolean);
+    if (!mots.every((m) => r.cerca.includes(m))) return false;
+  }
+  return true;
+}
+
+// ---------- Graella ----------
+// Etapa i curs en una sola línia: «ESO 1r·2n · Batx · FP».
+const TOTS = { 'Primària': 6, ESO: 4, Batxillerat: 2 };
+function cursosDe(r, e) {
+  const c = r.cursos.filter((x) => x.endsWith(e)).map((x) => x.replace(' ' + e, ''));
+  return c.length && c.length < (TOTS[e] || 0) ? c : [];   // cap o tots: només el nom de l'etapa
+}
+function nivell(r) {
+  const CURT = { Batxillerat: 'Batx' };
+  return r.etapes.map((e) => CURT[e] || e).join(' · ');
+}
+function nivellLlarg(r) {
+  return [...r.etapes.map((e) => { const c = cursosDe(r, e); return c.length ? c.join(', ') + (e === 'ESO' ? " d'ESO" : e === 'Primària' ? ' de primària' : ' de ' + e) : e; }), ...r.families.map((f) => 'FP: ' + f)];
+}
+// Escala d'1 a 5: el protocol puntua de 0 a 3 i aquí es converteix (0→1, 1→2,3, 2→3,7, 3→5).
+const cinc = (v) => 1 + v * 4 / 3;
+const num = (x) => (Math.round(x * 10) / 10).toFixed(1).replace('.0', '').replace('.', ',');
+const mitjana = (vs) => { const p = vs.filter((v) => v != null); return p.length ? p.reduce((a, v) => a + cinc(v), 0) / p.length : null; };
+const notaIA = (r) => mitjana([...r.notes.a, ...r.notes.b]);
+// Codis de llengua: de r.idiomes (text lliure en català); si no n'hi ha cap, de les marques catala/castella/llenguaCurta.
+const LLENGUES = [['CA', 'català', ['catala']], ['ES', 'castellà', ['castella', 'espanyol']], ['EN', 'anglès', ['angles']], ['FR', 'francès', ['frances']],
+  ['DE', 'alemany', ['alemany']], ['IT', 'italià', ['italia']], ['PT', 'portuguès', ['portugues']], ['EU', 'basc', ['basc', 'euscar', 'euskera']], ['GL', 'gallec', ['gallec']]];
+function codisLlengua(r) {
+  const troba = (txt) => { const t = senseAccents(String(txt || '')); return LLENGUES.filter(([, , claus]) => claus.some((c) => t.includes(c))).map(([c]) => c); };
+  let codis = troba(r.idiomes);
+  if (!codis.length) {
+    codis = [...(r.catala ? ['CA'] : []), ...(r.castella ? ['ES'] : []), ...troba(r.llenguaCurta)];
+    const curt = String(r.llenguaCurta || '').match(/\b(CA|ES|EN|FR|DE|IT|PT|EU|GL)\b/g);
+    if (curt) codis.push(...curt);
+  }
+  return LLENGUES.map(([c]) => c).filter((c) => codis.includes(c));
+}
+const nomLlengua = (c) => LLENGUES.find((l) => l[0] === c)[1];
+const ESTRELLA = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z"/></svg>';
+const notesGrup = (r) => 'Contingut i didàctica ' + num(mitjana(r.notes.a)) + ' · Disseny i funcionament ' + num(mitjana(r.notes.b));
+function insigniaNota(r) {
+  const { mitjana, n } = resumDocents(r);
+  if (n > 0) {
+    const b = el('span', { class: 'nota', role: 'img', 'data-ajuda': 'Valoració del professorat|' + num(mitjana) + ' de 5 · ' + n + (n === 1 ? ' docent' : ' docents'), 'aria-label': 'Valoració del professorat: ' + num(mitjana) + ' de 5, ' + n + (n === 1 ? ' docent' : ' docents') });
+    b.innerHTML = ESTRELLA; b.append(num(mitjana) + ' (' + n + ')');
+    return b;
+  }
+  const t = 'Revisió amb IA: ' + num(notaIA(r)) + ' de 5, pendent de validació per docents';
+  const grups = notesGrup(r);
+  return el('span', { class: 'nota ia', role: 'img', 'data-ajuda': 'Revisió amb IA · ' + num(notaIA(r)) + ' de 5|' + grups + '\n' + (r.destacat ? 'Destacat: tots dos grups arriben al llindar.' : 'No és destacat: cal arribar al llindar en tots dos grups.') + '\nPendent de validació per docents.', 'aria-label': t }, el('small', null, 'IA'), el('span', null, num(notaIA(r))));
+}
+const ajudaLl = (c) => (c.length === 1 ? 'Llengua' : 'Llengües') + '|' + c.map(nomLlengua).join(', ').replace(/^./, (x) => x.toUpperCase());
+function llenguesTarg(r, junt) {
+  const c = codisLlengua(r);
+  if (!c.length) return null;
+  const t = 'Llengua: ' + c.map(nomLlengua).join(', ');
+  if (junt === 'xips') return el('span', { class: 'llengues xips', 'data-ajuda': ajudaLl(c), 'aria-label': t },
+    [...c.slice(0, 3), ...(c.length > 3 ? ['+' + (c.length - 3)] : [])].map((x) => el('span', null, x)));
+  return el('span', { class: 'llengues' + (junt ? ' junt' : ''), 'data-ajuda': ajudaLl(c), 'aria-label': t }, c.slice(0, 3).join(' · ') + (c.length > 3 ? ' +' + (c.length - 3) : ''));
+}
+// Explicació flotant pròpia (en lloc del «title» del navegador): «Títol|detall» a data-ajuda.
+const ajuda = document.createElement('div'); ajuda.id = 'ajuda'; ajuda.setAttribute('role', 'tooltip'); document.body.append(ajuda);
+let ajudaDe = null, ajudaT = 0;
+const ESPERA_AJUDA = 300;   // ms amb el ratolí quiet a sobre abans de mostrar l'explicació
+function amagaAjuda() { clearTimeout(ajudaT); ajudaDe = null; ajuda.classList.remove('veu'); }
+function mostraAjuda(t) {
+  if (t !== ajudaDe || !t.isConnected) return;
+  const [cap, detall] = t.dataset.ajuda.split('|');
+  ajuda.replaceChildren(el('b', null, cap), detall ? el('span', null, detall) : '');
+  const c = t.getBoundingClientRect(), w = ajuda.offsetWidth, h = ajuda.offsetHeight, mig = c.left + c.width / 2;
+  const x = Math.max(8, Math.min(innerWidth - w - 8, mig - w / 2));
+  const sota = c.top - h - 10 < 8;
+  ajuda.style.left = x + 'px'; ajuda.style.top = (sota ? c.bottom + 10 : c.top - h - 10) + 'px';
+  ajuda.style.setProperty('--x', Math.max(14, Math.min(w - 14, mig - x)) + 'px');
+  ajuda.classList.toggle('sota', sota); ajuda.classList.add('veu');
+}
+// En pantalles tàctils no hi ha ratolí: un toc no ha de deixar cap explicació penjada.
+let darrerToc = 0;
+addEventListener('touchstart', () => { darrerToc = Date.now(); amagaAjuda(); }, { capture: true, passive: true });
+const senseRatoli = () => Date.now() - darrerToc < 1500 || !matchMedia('(hover: hover) and (pointer: fine)').matches;
+document.addEventListener('mouseover', (e) => {
+  if (senseRatoli()) return;
+  const t = e.target.closest && e.target.closest('[data-ajuda]');
+  if (!t) { if (ajudaDe) amagaAjuda(); return; }
+  if (t === ajudaDe) return;
+  amagaAjuda(); ajudaDe = t;
+  ajudaT = setTimeout(() => mostraAjuda(t), ESPERA_AJUDA);
+});
+// Mentre el ratolí es mou per sobre, el compte torna a començar: l'explicació surt quan s'atura.
+document.addEventListener('mousemove', () => {
+  if (!ajudaDe || ajuda.classList.contains('veu')) return;
+  const t = ajudaDe; clearTimeout(ajudaT); ajudaT = setTimeout(() => mostraAjuda(t), ESPERA_AJUDA);
+});
+// Explicacions de la barra superior.
+for (const [id, text] of Object.entries({
+  filtres: 'Filtres|Tria etapa, matèria, tipus, llengua i més',
+  avisos: 'Avisos|Recursos que has obert i encara no has valorat',
+  atzar: "Sorprèn-me|Obre un recurs a l'atzar entre els que es mostren",
+  proposa: 'Proposa un recurs|Envia un recurs perquè es revisi i entri al catàleg',
+  comIco: 'Com funciona|Com es trien, es revisen i es puntuen els recursos',
+  temaIco: "Mode clar o fosc|Canvia l'aparença del catàleg",
+  config: 'Configuració|Disseny de les targetes, aparença i barra',
+  tema: "Mode clar o fosc|Canvia l'aparença del catàleg",
+})) { const b = document.getElementById(id); if (b) b.dataset.ajuda = text; }
+for (const ev of ['scroll', 'click', 'keydown']) addEventListener(ev, amagaAjuda, true);
+// Banderes (només a la variant B): català, anglès, castellà i després la resta; com a màxim tres i «+n».
+const B = (cos) => '<svg viewBox="0 0 30 20" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' + cos + '</svg>';
+const tres = (a, b, c, v) => v ? `<rect width="10" height="20" fill="${a}"/><rect x="10" width="10" height="20" fill="${b}"/><rect x="20" width="10" height="20" fill="${c}"/>`
+  : `<rect width="30" height="7" fill="${a}"/><rect y="6.6" width="30" height="7" fill="${b}"/><rect y="13.3" width="30" height="7" fill="${c}"/>`;
+const BANDERES = {
+  CA: B('<rect width="30" height="20" fill="#fcdd09"/>' + [1, 3, 5, 7].map((i) => `<rect y="${i * 20 / 9}" width="30" height="${20 / 9}" fill="#da121a"/>`).join('')),
+  EN: B('<rect width="30" height="20" fill="#012169"/><path d="M0 0l30 20M30 0L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0l30 20M30 0L0 20" stroke="#c8102e" stroke-width="1.4"/><path d="M15 0v20M0 10h30" stroke="#fff" stroke-width="6.5"/><path d="M15 0v20M0 10h30" stroke="#c8102e" stroke-width="3.6"/>'),
+  ES: B('<rect width="30" height="20" fill="#aa151b"/><rect y="5" width="30" height="10" fill="#f1bf00"/>'),
+  FR: B(tres('#0055a4', '#fff', '#ef4135', true)), IT: B(tres('#009246', '#fff', '#ce2b37', true)),
+  DE: B(tres('#000', '#dd0000', '#ffce00', false)),
+  PT: B('<rect width="30" height="20" fill="#ff0000"/><rect width="12" height="20" fill="#006600"/><circle cx="12" cy="10" r="3.4" fill="#ffcc00"/>'),
+};
+function banderes(r, pindola) {
+  const tots = codisLlengua(r);
+  const c = [...['CA', 'EN', 'ES'].filter((x) => tots.includes(x)), ...tots.filter((x) => !['CA', 'EN', 'ES'].includes(x))];
+  if (!c.length) return null;
+  const t = 'Llengua: ' + c.map(nomLlengua).join(', ');
+  const max = pindola ? 2 : 3;   // dins l'etiqueta, com a màxim dues banderes i «+n»
+  const caixa = el('span', { class: 'banderes' + (pindola ? ' pindola' + (c.length > max ? ' mes' : '') : ''), role: 'img', 'data-ajuda': ajudaLl(c), 'aria-label': t });
+  caixa.innerHTML = c.slice(0, max).map((x) => BANDERES[x] || '<b>' + x + '</b>').join('') + (c.length > max ? '<b>+' + (c.length - max) + '</b>' : '');
+  return caixa;
+}
+// Tres dissenys de targeta per comparar (provisional): A segell i nota; B nota daurada i banderes; C imatge neta i tot al peu; D com la B amb les banderes dins d'una sola etiqueta partida.
+let variant = 'E';
+try { variant = localStorage.getItem('recursos-aula.variant2') || 'E'; } catch { /* sense emmagatzematge */ }
+function pestanyaDest(r) {
+  const p = el('span', { class: 'pdest', 'data-ajuda': 'Destacat|' + notesGrup(r) + '\nÉs destacat qui arriba al llindar en tots dos grups, no qui té la mitjana més alta.' });
+  p.innerHTML = ESTRELLA; p.append('Destacat');
+  return p;
+}
+function targeta(r) {
+  const img = r.captura
+    ? el('div', { class: 'imatge', style: `background-image:url("${r.captura}")`, role: 'img', 'aria-label': 'Captura de ' + r.titol })
+    : el('div', { class: 'imatge buida', 'aria-hidden': 'true' }, r.titol.slice(0, 1));
+  const nota = insigniaNota(r);
+  let peu;
+  if (variant === 'B' || variant === 'D') {
+    nota.classList.add('esq'); if (r.destacat) nota.classList.add('or');
+    img.append(nota, banderes(r, variant === 'D') || '');
+    peu = [el('b', null, nivell(r))];
+  } else if (variant === 'C' || variant === 'E' || variant === 'F' || variant === 'G') {
+    nota.classList.add('linia'); if (r.destacat) nota.classList.add('or');
+    let ll = llenguesTarg(r, variant === 'E' || variant === 'G' ? 'xips' : true);
+    if (variant === 'F') { ll = banderes(r); if (ll) ll.classList.add('linia'); }
+    peu = [el('b', null, nivell(r)), ll || '', nota];
+  } else {
+    if (r.destacat) img.append(el('span', { class: 'segell' }, 'Destacat'));
+    img.append(nota);
+    peu = [el('b', null, nivell(r)), llenguesTarg(r)];
+  }
+  const franja = variant === 'E' || variant === 'F' || variant === 'G';
+  return el('button', { class: 'fitxa', onclick: () => obre(r) },
+    img,
+    el('div', { class: 'cos' },
+      el('span', { class: 'materia' }, r.materiaCurta),
+      el('h2', null, r.titol),
+      el('p', null, r.resum),
+      variant === 'G' && r.destacat ? pestanyaDest(r) : null,
+      el('div', { class: 'peu' + (franja ? ' franja' + (r.destacat ? ' dest' : '') : ''), 'data-id': r.id }, peu)));
+}
+function posaVariant(v) {
+  variant = v; try { localStorage.setItem('recursos-aula.variant2', v); } catch { /* res */ }
+  document.querySelectorAll('[data-variant]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.variant === v))); pinta();
+}
+for (const v of ['A', 'B', 'C', 'D', 'E', 'F', 'G']) $('variants').append(el('button', { type: 'button', 'data-variant': v, 'aria-pressed': String(v === variant), 'aria-label': 'Disseny de targeta ' + v, onclick: () => posaVariant(v) }, v));
+// Dues barres superiors per comparar (provisional): 1 amb text («Mode fosc», «Com funciona»); 2 amb icones i roda de configuració.
+let barra = '2';
+try { barra = localStorage.getItem('recursos-aula.barra2') || '2'; } catch { /* sense emmagatzematge */ }
+function posaBarra(b) {
+  barra = b; document.body.dataset.barra = b; try { localStorage.setItem('recursos-aula.barra2', b); } catch { /* res */ }
+  document.querySelectorAll('[data-barra-op]').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.barraOp === b)));
+}
+for (const b of ['1', '2']) $('barres').append(el('button', { type: 'button', 'data-barra-op': b, 'aria-pressed': 'false', 'aria-label': 'Barra superior ' + b, onclick: () => posaBarra(b) }, b));
+posaBarra(barra);
+// Torn rotatori entre àmbits sobre el resultat ja filtrat, perquè cap àmbit quedi enterrat.
+function equilibra(ll) {
+  const cues = new Map();
+  for (const r of ll) { const k = r.arees[0]; if (!cues.has(k)) cues.set(k, []); cues.get(k).push(r); }
+  const surt = [];
+  while (surt.length < ll.length) for (const c of cues.values()) { const r = c.shift(); if (r) surt.push(r); }
+  return surt;
+}
+function pinta() {
+  const vots = llegeixVots();
+  const np = R.filter((r) => perValorar(vots[r.id])).length;
+  const bAv = $('avisos');
+  bAv.querySelector('.boleta').textContent = np; bAv.querySelector('.boleta').hidden = !np; bAv.setAttribute('aria-label', 'Avisos, ' + np + ' pendents');
+  const act = filtresActius();
+  $('filtres').classList.toggle('actiu', !!act.length);
+  $('filtres').querySelector('.boleta').hidden = !act.length; $('filtres').querySelector('.boleta').textContent = act.length;
+  $('filtres').setAttribute('aria-label', act.length ? 'Filtres, ' + act.length + (act.length === 1 ? ' actiu' : ' actius') : 'Filtres');
+  $('actius').hidden = !act.length; $('actius').textContent = 'Filtres: ' + act.join(' · ');
+  $('neteja').hidden = !(estat.q || act.length);
+  const tots = R.filter(passa);
+  let llista = [...equilibra(tots.filter((r) => r.destacat)), ...equilibra(tots.filter((r) => !r.destacat))];
+  if (estat.ordre === 'val') {
+    const d = new Map(llista.map((r) => [r, resumDocents(r)]));
+    llista = [...llista.filter((r) => d.get(r).n > 0).sort((a, b) => d.get(b).mitjana - d.get(a).mitjana), ...llista.filter((r) => !d.get(r).n)];
+  } else if (estat.ordre === 'ia') llista.sort((a, b) => (notaIA(b) ?? -1) - (notaIA(a) ?? -1));
+  else if (estat.ordre === 'nous') llista.sort((a, b) => Number(b.id.replace(/\D/g, '')) - Number(a.id.replace(/\D/g, '')));
+  else if (estat.ordre === 'az') llista.sort((a, b) => a.titol.localeCompare(b.titol, 'ca'));
+  $('n').textContent = llista.length;
+  $('graella').replaceChildren(...(llista.length ? llista.map(targeta)
+    : [el('div', { class: 'res' }, 'Cap recurs coincideix amb la cerca. Prova amb una altra paraula o treu algun filtre.')]));
+  refrescaFiltres();
+}
+
+// ---------- Valoracions (demostració: es desen al navegador) ----------
+const CLAU = 'recursos-aula.valoracions';
+function llegeixVots() { try { return JSON.parse(localStorage.getItem(CLAU) || '{}'); } catch { return {}; } }
+function desaVots(v) { try { localStorage.setItem(CLAU, JSON.stringify(v)); } catch { /* sense emmagatzematge */ } }
+// Cada escriptura torna a llegir i només fusiona els camps que canvia.
+function anota(id, canvis) { const v = llegeixVots(); v[id] = { ...(v[id] || {}), ...canvis }; desaVots(v); }
+const MIN_FORA = 15000;
+const valorat = (m) => !!(m && m.estrelles && m.nota);
+const perValorar = (m) => !!(m && m.obert && !valorat(m) && !m.noMeu);
+// Només existeix la valoració pròpia; amb la base de dades aquí es llegirà el conjunt de docents.
+function resumDocents(r) { const e = (llegeixVots()[r.id] || {}).estrelles; return e ? { mitjana: e, n: 1 } : { mitjana: null, n: 0 }; }
+const movimentReduit = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function blocValoracio(r, alDesar) {
+  const meu = { ...(llegeixVots()[r.id] || {}) };
+  const avis = el('span', { class: 'gracies', 'aria-live': 'polite' });
+  const resum = el('p');
+  const pintaResum = () => {
+    const d = (llegeixVots()[r.id] || {}).estrelles;
+    resum.replaceChildren(d ? el('b', null, '★ ' + d + ' de 5 · 1 docent') : 'Encara no l\'ha valorat cap docent.',
+      ' En aquesta versió de prova la valoració es desa només en aquest navegador; amb la base de dades es veurà la mitjana i quants docents han valorat.');
+  };
+  const estrelles = el('div', { class: 'estrelles', role: 'radiogroup', 'aria-label': "Puntuació d'1 a 5 estrelles" });
+  const boto = el('button', { class: 'boto', type: 'button' }, 'Desa la valoració');
+  const nota = el('textarea', { rows: '3', placeholder: 'Què hi has vist: per a què serveix, amb quin curs, què hi falta…' });
+  nota.value = meu.nota || '';
+  const revisa = () => { boto.disabled = !(meu.estrelles && nota.value.trim()); avis.textContent = ''; };
+  const pintaE = () => [...estrelles.children].forEach((b, i) => {
+    const plena = i < (meu.estrelles || 0);
+    b.textContent = plena ? '★' : '☆'; b.classList.toggle('plena', plena); b.setAttribute('aria-checked', String(meu.estrelles === i + 1));
+  });
+  for (let n = 1; n <= 5; n++) estrelles.append(el('button', { class: 'estrella', type: 'button', role: 'radio', 'aria-label': n + (n === 1 ? ' estrella' : ' estrelles'),
+    onclick: () => { meu.estrelles = n; pintaE(); revisa(); } }));
+  nota.addEventListener('input', revisa);
+  const aula = el('div', { class: 'pregunta' }, el('span', null, "Si has fet servir el recurs a l'aula, digues si t'ha funcionat"));
+  for (const [valor, nom] of [[1, 'Ha funcionat'], [-1, 'No ha funcionat']]) {
+    const b = el('button', { class: 'polze' + (valor < 0 ? ' avall' : ''), type: 'button', 'aria-pressed': String(meu.aula === valor) });
+    b.innerHTML = POLZE; b.append(nom);
+    b.addEventListener('click', () => {
+      meu.aula = meu.aula === valor ? 0 : valor;
+      aula.querySelectorAll('.polze').forEach((x, i) => x.setAttribute('aria-pressed', String(meu.aula === (i === 0 ? 1 : -1))));
+      revisa();
+    });
+    aula.append(b);
+  }
+  boto.addEventListener('click', () => {
+    meu.nota = nota.value.trim();
+    anota(r.id, { estrelles: meu.estrelles, nota: meu.nota, aula: meu.aula });
+    sec.classList.remove('crida');
+    avis.textContent = 'Gràcies, valoració desada.'; pintaResum(); pinta(); if (alDesar) alDesar();
+  });
+  pintaE(); revisa(); pintaResum();
+  const sec = el('section', { class: 'valora' },
+    el('h3', null, 'Valoració del professorat'), resum,
+    el('label', null, el('span', null, 'La teva puntuació ', el('small', null, '(obligatòria)')), estrelles),
+    el('label', null, el('span', null, 'Comentari ', el('small', null, '(obligatori)')), nota),
+    aula,
+    el('div', { class: 'pregunta' }, boto, avis));
+  sec.ressalta = () => {
+    sec.scrollIntoView({ block: 'center', behavior: movimentReduit() ? 'auto' : 'smooth' });
+    sec.classList.remove('crida'); void sec.offsetWidth; sec.classList.add('crida');
+  };
+  sec.preselecciona = (n) => { meu.estrelles = n; pintaE(); revisa(); nota.focus({ preventScroll: true }); };
+  return sec;
+}
+
+// ---------- Puntuacions de la revisió ----------
+function rubrica(r) {
+  if (!r.notes) return null;
+  const grup = (titol, criteris, valors) => el('div', { class: 'grup' },
+    el('h3', null, titol, el('b', null, num(mitjana(valors)) + ' / 5')),
+    criteris.map(([nom, que], i) => el('div', { class: 'criteri' }, el('span', null, nom, el('em', null, que)),
+      valors[i] == null ? el('small', { style: 'width:auto' }, 'pendent')
+        : [el('span', { class: 'pista', 'aria-hidden': 'true' }, el('i', { style: 'width:' + cinc(valors[i]) * 20 + '%' })), el('small', null, num(cinc(valors[i])) + ' / 5')])));
+  return el('div', null,
+    el('p', { class: 'global' }, el('span', null, 'Revisió amb IA: ', el('b', null, num(notaIA(r))), ' / 5'),
+      el('span', null, 'Generada amb IA seguint el protocol; pendent de validació per una persona.')),
+    el('div', { class: 'rubrica' },
+      grup('Qualitat del contingut i didàctica', [
+        ['Rigor epistemològic', 'Conceptes, fórmules i dades correctes segons la disciplina'],
+        ['Fonts i simplificacions declarades', "Diu d'on surt la informació i què simplifica"],
+        ['Disseny didàctic', 'Fa predir, provar i explicar, no només mostra']], r.notes.a),
+      grup('Disseny i funcionament', [
+        ['Claredat de la representació', 'El que es veu fa entendre el mecanisme'],
+        ['Interactivitat', "Què pot manipular l'alumnat"],
+        ["Ús pràctic a l'aula", "S'entén de seguida; projector i tauleta"]], r.notes.b)),
+    el('p', { class: 'nota-rubrica' }, "Cada criteri es mostra sobre 5 i el total és la mitjana dels criteris puntuats. ", el('button', { class: 'enllac', type: 'button', onclick: () => obreCom('puntua') }, 'Com es puntua i què vol dir «destacat»')));
+}
+
+// ---------- Com funciona ----------
+function obreCom(seccio) {
+  const dlg = $('dlg');
+  dlg.className = '';
+  const cos = $('tCom').content.cloneNode(true);
+  const X = window.XIFRES || {};
+  cos.querySelectorAll('[data-x]').forEach((n) => { n.textContent = X[n.dataset.x] ?? '–'; });
+  cos.querySelector('#xClaredat').textContent = X.senseClaredat
+    ? 'En ' + X.senseClaredat + ' recursos la claredat de la representació és pendent, perquè la captura disponible no mostra prou el recurs en funcionament. En aquests casos el grup 2 es calcula amb els altres dos criteris i es destaca amb una mitjana de 4,3 o més.' : '';
+  cos.querySelectorAll('details').forEach((d) => { d.open = d.dataset.s === (seccio || 'entra'); });
+  dlg.replaceChildren(el('button', { class: 'tanca', 'aria-label': 'Tanca', onclick: () => dlg.close() }, '×'), cos);
+  if (!dlg.open) dlg.showModal();
+  const obert = dlg.querySelector('details[open]');
+  dlg.scrollTop = seccio && obert ? obert.offsetTop - 12 : 0;
+}
+$('com').addEventListener('click', () => obreCom());
+
+// ---------- Detall ----------
+let fitxaActual = null, calRepintar = false;
+const autoriaCurta = (s) => {
+  let t = String(s || '').split(/\s[—–]\s|;|\(/)[0].trim();
+  if (t.length > 40) t = t.split(',')[0].trim();
+  return t;
+};
+function obre(r, pestanya) {
+  const dlg = $('dlg');
+  dlg.className = '';
+  const f = fitxaActual = { r, obert: false, accions: null };
+  const marcaObert = () => { anota(r.id, { obert: Date.now() }); f.obert = true; calRepintar = true; };
+  const fila = (nom, valor) => (valor ? [el('dt', null, nom), el('dd', null, valor)] : []);
+  const dada = (nom, valor) => (valor ? el('div', null, el('small', null, nom), valor) : null);
+  // Alerta d'ús recomanat: només quan no és «alumnat». Triangle groc només a «Només per projectar»; la resta, text sense triangle.
+  const ALERTA = { projectar: 'Només per projectar', 'alumnat amb precaucions': 'Amb precaucions', 'no confirmat': 'Privadesa sense confirmar' };
+  const alertaText = ALERTA[r.us] || '';
+  const triangle = () => { if (r.us !== 'projectar') return null; const s = el('span', { class: 'tri', 'aria-hidden': 'true' }); s.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 2.6 1.2 21.2h21.6z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 9.4v6" stroke="#2a1a00" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="18.2" r="1.25" fill="#2a1a00"/></svg>'; return s; };
+  const blocUs = r.usText ? el('div', { class: r.us === 'alumnat' ? 'bloc' : r.us === 'projectar' ? 'avis' : 'avis neutre' }, el('strong', null, alertaText && triangle(), 'Ús recomanat'), r.usText) : null;
+  const panells = {
+    idees: el('div', null,
+      r.idea ? el('div', { class: 'idea' }, el('strong', null, "Una idea per a l'aula"), r.idea)
+             : el('p', { class: 'nota-rubrica' }, "Aquest recurs encara no té cap idea d'aula escrita."),
+      r.peces.length ? el('div', { class: 'bloc' }, el('strong', null, 'Per on començar'),
+        el('div', { class: 'peces' }, r.peces.map((p) => el('a', { href: p.url, target: '_blank', rel: 'noopener noreferrer', onclick: marcaObert }, p.titol)))) : null,
+      blocUs,
+      r.precaucions && el('div', { class: 'avis' }, el('strong', null, 'Abans de fer-lo servir'), r.precaucions),
+      r.errors && r.errors.length ? el('div', { class: 'avis' }, el('strong', null, 'Límits i errors detectats'),
+        el('ul', { style: 'margin:4px 0 0;padding-left:18px' }, r.errors.map((e) => el('li', null, e)))) : null),
+    valora: blocValoracio(r, () => { pintaPunt(); avisDemana().remove(); }),
+    criteris: el('div', null, rubrica(r)),
+    detalls: el('dl', { style: 'margin-top:0' },
+      fila('Fonts i simplificacions', r.transparencia),
+      fila('Autoria', r.autor), fila('Llicència', r.llicencia), fila('Requisits', r.requisits),
+      fila('Què s\'ha revisat', r.revisat),
+      fila('Llengües disponibles', r.idiomes), fila('Privadesa', r.privadesa)),
+  };
+  const noms = [['idees', "Idees per a l'aula"], ['valora', 'Valoració'], ['criteris', 'Criteris de la revisió'], ['detalls', 'Més detalls']];
+  const tria = (k) => noms.forEach(([c], i) => { botons[i].setAttribute('aria-selected', String(c === k)); panells[c].hidden = c !== k; });
+  const vaAValoracio = (n) => { tria('valora'); if (n) panells.valora.preselecciona(n); panells.valora.ressalta(); };
+  const punt = el('div', { class: 'puntuacio' });
+  const pintaPunt = () => {
+    const m = llegeixVots()[r.id] || {};
+    const { mitjana, n } = resumDocents(r);
+    const noMeu = () => { anota(r.id, { noMeu: true }); pintaPunt(); avisDemana().remove(); pinta(); };
+    let teva;
+    if (m.noMeu) teva = el('span', { class: 'sota' }, 'No és de la teva matèria',
+      el('button', { class: 'enllac', type: 'button', onclick: () => { anota(r.id, { noMeu: false }); pintaPunt(); pinta(); } }, 'Canvia'));
+    else {
+      const e = el('span', { class: 'estrelles', role: 'group', 'aria-label': 'La teva valoració' });
+      for (let i = 1; i <= 5; i++) e.append(el('button', { class: 'estrella' + (i <= (m.estrelles || 0) ? ' plena' : ''), type: 'button',
+        'aria-label': 'Valora amb ' + i + (i === 1 ? ' estrella' : ' estrelles'), onclick: () => vaAValoracio(i) }, i <= (m.estrelles || 0) ? '★' : '☆'));
+      teva = el('span', { class: 'sota' }, e, valorat(m) ? null : el('button', { class: 'enllac', type: 'button', onclick: noMeu }, 'No és de la meva matèria'));
+    }
+    punt.replaceChildren(
+      el('div', null, el('small', null, 'La teva valoració'), teva),
+      el('div', null, el('small', null, 'Docents'), n ? '★ ' + num(mitjana) + ' · ' + n + (n === 1 ? ' docent' : ' docents') : 'Cap docent encara'),
+      el('div', null, el('small', null, 'Revisió amb IA'), num(notaIA(r)) + ' / 5'));
+  };
+  const avisDemana = () => dlg.querySelector('.demana') || el('div');
+  f.pregunta = () => {
+    avisDemana().remove();
+    anota(r.id, { demanat: true });
+    const tanca = () => dlg.querySelector('.demana')?.remove();
+    f.accions.before(el('div', { class: 'demana', role: 'status' },
+      el('span', null, 'Has obert aquest recurs. El vols valorar ara?'),
+      el('div', { class: 'botons' },
+        el('button', { class: 'boto', type: 'button', onclick: () => { tanca(); vaAValoracio(); } }, 'Sí, ara'),
+        el('button', { class: 'boto segon', type: 'button', onclick: tanca }, 'Més tard'),
+        el('button', { class: 'boto segon', type: 'button', onclick: () => { anota(r.id, { noMeu: true }); tanca(); pintaPunt(); pinta(); } }, 'No és de la meva matèria'))));
+  };
+  const botons = noms.map(([k, nom]) => el('button', { class: 'pestanya', type: 'button', role: 'tab', onclick: () => tria(k) }, nom));
+  dlg.replaceChildren(
+    el('button', { class: 'tanca', 'aria-label': 'Tanca', onclick: () => dlg.close() }, '×'),
+    el('div', { class: 'dalt' },
+      r.captura ? el('img', { class: 'gran', src: r.captura, alt: 'Captura de ' + r.titol })
+                : el('div', { class: 'gran imatge buida', 'aria-hidden': 'true' }, r.titol.slice(0, 1)),
+      el('div', null,
+        el('span', { class: 'materia' }, r.materiaCurta), r.destacat && el('span', { class: 'segell' }, 'Destacat'),
+        el('h2', null, r.titol),
+        el('p', { class: 'intro' }, r.descripcio))),
+    punt,
+    el('div', { class: 'info' },
+      dada('Etapa i curs', nivellLlarg(r).join(' · ')), dada('Tema del currículum', r.tema),
+      dada('Llengua', r.llenguaLlarga), dada('Tipus de recurs', r.tipus), dada('Condicions', ['Gratuït · sense registre', alertaText && el('span', { class: 'alerta-linia' }, triangle(), alertaText)]),
+      dada('Autoria', autoriaCurta(r.autor))),
+    f.accions = el('div', { class: 'accions' },
+      el('a', { class: 'boto', href: r.url, target: '_blank', rel: 'noopener noreferrer', style: 'text-decoration:none', onclick: marcaObert }, 'Obre el recurs'),
+      el('button', { class: 'boto segon', onclick: (ev) => { navigator.clipboard?.writeText(r.url).catch(() => {}); ev.currentTarget.textContent = 'Enllaç copiat'; } }, "Copia l'enllaç"),
+      r.us === 'projectar' && el('button', { class: 'alerta', title: alertaText + ": mostra l'ús recomanat", 'aria-label': alertaText + ": mostra l'ús recomanat", onclick: () => { tria('idees'); blocUs.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }, triangle()),
+      el('div', { class: 'pestanyes', role: 'tablist', 'aria-label': 'Apartats de la fitxa' }, botons)),
+    el('div', { class: 'detall' }, panells.idees, panells.valora, panells.criteris, panells.detalls),
+    el('div', { class: 'obre-fix' }, alertaText && el('span', { class: 'alerta-linia' }, triangle(), alertaText), el('a', { class: 'boto', href: r.url, target: '_blank', rel: 'noopener noreferrer', onclick: marcaObert }, 'Obre el recurs')));
+  tria('idees'); pintaPunt();
+  if (!dlg.open) dlg.showModal();
+  dlg.scrollTop = 0;
+  if (pestanya === 'valora') vaAValoracio(); else if (pestanya) tria(pestanya);
+}
+$('dlg').addEventListener('click', (ev) => { if (ev.target === $('dlg')) $('dlg').close(); });
+$('dlg').addEventListener('close', () => { fitxaActual = null; if (calRepintar) { calRepintar = false; pinta(); } });
+// En tornar a la pestanya: repinta el marcador i, un sol cop per recurs, pregunta si es vol valorar.
+function alTornar() {
+  if (calRepintar) { calRepintar = false; pinta(); }
+  const f = fitxaActual;
+  if (!f || !f.obert || !f.accions.isConnected || !$('dlg').open) return;
+  const m = llegeixVots()[f.r.id] || {};
+  if (perValorar(m) && !m.demanat && Date.now() - m.obert >= MIN_FORA) f.pregunta();
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') alTornar(); });
+window.addEventListener('focus', alTornar);
+
+// ---------- Proposta ----------
+$('proposa').addEventListener('click', () => {
+  const dlg = $('dlg');
+  dlg.className = '';
+  const avis = el('div', { class: 'gracies', 'aria-live': 'polite' });
+  const opcional = (txt) => el('small', null, txt || '(opcional)');
+
+  // Recurs existent: trobat o creat
+  const url = el('input', { type: 'url', required: true, placeholder: 'https://…' });
+  const existent = el('div', { class: 'camps' },
+    el('label', null, 'Adreça del recurs', url),
+    el('label', null, el('span', null, 'Matèria i curs ', opcional()), el('input', { type: 'text', placeholder: 'Per exemple: Física, 1r de Batxillerat' })),
+    el('label', null, el('span', null, 'Per què el recomanes? ', opcional('(opcional, una frase)')), el('textarea', { rows: '2' })));
+
+  // Encàrrec d'un recurs nou (pendent)
+  const obligatoris = [
+    el('input', { type: 'text', placeholder: 'Per exemple: per què amb una marxa curta costa menys pujar una pujada' }),
+    el('input', { type: 'text', placeholder: 'Per exemple: Coneixement del medi, 5è i 6è de primària' }),
+    el('textarea', { rows: '2', placeholder: "Què no acaben d'entendre, encara que ho hàgiu explicat" }),
+    el('input', { type: 'checkbox' }),
+  ];
+  const nou = el('div', { class: 'camps', hidden: true },
+    el('p', { class: 'avis-pendent' }, "Aquesta opció encara no està en marxa. L'equip del catàleg està preparant com crear recursos propis; quan s'obri, les peticions es faran des d'aquí."),
+    el('label', null, 'Què ha de fer entendre el recurs?', obligatoris[0]),
+    el('label', null, 'Matèria, etapa i curs', obligatoris[1]),
+    el('label', null, "Què costa d'entendre a l'alumnat?", obligatoris[2]),
+    el('label', null, el('span', null, 'Quina idea errònia hi porta sovint? ', opcional()), el('textarea', { rows: '2', placeholder: 'Per exemple: «la marxa més grossa sempre va més de pressa»' })),
+    el('label', null, el('span', null, "Què hauria de poder canviar o manipular l'alumnat? ", opcional()), el('textarea', { rows: '2' })),
+    el('label', null, el('span', null, 'Fonts o materials de referència que fas servir ', opcional()), el('textarea', { rows: '2' })),
+    el('label', { class: 'compromis' }, obligatoris[3], el('span', null, 'Revisaré el contingut del recurs abans que es publiqui (conceptes, dades i textos).')));
+
+  const envia = el('button', { class: 'boto calid', type: 'submit' }, 'Envia la proposta');
+  const subtitol = el('p', { style: 'margin:0;color:var(--suau)' });
+  const tria = (valor) => {
+    const esNou = valor === 'nou';
+    existent.hidden = esNou;
+    nou.hidden = !esNou;
+    url.required = !esNou;
+    obligatoris.forEach((c) => { c.required = esNou; });
+    envia.textContent = esNou ? 'Envia la petició' : 'Envia la proposta';
+    subtitol.textContent = esNou
+      ? "Explica què vols que entengui l'alumnat. El recurs el fa l'equip del catàleg; tu n'aportes el sentit didàctic i en revises el contingut."
+      : "Només cal l'adreça. La revisió la fa l'equip del catàleg: tu no has d'omplir cap fitxa.";
+    avis.textContent = '';
+  };
+  const radio = (valor, ...text) => el('label', null,
+    el('input', { type: 'radio', name: 'origen', value: valor, checked: valor === 'trobat', onchange: () => tria(valor) }), ...text);
+
+  dlg.replaceChildren(
+    el('button', { class: 'tanca', 'aria-label': 'Tanca', onclick: () => dlg.close() }, '×'),
+    el('form', { class: 'form', onsubmit: (ev) => {
+      ev.preventDefault();
+      avis.textContent = nou.hidden
+        ? "Rebut. En aquesta proposta de disseny no s'envia enlloc; a l'aplicació definitiva arribarà a l'equip del catàleg, que el revisarà i et dirà si hi entra."
+        : "Petició desada com a exemple. Aquesta opció és pendent: encara no s'envia enlloc ni s'atén.";
+    } },
+      el('h2', null, 'Proposa un recurs'),
+      subtitol,
+      el('div', { class: 'tria' },
+        radio('trobat', "L'he trobat"),
+        radio('creat', "L'he creat jo o el meu equip"),
+        radio('nou', "Vull que se'n creï un", el('span', { class: 'insignia' }, 'pendent'))),
+      existent,
+      nou,
+      el('div', null, envia),
+      el('p', { style: 'margin:0;font-size:14px;color:var(--suau)' }, el('button', { class: 'enllac', type: 'button', onclick: () => obreCom('proposa') }, 'Què passa després de proposar-lo')),
+      avis));
+  tria('trobat');
+  if (!dlg.open) dlg.showModal();
+});
+
+// ---------- Avisos ----------
+function obreAvisos() {
+  const dlg = $('dlg');
+  const llista = el('div');
+  const pintaLlista = () => {
+    const vots = llegeixVots();
+    const ll = R.filter((r) => perValorar(vots[r.id]));
+    llista.replaceChildren(...(ll.length ? ll.map((r) => el('div', { class: 'aviso' },
+      el('div', null, el('b', null, r.titol), el('small', null, r.materiaCurta)),
+      el('div', { class: 'botons' },
+        el('button', { class: 'boto', type: 'button', onclick: () => obre(r, 'valora') }, "Valora'l"),
+        el('button', { class: 'boto segon', type: 'button', onclick: () => { anota(r.id, { noMeu: true }); pintaLlista(); pinta(); } }, 'No és de la meva matèria'))))
+      : [el('p', null, 'No tens cap recurs pendent de valorar.')]));
+  };
+  pintaLlista();
+  dlg.className = 'petit';
+  dlg.replaceChildren(
+    el('button', { class: 'tanca', 'aria-label': 'Tanca', onclick: () => dlg.close() }, '×'),
+    el('div', { class: 'p-cos' },
+      el('h2', null, 'Avisos'),
+      el('section', { class: 'p-sec' }, el('h3', null, 'Recursos per valorar'), llista),
+      el('section', { class: 'p-sec' }, el('h3', null, 'Les teves propostes ', el('span', { class: 'insignia' }, 'pendent')),
+        el('p', null, "Quan proposis un recurs, aquí en veuràs l'estat: rebut, en revisió, acceptat o no acceptat, amb el motiu.")),
+      el('section', { class: 'p-sec' }, el('h3', null, 'Compartits amb tu ', el('span', { class: 'insignia' }, 'pendent')),
+        el('p', null, 'Quan algú et comparteixi un recurs, sortirà aquí.'))));
+  if (!dlg.open) dlg.showModal();
+  dlg.scrollTop = 0;
+}
+$('avisos').addEventListener('click', obreAvisos);
+
+// ---------- Tema clar o fosc ----------
+function posaTema(t) {
+  document.documentElement.dataset.tema = t;
+  $('tema').textContent = t === 'fosc' ? 'Mode clar' : 'Mode fosc';
+  $('temaIco').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">' + (t === 'fosc'
+    ? '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'
+    : '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>') + '</svg>';
+  $('temaIco').setAttribute('aria-label', t === 'fosc' ? 'Passa a mode clar' : 'Passa a mode fosc');
+  document.querySelectorAll('[data-tema-op]').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.temaOp === t)));
+}
+let temaDesat = null;
+try { temaDesat = localStorage.getItem('recursos-aula.tema'); } catch { /* sense emmagatzematge */ }
+posaTema(temaDesat || (matchMedia('(prefers-color-scheme: dark)').matches ? 'fosc' : 'clar'));
+function desaTema(t) { posaTema(t); try { localStorage.setItem('recursos-aula.tema', t); } catch { /* res */ } }
+const giraTema = () => desaTema(document.documentElement.dataset.tema === 'fosc' ? 'clar' : 'fosc');
+$('tema').addEventListener('click', giraTema);
+$('temaIco').addEventListener('click', giraTema);
+$('comIco').addEventListener('click', () => obreCom());
+
+// ---------- Configuració ----------
+function obreConfig() {
+  const dlg = $('dlg');
+  const op = (attr, valor, nom, actiu, fn) => el('button', { class: 'xip', type: 'button', [attr]: valor, 'aria-pressed': String(actiu), onclick: fn }, nom);
+  dlg.className = 'petit';
+  dlg.replaceChildren(
+    el('button', { class: 'tanca', 'aria-label': 'Tanca', onclick: () => dlg.close() }, '×'),
+    el('div', { class: 'p-cos' },
+      el('h2', null, 'Configuració'),
+      el('section', { class: 'p-sec' }, el('h3', null, 'Disseny de les targetes'),
+        el('div', { class: 'xips' }, [['A', 'A · Destacat i puntuació'], ['B', 'B · Puntuació i banderes'], ['C', 'C · Imatge neta'], ['D', 'D · Banderes en una etiqueta'], ['E', 'E · Franja amb codis de llengua'], ['F', 'F · Franja amb banderes'], ['G', 'G · Franja amb pestanya «Destacat»']]
+          .map(([v, nom]) => op('data-variant', v, nom, v === variant, () => posaVariant(v))))),
+      el('section', { class: 'p-sec' }, el('h3', null, 'Aparença'),
+        el('div', { class: 'xips' }, [['clar', 'Mode clar'], ['fosc', 'Mode fosc']].map(([t, nom]) => op('data-tema-op', t, nom, document.documentElement.dataset.tema === t, () => desaTema(t))))),
+      el('section', { class: 'p-sec' }, el('h3', null, 'Barra superior'),
+        el('div', { class: 'xips' }, [['1', 'Amb text'], ['2', 'Amb icones']].map(([b, nom]) => op('data-barra-op', b, nom, b === barra, () => posaBarra(b))))),
+      el('section', { class: 'p-sec' }, el('h3', null, 'Ajuda i opinió'),
+        el('div', { class: 'ajuda' },
+          el('button', { class: 'boto segon', type: 'button', onclick: () => obreCom() }, 'Com funciona'),
+          el('button', { class: 'boto segon', type: 'button', onclick: obreValApp }, 'Valora el catàleg'))),
+      el('p', { class: 'nota-p' }, 'Aquestes preferències es desen només en aquest navegador.')));
+  if (!dlg.open) dlg.showModal();
+  dlg.scrollTop = 0;
+}
+$('config').addEventListener('click', obreConfig);
+
+// ---------- Valoració del catàleg en conjunt (demostració: es desa al navegador) ----------
+const CLAU_APP = 'recursos-aula.app';
+function llegeixApp() { try { return JSON.parse(localStorage.getItem(CLAU_APP) || '{}'); } catch { return {}; } }
+function desaApp(canvis) { const a = { ...llegeixApp(), ...canvis }; try { localStorage.setItem(CLAU_APP, JSON.stringify(a)); } catch { /* res */ } return a; }
+function obreValApp() {
+  const dlg = $('dlg');
+  $('demApp').hidden = true;
+  const a = llegeixApp();
+  let punts = a.estrelles || 0;
+  const avis = el('span', { class: 'gracies', 'aria-live': 'polite' });
+  const estrelles = el('div', { class: 'estrelles', role: 'radiogroup', 'aria-label': "Puntuació d'1 a 5 estrelles" });
+  const boto = el('button', { class: 'boto', type: 'button', disabled: !punts }, 'Desa la valoració');
+  const nota = el('textarea', { rows: '3', placeholder: 'Què hi trobes a faltar, què canviaries, què et va bé…' });
+  nota.value = a.nota || '';
+  const pintaE = () => [...estrelles.children].forEach((b, i) => { const plena = i < punts; b.textContent = plena ? '★' : '☆'; b.classList.toggle('plena', plena); b.setAttribute('aria-checked', String(punts === i + 1)); });
+  for (let n = 1; n <= 5; n++) estrelles.append(el('button', { class: 'estrella', type: 'button', role: 'radio', 'aria-label': n + (n === 1 ? ' estrella' : ' estrelles'),
+    onclick: () => { punts = n; boto.disabled = false; avis.textContent = ''; pintaE(); } }));
+  boto.addEventListener('click', () => { desaApp({ estrelles: punts, nota: nota.value.trim(), data: Date.now() }); avis.textContent = 'Gràcies, valoració desada.'; });
+  pintaE();
+  dlg.className = 'petit';
+  dlg.replaceChildren(
+    el('button', { class: 'tanca', 'aria-label': 'Tanca', onclick: () => dlg.close() }, '×'),
+    el('div', { class: 'p-cos' },
+      el('h2', null, 'Valora el catàleg'),
+      el('p', { class: 'nota-p' }, "La teva opinió sobre el catàleg en conjunt, no sobre un recurs concret. En aquesta versió de prova es desa només en aquest navegador."),
+      el('section', { class: 'valora', style: 'margin-top:14px' },
+        el('label', null, el('span', null, "T'és útil el catàleg? ", el('small', null, '(obligatori)')), estrelles),
+        el('label', null, el('span', null, 'Què milloraries? ', el('small', null, '(opcional)')), nota),
+        el('div', { class: 'pregunta' }, boto, avis))));
+  if (!dlg.open) dlg.showModal();
+  dlg.scrollTop = 0;
+}
+$('valApp').addEventListener('click', obreValApp);
+// Es demana un sol cop a partir de la tercera visita; si es diu «Ara no» dues vegades, no es torna a demanar.
+const VISITES_MIN = 3;
+(function demanaApp() {
+  const a = desaApp({ visites: (llegeixApp().visites || 0) + 1 });
+  if (a.estrelles || a.visites < VISITES_MIN || (a.ajornat || 0) >= 2) return;
+  const c = $('demApp');
+  c.replaceChildren(el('b', null, 'Com et va amb el catàleg?'), el('span', null, 'Ens ajudaria saber si et resulta útil. És un minut.'),
+    el('div', null,
+      el('button', { class: 'boto', type: 'button', onclick: obreValApp }, "Valora'l"),
+      el('button', { class: 'boto segon', type: 'button', onclick: () => { desaApp({ ajornat: (llegeixApp().ajornat || 0) + 1 }); c.hidden = true; } }, 'Ara no')));
+  setTimeout(() => { if (!$('dlg').open) c.hidden = false; }, 4000);
+})();
+
+// ---------- Esdeveniments ----------
+$('q').addEventListener('input', (ev) => { estat.q = ev.target.value.trim(); pinta(); });
+$('neteja').addEventListener('click', netejaFiltres);
+$('atzar').addEventListener('click', () => { const ll = R.filter(passa); if (ll.length) obre(ll[Math.floor(Math.random() * ll.length)]); });
+pinta();
+</script>
+</body>
+</html>
