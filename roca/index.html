@@ -1,0 +1,930 @@
+<!doctype html><html lang="ca"><head><meta name="robots" content="noindex"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>La biografia d'una roca</title><style>/* Colors dels dos temes. Mateixos noms i valors que el kit d'anatomy (ISO_CSS), perquè una figura feta amb el kit
+   i una feta a mà (mida Esquema) facin servir les mateixes variables. Si la pàgina inclou ISO_CSS, aquest bloc no hi fa nosa. */
+.iso{
+  color-scheme:dark;
+  --anatomy-page:#0b0b0b;--anatomy-card:#131313;--anatomy-text:#a3a3a3;--anatomy-strong:#e6e6e6;--anatomy-muted:#6e6e6e;
+  --anatomy-paper:#131313;--anatomy-face:#1b1b1b;--anatomy-top:#1c1c1c;
+  --anatomy-shade-0:#0f0f0f;--anatomy-shade-1:#121212;--anatomy-shade-2:#151515;--anatomy-shade-3:#181818;
+  --anatomy-hi:#d4d4d4;--anatomy-mid:#6a6a6a;--anatomy-lo:#3e3e3e;--anatomy-faint:#2a2a2a;--anatomy-lit:#ffffff;
+  --anatomy-red:#ff6b6b;--anatomy-green:#6be0a0;--anatomy-blue:#6b9bff;
+}
+.iso[data-theme="light"]{
+  color-scheme:light;
+  --anatomy-page:#f2f2ef;--anatomy-card:#fbfbfa;--anatomy-text:#57575a;--anatomy-strong:#18181a;--anatomy-muted:#8c8c90;
+  --anatomy-paper:#fbfbfa;--anatomy-face:#ffffff;--anatomy-top:#ffffff;
+  --anatomy-shade-0:#dcdcd9;--anatomy-shade-1:#e5e5e2;--anatomy-shade-2:#ededea;--anatomy-shade-3:#f4f4f1;
+  --anatomy-hi:#26262a;--anatomy-mid:#8a8a8f;--anatomy-lo:#b4b4b8;--anatomy-faint:#d4d4d6;--anatomy-lit:#000000;
+  --anatomy-red:#e5484d;--anatomy-green:#30a46c;--anatomy-blue:#3e63dd;
+}
+
+.iso{
+  --anatomy-page:#0b0b0b;--anatomy-card:#131313;--anatomy-text:#a3a3a3;--anatomy-strong:#e6e6e6;--anatomy-muted:#6e6e6e;
+  --anatomy-paper:#131313;--anatomy-face:#1b1b1b;--anatomy-top:#1c1c1c;
+  --anatomy-shade-0:#0f0f0f;--anatomy-shade-1:#121212;--anatomy-shade-2:#151515;--anatomy-shade-3:#181818;
+  --anatomy-lit-top:#262626;--anatomy-lit-shade:#1d1d1d;
+  --anatomy-hi:#d4d4d4;--anatomy-mid:#6a6a6a;--anatomy-lo:#3e3e3e;--anatomy-faint:#2a2a2a;--anatomy-lit:#ffffff;
+  --anatomy-halo:#050505;--anatomy-halo-opacity:.9;--anatomy-dot:#e6e6e6;
+  --anatomy-red:#ff6b6b;--anatomy-green:#6be0a0;--anatomy-blue:#6b9bff;
+  --anatomy-weight:.6px;--anatomy-ease:cubic-bezier(.32,.72,0,1);
+  --anatomy-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --anatomy-lift:inset 0 1px 0 0 #ffffff0a,inset 0 0 0 1px #ffffff06,0 0 0 1px #00000026,0 1px 1px -.5px #00000014,0 3px 3px -1.5px #00000014,0 6px 6px -3px #00000014,0 12px 12px -6px #00000014;
+}
+.iso[data-theme="light"]{
+  --anatomy-page:#f2f2ef;--anatomy-card:#fbfbfa;--anatomy-text:#57575a;--anatomy-strong:#18181a;--anatomy-muted:#8c8c90;
+  --anatomy-paper:#fbfbfa;--anatomy-face:#ffffff;--anatomy-top:#ffffff;
+  --anatomy-shade-0:#dcdcd9;--anatomy-shade-1:#e5e5e2;--anatomy-shade-2:#ededea;--anatomy-shade-3:#f4f4f1;
+  --anatomy-lit-top:#ffffff;--anatomy-lit-shade:#eeeeeb;
+  --anatomy-hi:#26262a;--anatomy-mid:#8a8a8f;--anatomy-lo:#b4b4b8;--anatomy-faint:#d4d4d6;--anatomy-lit:#000000;
+  --anatomy-halo:#8a8a80;--anatomy-halo-opacity:.32;--anatomy-dot:#3a3a3e;
+  --anatomy-red:#e5484d;--anatomy-green:#30a46c;--anatomy-blue:#3e63dd;
+  --anatomy-lift:inset 0 1px 0 0 #ffffff,0 0 0 1px #0000000f,0 1px 1px -.5px #0000000a,0 3px 3px -1.5px #0000000a,0 6px 6px -3px #0000000a,0 12px 12px -6px #0000000a;
+}
+.iso-svg{display:block;width:100%;height:auto;overflow:visible}
+.iso-svg path,.iso-svg circle{vector-effect:non-scaling-stroke}
+.iso-fill{fill:var(--anatomy-paper);stroke:none}
+.iso-solid[data-lit]>.iso-fill{fill:var(--anatomy-face)}
+.iso-shade,.iso-top{stroke:none}
+.iso-shade[data-shade="0"]{fill:var(--anatomy-shade-0)}
+.iso-shade[data-shade="1"]{fill:var(--anatomy-shade-1)}
+.iso-shade[data-shade="2"]{fill:var(--anatomy-shade-2)}
+.iso-shade[data-shade="3"]{fill:var(--anatomy-shade-3)}
+.iso-top{fill:var(--anatomy-top)}
+.iso-solid[data-lit]>.iso-top{fill:var(--anatomy-lit-top)}
+.iso-solid[data-lit]>.iso-shade{fill:var(--anatomy-lit-shade)}
+.iso-solid[data-seamless]>.iso-shade,.iso-solid[data-seamless]>.iso-top{stroke-width:.4;stroke-linejoin:round}
+.iso-solid[data-seamless]>.iso-shade[data-shade="0"]{stroke:var(--anatomy-shade-0)}
+.iso-solid[data-seamless]>.iso-shade[data-shade="1"]{stroke:var(--anatomy-shade-1)}
+.iso-solid[data-seamless]>.iso-shade[data-shade="2"]{stroke:var(--anatomy-shade-2)}
+.iso-solid[data-seamless]>.iso-shade[data-shade="3"]{stroke:var(--anatomy-shade-3)}
+.iso-solid[data-seamless]>.iso-top{stroke:var(--anatomy-top)}
+.iso-solid[data-seamless][data-lit]>.iso-top{stroke:var(--anatomy-lit-top)}
+.iso-solid[data-seamless][data-lit]>.iso-shade{stroke:var(--anatomy-lit-shade)}
+.iso-solid[data-lit]>.iso-edge{stroke:var(--anatomy-lit)}
+.iso-halo{fill:var(--anatomy-halo);stroke:none;filter:blur(9px);opacity:var(--anatomy-halo-opacity);transform:translateY(3px)}
+.iso-line{fill:none;stroke:var(--anatomy-lo);stroke-width:var(--anatomy-weight);stroke-linecap:round;stroke-linejoin:round}
+.iso-line[data-tone="hi"]{stroke:var(--anatomy-hi)}
+.iso-line[data-tone="mid"]{stroke:var(--anatomy-mid)}
+.iso-line[data-tone="lo"]{stroke:var(--anatomy-lo)}
+.iso-line[data-tone="faint"]{stroke:var(--anatomy-faint)}
+.iso-line[data-tone="lit"]{stroke:var(--anatomy-lit)}
+.iso-line[data-tone="red"]{stroke:var(--anatomy-red)}
+.iso-line[data-tone="green"]{stroke:var(--anatomy-green)}
+.iso-line[data-tone="blue"]{stroke:var(--anatomy-blue)}
+.iso-line[data-dotted]{stroke-dasharray:.01 3.5;stroke-width:1}
+.iso-line[data-dashed]{stroke-dasharray:3 3}
+.iso-line[data-flow]{stroke-dasharray:2 6}
+.iso-wire-end{fill:var(--anatomy-paper);stroke:var(--anatomy-lo);stroke-width:var(--anatomy-weight)}
+.iso-wire[data-tone="hi"] .iso-wire-end{stroke:var(--anatomy-hi)}
+.iso-wire[data-tone="mid"] .iso-wire-end{stroke:var(--anatomy-mid)}
+.iso-wire[data-tone="faint"] .iso-wire-end{stroke:var(--anatomy-faint)}
+.iso-wire[data-tone="lit"] .iso-wire-end{stroke:var(--anatomy-lit)}
+.iso-dots circle{fill:var(--anatomy-dot);stroke:none;opacity:.32}
+.iso-dots[data-tone="hi"] circle{opacity:.85}
+.iso-dots[data-tone="mid"] circle{opacity:.45}
+.iso-dots[data-tone="lo"] circle{opacity:.22}
+.iso-dots[data-tone="faint"] circle{opacity:.12}
+.iso-face-text{fill:var(--anatomy-mid);font-family:var(--anatomy-mono);letter-spacing:.04em}
+.iso-face-text[data-tone="hi"]{fill:var(--anatomy-hi)}
+.iso-face-text[data-tone="lo"]{fill:var(--anatomy-lo)}
+.iso-face-text[data-tone="faint"]{fill:var(--anatomy-faint)}
+.tb-body{fill:var(--anatomy-shade-2);stroke:none}
+.tb-shine{fill:var(--anatomy-top);stroke:none}
+.tb-shade{fill:var(--anatomy-shade-0);stroke:none}
+.tb-ring{fill:none;stroke:var(--anatomy-lo);stroke-width:.45;stroke-linecap:butt;stroke-linejoin:round}
+.tb-ring[data-tone="mid"]{stroke:var(--anatomy-mid)}
+.tb-ring[data-tone="faint"]{stroke:var(--anatomy-faint)}
+.tb-ring[data-tone="hi"]{stroke:var(--anatomy-hi)}
+@keyframes iso-flow{to{stroke-dashoffset:-32}}
+@keyframes iso-pulse{0%,100%{opacity:.18}12%{opacity:1}40%{opacity:.18}}
+.iso-line[data-flow]{animation:iso-flow 1600ms linear infinite}
+.iso-dots circle[data-pulse]{animation:iso-pulse 1600ms steps(1,end) infinite;animation-delay:var(--pulse-at,0ms)}
+.iso-figure{margin:32px 0 36px}
+.iso-plate{position:relative;padding:52px 24px;border-radius:0;background:var(--anatomy-card);box-shadow:0 0 0 1px var(--anatomy-mid);--anatomy-paper:var(--anatomy-card)}
+.iso-plate-corners{position:absolute;inset:18px 20px;pointer-events:none}
+.iso-plate-corner{position:absolute;color:var(--anatomy-muted);font-family:var(--anatomy-mono);font-size:10.5px;line-height:1;letter-spacing:.04em;white-space:nowrap}
+.iso-plate-corner[data-corner="fig"]{top:0;left:0;color:var(--anatomy-text)}
+.iso-plate-corner[data-corner="title"]{top:0;right:0;text-transform:uppercase;letter-spacing:.1em}
+.iso-plate-corner[data-corner="hint"]{bottom:0;left:0;text-transform:uppercase;letter-spacing:.1em}
+.iso-plate-corner[data-corner="readout"]{right:0;bottom:0;color:var(--anatomy-text);font-variant-numeric:tabular-nums}
+.iso-plate .iso-svg{margin:0 auto}
+.iso-legend{display:grid;gap:8px;margin-top:12px;color:var(--anatomy-muted);font-size:13px;line-height:1.55}
+.iso-keys{display:flex;flex-wrap:wrap;gap:6px 18px}
+.iso-key{display:inline-flex;align-items:center;gap:7px}
+.iso-swatch{width:16px;height:10px;flex:none;overflow:visible}
+.iso-swatch path{fill:none;stroke:var(--anatomy-hi);stroke-width:1;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
+.iso-swatch[data-mark="raised"] path,.iso-swatch[data-mark="flat"] path{stroke:var(--anatomy-mid)}
+.iso-swatch[data-mark="lit"] path{stroke:var(--anatomy-lit)}
+.iso-swatch[data-mark="dim"] path{stroke:var(--anatomy-lo)}
+.iso-swatch[data-mark="dotted"] path{stroke-dasharray:.01 3;stroke-width:1.4}
+.iso-swatch[data-mark="dashed"] path{stroke-dasharray:3 2.5}
+.iso-swatch[data-mark="red"] path{stroke:var(--anatomy-red)}
+.iso-swatch[data-mark="green"] path{stroke:var(--anatomy-green)}
+.iso-swatch[data-mark="blue"] path{stroke:var(--anatomy-blue)}
+.iso-swatch-crease{stroke:var(--anatomy-lo)!important}
+@media (max-width:560px){.iso-plate{padding:48px 12px 70px}.iso-plate-corner[data-corner="hint"]{bottom:18px}}
+@media (prefers-reduced-motion:reduce){.iso-line[data-flow],.iso-dots circle[data-pulse]{animation:none}}
+/* Plantilla de pantalla única (skill recurs-aula). Cos genèric: barra superior, menú de panells, pestanyes del mòbil,
+   figura, controls, lectures i panells. El que és propi del recurs va al seu pagina.css, que es carrega després.
+   Variables que el recurs pot canviar a .app: --lletra (18 px a primària, 16 px a ESO), --ctrl-w (amplada de la columna de controls),
+   --fig-ratio (proporció de la figura al mòbil, p. ex. 760/430). */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:var(--anatomy-page);color:var(--anatomy-text);font:18px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.app{--gap:8px;--lletra:18px;--ctrl-w:290px;--fig-ratio:16/9;display:grid;height:100vh;height:100dvh;padding:var(--gap);gap:var(--gap);color:var(--anatomy-text);font-size:var(--lletra);line-height:1.4;
+  grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto;grid-template-areas:"top" "fig" "ctrl" "lect"}
+.app h1{font-size:22px;line-height:1.15;margin:0;color:var(--anatomy-strong)}
+.app h2{font-size:24px;margin:0;color:var(--anatomy-strong)}
+.app h3{font-size:var(--lletra);margin:0;color:var(--anatomy-strong);font-weight:600}
+.app p{margin:0}
+.app [hidden]{display:none!important}
+
+/* barra superior i menú */
+.top{grid-area:top;display:flex;align-items:center;flex-wrap:wrap;gap:4px 16px;position:relative}
+.top h1{flex:1 1 auto;min-width:0}
+.logo-fje{display:block;flex:0 0 auto;height:30px;width:auto;box-sizing:content-box}
+.iso[data-theme="dark"] .logo-fje{background:#fff;padding:3px 6px;border-radius:6px}
+.top .sub{flex:1 1 100%;font-size:var(--lletra);line-height:1.3;margin:0;order:3}
+.menu-nav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-end;flex:0 0 auto;order:2}
+.menu-nav .btn{font-size:16px;padding:6px 9px}
+.menu-toggle{display:none}
+.ind{font-weight:600;color:var(--anatomy-strong)}
+.ind:not(:empty)::before{content:"· ";font-weight:400}
+
+/* botons */
+.btn{appearance:none;font:inherit;font-size:var(--lletra);line-height:1.1;min-height:44px;min-width:44px;padding:6px 14px;color:var(--anatomy-text);background:var(--anatomy-card);border:2px solid var(--anatomy-mid);border-radius:8px;cursor:pointer;font-variant-numeric:tabular-nums}
+.btn:hover{border-color:var(--anatomy-strong);color:var(--anatomy-strong)}
+.btn[aria-pressed="true"]{background:var(--anatomy-strong);color:var(--anatomy-card);border-color:var(--anatomy-strong)}
+.btn[aria-disabled="true"]{opacity:.55;border-style:dashed}
+.btn[data-desc][data-ready="true"]{border-color:var(--anatomy-lit);color:var(--anatomy-strong);font-weight:600}
+.btn:focus-visible,.panell input:focus-visible,.panell a:focus-visible{outline:3px solid var(--anatomy-lit);outline-offset:2px}
+.btn.mini{padding:4px 10px;font-size:16px}
+.btn.gran{padding:8px 22px;font-weight:600}
+.tabs{display:none}
+
+/* figura */
+.fig{grid-area:fig;position:relative;min-height:0;min-width:0;overflow:hidden;border:1px solid var(--anatomy-lo);border-radius:10px;background:var(--anatomy-card);display:flex}
+.visor{margin:0;position:relative}
+.mainv{flex:1;min-width:0;min-height:0}
+.mainv .stage{position:absolute;inset:0;overflow:hidden}
+.mainv .stage>svg:not(.lead){position:absolute;inset:0;width:100%;height:100%}
+
+/* etiquetes: capa HTML sobre la figura (Pantalla.etiquetes) */
+.stage .tags{position:absolute;inset:0;pointer-events:none}
+.tag{position:absolute;font:600 17px/1.25 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:2px 8px;background:var(--anatomy-paper);color:var(--anatomy-strong);border:1.5px solid var(--anatomy-mid);border-radius:6px;white-space:nowrap;transform:translate(-50%,-50%)}
+.lead{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.lead line{stroke:var(--anatomy-strong);stroke-width:2}
+.lead circle{fill:var(--anatomy-strong);stroke:var(--anatomy-paper);stroke-width:1.5}
+
+/* vista ampliada (opcional): requadre dins de la figura */
+.inset{position:absolute;z-index:2;top:8px;left:8px;width:clamp(300px,34%,430px);background:var(--anatomy-card);border:2px solid var(--anatomy-mid);border-radius:10px;overflow:hidden;box-shadow:0 2px 10px #0003}
+.inset .stage{position:relative;overflow:hidden}
+.inset .stage>svg:not(.lead){display:block;width:100%;height:auto}
+.inset-bar{display:flex;align-items:center;gap:6px;padding:3px 6px 3px 10px;border-bottom:1px solid var(--anatomy-lo)}
+.inset-t{flex:1;font-size:16px;font-weight:600;color:var(--anatomy-strong);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inset.gran{width:min(64%,760px);left:50%;transform:translateX(-50%)}
+.mostra{position:absolute;z-index:2;top:8px;left:8px}
+
+/* controls */
+.ctrl{grid-area:ctrl;display:grid;gap:8px 16px;align-content:start;padding:10px 12px;border:1px solid var(--anatomy-lo);border-radius:10px;background:var(--anatomy-card);grid-template-columns:1fr;min-height:0}
+.fila{display:flex;flex-direction:column;gap:4px;min-width:0}
+.etiq{font-size:var(--lletra);font-weight:600;color:var(--anatomy-strong)}
+.grup{display:flex;flex-wrap:wrap;gap:6px}
+.grup .btn{flex:1 1 auto}
+.grup.dos{display:grid;grid-template-columns:1fr 1fr}
+.grup.dos .btn{min-width:0;padding:4px 6px;line-height:1.15}
+.fila>.btn{width:100%}
+.estat{font-size:16px;line-height:1.3}
+.quick{display:none}
+
+/* lectures */
+.lect{grid-area:lect;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+.lectura{border:1px solid var(--anatomy-lo);border-radius:10px;padding:6px 12px 8px;background:var(--anatomy-card);min-width:0}
+.lectura .gran-text{font-size:22px;font-weight:700;color:var(--anatomy-strong);line-height:1.2}
+.lectura .sub{font-size:var(--lletra);line-height:1.25}
+.barra{display:flex;gap:5px;margin-top:5px}
+.barra i{flex:1;height:14px;border:2px solid var(--anatomy-mid);border-radius:4px;background:transparent}
+.barra i.on{background:var(--anatomy-strong);border-color:var(--anatomy-strong)}
+.frase{grid-column:1/-1;padding:2px 4px;font-size:var(--lletra);line-height:1.3}
+.frase .resum{font-weight:600;color:var(--anatomy-strong)}
+
+/* panells */
+.panell{padding:0;border:2px solid var(--anatomy-mid);border-radius:12px;background:var(--anatomy-card);color:var(--anatomy-text);width:min(760px,94vw);max-height:88vh;max-height:88dvh;overflow:hidden;font:inherit;font-size:18px}
+.panell[open]{display:flex;flex-direction:column}
+.panell::backdrop{background:#000a}
+.p-cap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid var(--anatomy-lo)}
+.p-cap h2{font-size:24px;margin:0;color:var(--anatomy-strong)}
+.p-cos{padding:12px 18px 18px;overflow:auto;display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-content:start}
+.p-cos>div{display:grid;gap:12px}
+.p-cos p{margin:0}
+.p-cos h3{font-size:20px;margin:6px 0 0;color:var(--anatomy-strong)}
+.p-cos ul{margin:0;padding-left:1.3em}
+.p-cos li{margin:4px 0}
+.p-cos .peu{position:sticky;bottom:-18px;background:var(--anatomy-card);padding:8px 0 10px;margin:0;border-top:1px solid var(--anatomy-lo)}
+.p-cos a{color:var(--anatomy-strong)}
+.panell p,.panell li{font-size:18px;line-height:1.5}
+.panell .pregunta{font-size:20px;color:var(--anatomy-strong)}
+.panell fieldset.pred{border:1px solid var(--anatomy-lo);border-radius:8px;padding:8px 14px;margin:0}
+.panell fieldset.pred legend{font-size:19px;color:var(--anatomy-strong);padding:0 6px}
+.panell fieldset.pred label{display:flex;align-items:center;gap:12px;min-height:46px;cursor:pointer}
+.panell fieldset.pred input{width:24px;height:24px;flex:0 0 auto;accent-color:var(--anatomy-strong)}
+.avis{border:2px solid var(--anatomy-mid);border-radius:8px;padding:8px 12px}
+.taula{border-collapse:collapse;width:100%;font-size:18px}
+.taula caption{text-align:left;font-weight:600;padding-bottom:6px}
+.taula th,.taula td{border:1px solid var(--anatomy-lo);padding:3px 8px;text-align:right}
+.taula th[scope=row],.taula th[scope=col]:first-child{text-align:left}
+.taula-wrap{overflow-x:auto}
+.p-cos .taula{display:block;overflow-x:auto} /* una taula ampla es desplaça dins del panell en lloc d'eixamplar-lo */
+.p-cos a{overflow-wrap:anywhere}
+
+/* ---- mides ---- */
+/* ordinador i projector: controls en una columna a la dreta */
+@media (min-width:1000px) and (min-height:560px){
+  .app{grid-template-columns:minmax(0,1fr) var(--ctrl-w);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"top top" "fig ctrl" "lect ctrl"}
+  .ctrl{gap:14px}
+}
+/* tauleta: controls en dues columnes sota la figura */
+@media (max-width:999px){
+  .menu-nav{flex:1 1 100%;justify-content:flex-start}
+  .ctrl{grid-template-columns:1fr 1fr}
+  .ctrl>.estat,.ctrl>.peu-ctrl{grid-column:1/-1}
+}
+/* mòbil: menú en un botó i dues pestanyes («a»: figura, «b»: controls i lectures) */
+@media (max-width:600px){
+  .app{--gap:6px;--lletra:16px;grid-template-rows:auto auto minmax(0,1fr) auto auto auto;grid-template-areas:"top" "tabs" "fig" "quick" "ctrl" "lect"}
+  .app h1{font-size:18px;flex:1 1 0}
+  .logo-fje,.iso[data-theme="dark"] .logo-fje{width:30px;height:30px;padding:0;object-fit:cover;object-position:left;border-radius:3px}
+  .top .pregunta{display:none}
+  .top .sub:has(.ind:empty){display:none}
+  .ind::before{content:none!important}
+  .menu-toggle{display:inline-block;flex:0 0 auto}
+  .menu-nav{display:none;position:absolute;z-index:6;right:0;top:48px;flex-direction:column;align-items:stretch;background:var(--anatomy-card);border:2px solid var(--anatomy-mid);border-radius:10px;padding:8px;box-shadow:0 4px 16px #0006;min-width:230px}
+  .menu-nav.obert{display:flex}
+  .tabs{grid-area:tabs;display:flex;gap:6px}
+  .tabs .btn{flex:1}
+  .fig{flex-direction:column}
+  .mainv{flex:1 1 auto;width:100%}
+  .fig:has(.inset) .mainv{flex:0 0 auto;height:auto;aspect-ratio:var(--fig-ratio)} /* amb vista ampliada a sota, la figura principal fa la seva proporció */
+  .ctrl{padding:8px 10px;grid-template-columns:1fr;gap:6px}
+  .fila{flex-direction:row;align-items:center;flex-wrap:wrap}
+  .fila>.etiq{flex:0 0 96px}
+  .fila>.grup,.fila>.btn{flex:1}
+  .quick{grid-area:quick;display:grid;gap:4px}
+  .quick .grup{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .quick .btn{min-width:0;padding:4px 6px;line-height:1.1}
+  .lect{grid-template-columns:1fr;gap:4px}
+  .lectura{padding:3px 8px}
+  .lectura .gran-text{font-size:16px}
+  .lectura .sub{display:none}
+  .barra i{height:10px}
+  .inset{width:min(62%,300px)}
+  .app[data-tab="a"] .ctrl,.app[data-tab="a"] .frase{display:none}
+  .app[data-tab="b"] .fig,.app[data-tab="b"] .quick{display:none}
+  .app[data-tab="b"]{grid-template-rows:auto auto 0 0 auto auto;align-content:start}
+  .panell{width:96vw;max-height:92dvh}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* Colors de la figura (bloc de terreny) en els dos temes */
+.iso{--g-terra:#3a4a34;--g-crosta:#4a4338;--g-meta:#4b4560;--g-fusio:#8a2f12;--g-magma:#ff7a2a;--g-aigua:#2f6f9c;--g-capa0:#b79a5a;--g-capa1:#8f7645;--g-capa2:#cdb37a;--g-colada:#2a2622;--g-plec:#a79fd0;--g-vora:#e6e6e6;--g-regle:#e6e6e6;--g-bombolla:#ffb26b}
+.iso[data-theme="light"]{--g-terra:#b9cfa4;--g-crosta:#d8cbb4;--g-meta:#c9c2e0;--g-fusio:#e58a5c;--g-magma:#d9480f;--g-aigua:#6aa9d6;--g-capa0:#e6cf8f;--g-capa1:#c9ad66;--g-capa2:#f1e2b4;--g-colada:#5a5048;--g-plec:#6d62a8;--g-vora:#18181a;--g-regle:#18181a;--g-bombolla:#a8380a}
+.roca .terra-top{fill:var(--g-terra)}
+.roca .aigua-top,.roca .aigua-tall{fill:var(--g-aigua)}
+.roca .riu{fill:none;stroke:var(--g-aigua);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.roca .zona-crosta{fill:var(--g-crosta)}
+.roca .zona-meta{fill:var(--g-meta)}
+.roca .zona-fusio{fill:var(--g-fusio)}
+.roca .ombra-cara{fill:#000;opacity:.22}
+.roca .capa.c0{fill:var(--g-capa0)}.roca .capa.c1{fill:var(--g-capa1)}.roca .capa.c2{fill:var(--g-capa2)}
+.roca .capa{stroke:var(--g-crosta);stroke-width:.8}
+.roca .plec{fill:none;stroke:var(--g-plec);stroke-width:1.3;opacity:.75}
+.roca .magma{fill:var(--g-magma)}
+.roca .bombolla{fill:none;stroke:var(--g-bombolla);stroke-width:1.2;opacity:.7}
+.roca .colada{fill:var(--g-colada)}
+.roca .regle{fill:none;stroke:var(--g-regle);stroke-width:1.6}
+.roca .vora{fill:none;stroke:var(--g-vora);stroke-width:1.8;stroke-linejoin:round}
+.roca .vora.fina{stroke-width:1;opacity:.6}
+.roca .munt{--anatomy-shade-0:#2f3a2a;--anatomy-shade-1:#35422f;--anatomy-shade-2:#3b4a34;--anatomy-shade-3:#42523a;--anatomy-top:#55684a;--anatomy-paper:#3b4a34}
+.roca .volca{--anatomy-shade-0:#2c2824;--anatomy-shade-1:#332e29;--anatomy-shade-2:#3a342e;--anatomy-shade-3:#413a33;--anatomy-top:#544b42;--anatomy-paper:#3a342e}
+.iso[data-theme="light"] .roca .munt{--anatomy-shade-0:#8fa67b;--anatomy-shade-1:#9bb187;--anatomy-shade-2:#a6bb92;--anatomy-shade-3:#b1c59d;--anatomy-top:#cfe0bd;--anatomy-paper:#a6bb92}
+.iso[data-theme="light"] .roca .volca{--anatomy-shade-0:#8d8073;--anatomy-shade-1:#998c7e;--anatomy-shade-2:#a5988a;--anatomy-shade-3:#b0a496;--anatomy-top:#cbbfb1;--anatomy-paper:#a5988a}
+.roca .munt .iso-line,.roca .volca .iso-line{opacity:.55}
+/* Propi de «La biografia d'una roca». El cos de pantalla és a la plantilla de la skill; els colors del bloc, a figura.css. */
+.app{--lletra:16px;--ctrl-w:340px;--fig-ratio:820/396}
+.iso{--avis:#f5c542;--r-basalt:#3a3a40;--r-granit:#d9b9a8;--r-sed:#c9ad66;--r-meta:#a79fd0;--r-sediments:#d8c48c;--r-magma:#ff7a2a;--r-vora:#ffffff}
+.iso[data-theme="light"]{--avis:#9a6a00;--r-basalt:#3a3a40;--r-granit:#c99a86;--r-sed:#b8953f;--r-meta:#6d62a8;--r-sediments:#a8893a;--r-magma:#d9480f;--r-vora:#18181a}
+.nomes-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.fig{flex-direction:column}
+.marcador{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:center;padding:4px 12px;border-bottom:1px solid var(--anatomy-lo);font-size:17px;line-height:1.25}
+.marcador b{color:var(--anatomy-strong);font-size:19px}
+.m-roca{font-weight:600;color:var(--anatomy-strong)}
+.mostra-roca{display:inline-flex}
+/* mostres de roca */
+.tros .m-vora{fill:none;stroke:var(--anatomy-hi);stroke-width:2}
+.m-basalt .m-fons{fill:#33333a}.m-basalt .m-gra{fill:#b9b9c4}
+.m-granit .m-fons{fill:#e7d5cb}.m-granit .m-cristall{stroke:#5a4a44;stroke-width:.8}.m-granit .k0{fill:#f4eeea}.m-granit .k1{fill:#d8a48f}.m-granit .k2{fill:#55504e}
+.m-sedimentaria .m-fons{fill:#d9c58a}.m-sedimentaria .k0{fill:#e6cf8f}.m-sedimentaria .k1{fill:#b8953f}.m-sedimentaria .k2{fill:#f1e2b4}.m-fossil{fill:none;stroke:#4a3a12;stroke-width:1.4}
+.m-metamorfica .m-fons{fill:#cfc8e6}.m-banda{fill:none;stroke-width:2.6}.m-banda.k0{stroke:#5d5296}.m-banda.k1{stroke:#8f86c2}
+.m-sediments .m-fons{fill:var(--anatomy-shade-2)}.m-sediments .m-gra{fill:#c9ad66}.m-sediments .k1{fill:#8a7340}.m-sediments .k2{fill:#e6d8a8}
+.m-magma .m-fons{fill:#e2530f}.m-bombolla{fill:#ffb057;stroke:#ffd9a8;stroke-width:.8}
+/* la roca dins del bloc */
+.fitxa-roca .halo{fill:none;stroke:var(--r-vora);stroke-width:2;opacity:.9;animation:batec 1.8s ease-in-out infinite}
+.fitxa-roca .cos{stroke:var(--r-vora);stroke-width:2.5}
+.fitxa-roca .punt{fill:var(--r-vora)}
+.t-basalt .cos{fill:var(--r-basalt)}.t-granit .cos{fill:var(--r-granit)}.t-sedimentaria .cos{fill:var(--r-sed)}.t-metamorfica .cos{fill:var(--r-meta)}.t-sediments .cos{fill:var(--r-sediments);stroke-dasharray:3 3}.t-magma .cos{fill:var(--r-magma)}
+@keyframes batec{0%,100%{r:13px;opacity:.9}50%{r:19px;opacity:.25}}
+.rastre .pas{fill:none;stroke:var(--r-vora);stroke-width:2;stroke-dasharray:2 6;stroke-linecap:round;stroke-linejoin:round}
+.stage .tag{font-size:16px;padding:1px 7px}
+.stage .tags{transition:opacity .2s}
+/* controls */
+.ctrl{gap:6px 12px;padding:8px 10px}
+.ctrl>.etiq{margin:0}
+.processos{display:grid;gap:5px}
+.btn.proc{width:100%;text-align:left;font-size:16px;padding:5px 10px;line-height:1.15;min-height:44px}
+.btn.proc[aria-disabled="true"]{cursor:help}
+.ctrl .grup.dos .btn{font-size:16px}
+.avis-var{font-size:16px;line-height:1.3;color:var(--anatomy-strong);margin:0}
+.avis-var.on{border:2px solid var(--avis);border-radius:8px;padding:5px 9px;background:var(--anatomy-paper)}
+.estat{font-size:15px;line-height:1.25}
+.peu-ctrl{display:none}
+/* lectures */
+.lect{grid-template-columns:minmax(0,1.25fr) minmax(0,1.15fr) minmax(0,1.3fr)}
+.lectura h3{font-size:16px}
+.lectura h3+.v-t{margin-top:0!important}
+.lt h3:nth-of-type(2){margin-top:5px}
+.sub-t{font-weight:400;font-size:15px}
+.v-fila{display:grid;grid-template-columns:96px minmax(0,1fr) 5.2em;gap:6px;align-items:center;font-size:16px;margin-top:3px!important}
+.v-fila b{text-align:right;color:var(--anatomy-strong);font-variant-numeric:tabular-nums}
+.v-b{position:relative;height:12px;border:2px solid var(--anatomy-mid);border-radius:4px}
+.v-b i{display:block;height:100%;background:var(--anatomy-strong);transition:width .3s}
+.v-b.calor i{background:var(--r-magma)}
+.v-b .forn{position:absolute;top:-4px;bottom:-4px;width:0;border-left:2px dashed var(--anatomy-strong)}
+.v-t{font-size:16px;line-height:1.25}
+.bio{margin:2px 0 0;padding-left:2.1em;font-size:16px;line-height:1.25;max-height:96px;overflow:auto}
+.bio li{margin:0 0 2px}
+.frase{font-size:16px}
+#dades{margin:0;padding-left:1.4em}
+.taula.comp{font-size:16px}.taula.comp th,.taula.comp td{text-align:left;vertical-align:top}
+@media (max-width:1150px){.lect{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.lb{display:none}.ctrl>.estat{display:none}}
+@media (min-width:601px) and (max-width:999px){
+  .processos{grid-template-columns:1fr 1fr 1fr}
+  .ctrl{grid-template-columns:1fr;gap:4px}
+  .ctrl .grup.dos{grid-template-columns:repeat(4,1fr)}
+  .btn.proc{font-size:15px;padding:3px 8px}
+  .v-t{font-size:15px}
+}
+@media (max-width:600px){
+  .marcador{font-size:16px;padding:3px 8px}.marcador b{font-size:17px}
+  .mostra-roca svg{width:30px;height:30px}
+  .processos.rapid{grid-template-columns:1fr 1fr}
+  .processos.rapid .btn.proc{font-size:15px;padding:3px 6px;min-height:44px}
+  .lect{grid-template-columns:1fr}
+  .app[data-tab="a"] .lt,.app[data-tab="a"] .lb,.app[data-tab="a"] .lv h3,.app[data-tab="a"] .lv .v-t{display:none}
+  .app[data-tab="a"] .frase{display:none}
+  .app[data-tab="b"] .ctrl .processos,.app[data-tab="b"] #e-proc,.app[data-tab="b"] .ctrl>.avis-var{display:none}
+  .app[data-tab="b"] .lv{display:none}
+  .app[data-tab="b"] .lb{display:block}
+  .v-fila{grid-template-columns:88px minmax(0,1fr) 4.8em}
+  .bio{max-height:150px}
+}
+@media (prefers-reduced-motion:reduce){.fitxa-roca .halo{animation:none}}
+.ctrl .avis-var.on~.estat{display:none}
+</style></head><body class="iso" data-theme="light"><div class="app" data-tab="a">
+<header class="top">
+<img class="logo-fje" src="data:image/png;base64,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" alt="Jesuïtes Educació" width="300" height="96">
+<h1>La biografia d'una roca</h1>
+<button class="btn menu-toggle" type="button" aria-expanded="false" aria-controls="menu">Menú</button>
+<nav class="menu-nav" id="menu" aria-label="Panells"><button class="btn menu" type="button" data-open="p-pred" >La pregunta</button><button class="btn menu" type="button" data-open="p-desc" aria-disabled="true" aria-describedby="estat-desc" data-desc>Què has descobert?</button><button class="btn menu" type="button" data-open="p-repte" >Reptes</button><button class="btn menu" type="button" data-open="p-model" >Sobre aquest model</button><button class="btn menu" type="button" data-open="p-docent" >Per al docent</button></nav>
+<p class="sub"><span class="pregunta">Una roca pot acabar sent d'un altre tipus? Què li ha de passar, i on?</span> <span class="ind" data-f="ind" aria-live="polite"></span></p>
+</header>
+<div class="tabs" role="group" aria-label="Vista"><button class="btn" type="button" data-tab-btn="a" aria-pressed="true">Bloc de terreny</button><button class="btn" type="button" data-tab-btn="b" aria-pressed="false">Controls</button></div>
+<section class="fig" aria-label="Bloc de terreny"><div class="marcador" role="group" aria-label="La teva roca"><span class="mostra-roca" id="mostra" aria-hidden="true"></span><span class="m-roca">La teva roca: <b data-f="roca"></b></span><span class="m-lloc" data-f="lloc"></span></div>
+<figure class="visor mainv"><div class="stage"><svg class="iso-svg roca" viewBox="0 0 820 396" role="img" aria-label="Un bloc de terreny tallat, vist en perspectiva. A dalt, una muntanya, un riu que baixa fins al mar i un volcà. Al tall es veu l'interior: capes de sediments sota el mar, una zona de molta pressió i temperatura amb les capes plegades, i al fons la zona on la roca es fon. Una columna de magma puja fins a una cambra magmàtica i d'aquí al cràter del volcà. Un regle a l'esquerra marca la profunditat cada 5 quilòmetres. Un cercle assenyala on és la teva roca." preserveAspectRatio="xMidYMid meet"><path class="terra-top" d="M96.1 44.9L763.2 82.7L730.2 157.4L63 119.6Z"/><path class="aigua-top" d="M361.2 136.5L377.8 118.3L413.8 99.7L461.9 92.4L509.9 99.7L533.3 119.5L536.3 146.4Z"/><g class="iso-solid munt"><path class="iso-fill" d="M105.4 67.1L106.7 61.3L110.5 55.7L116.7 50.3L125.2 45.3L135.7 40.9L148 37.1L161.9 34.1L176.9 31.9L192.7 30.5L208.8 30.1L225 30.5L240.8 31.9L255.8 34.1L269.6 37.1L282 40.9L292.5 45.3L301 50.3L307.2 55.7L311 61.3L312.3 67.1L312.3 75L311 80.8L307.2 86.5L301 91.8L292.5 96.8L282 101.2L269.6 105L255.8 108L240.8 110.3L225 111.6L208.8 112.1L192.7 111.6L176.9 110.3L161.9 108L148 105L135.7 101.2L125.2 96.8L116.7 91.8L110.5 86.5L106.7 80.8L105.4 75Z"/><path class="iso-shade" data-shade="0" d="M311 80.8L307.2 86.5L307.2 78.6L311 72.9ZM307.2 86.5L301 91.8L301 83.9L307.2 78.6ZM301 91.8L292.5 96.8L292.5 88.9L301 83.9ZM292.5 96.8L282 101.2L282 93.3L292.5 88.9ZM282 101.2L269.6 105L269.6 97.1L282 93.3ZM269.6 105L255.8 108L255.8 100.1L269.6 97.1ZM312.3 75L311 80.8L311 72.9L312.3 67.1Z"/><path class="iso-shade" data-shade="1" d="M255.8 108L240.8 110.3L240.8 102.4L255.8 100.1ZM240.8 110.3L225 111.6L225 103.7L240.8 102.4ZM225 111.6L208.8 112.1L208.8 104.2L225 103.7Z"/><path class="iso-shade" data-shade="2" d="M208.8 112.1L192.7 111.6L192.7 103.7L208.8 104.2ZM192.7 111.6L176.9 110.3L176.9 102.4L192.7 103.7ZM176.9 110.3L161.9 108L161.9 100.1L176.9 102.4Z"/><path class="iso-shade" data-shade="3" d="M161.9 108L148 105L148 97.1L161.9 100.1ZM148 105L135.7 101.2L135.7 93.3L148 97.1ZM135.7 101.2L125.2 96.8L125.2 88.9L135.7 93.3ZM125.2 96.8L116.7 91.8L116.7 83.9L125.2 88.9ZM116.7 91.8L110.5 86.5L110.5 78.6L116.7 83.9ZM110.5 86.5L106.7 80.8L106.7 72.9L110.5 78.6ZM106.7 80.8L105.4 75L105.4 67.1L106.7 72.9Z"/><path class="iso-top" d="M311 72.9L307.2 78.6L301 83.9L292.5 88.9L282 93.3L269.6 97.1L255.8 100.1L240.8 102.4L225 103.7L208.8 104.2L192.7 103.7L176.9 102.4L161.9 100.1L148 97.1L135.7 93.3L125.2 88.9L116.7 83.9L110.5 78.6L106.7 72.9L105.4 67.1L106.7 61.3L110.5 55.7L116.7 50.3L125.2 45.3L135.7 40.9L148 37.1L161.9 34.1L176.9 31.9L192.7 30.5L208.8 30.1L225 30.5L240.8 31.9L255.8 34.1L269.6 37.1L282 40.9L292.5 45.3L301 50.3L307.2 55.7L311 61.3L312.3 67.1Z"/><path class="iso-line iso-crease" data-tone="faint" d="M312.3 67.1L311 72.9L307.2 78.6L301 83.9L292.5 88.9L282 93.3L269.6 97.1L255.8 100.1L240.8 102.4L225 103.7L208.8 104.2L192.7 103.7L176.9 102.4L161.9 100.1L148 97.1L135.7 93.3L125.2 88.9L116.7 83.9L110.5 78.6L106.7 72.9L105.4 67.1"/><path class="iso-line iso-edge" data-tone="mid" d="M105.4 67.1L106.7 61.3L110.5 55.7L116.7 50.3L125.2 45.3L135.7 40.9L148 37.1L161.9 34.1L176.9 31.9L192.7 30.5L208.8 30.1L225 30.5L240.8 31.9L255.8 34.1L269.6 37.1L282 40.9L292.5 45.3L301 50.3L307.2 55.7L311 61.3L312.3 67.1M312.3 75L311 80.8L307.2 86.5L301 91.8L292.5 96.8L282 101.2L269.6 105L255.8 108L240.8 110.3L225 111.6L208.8 112.1L192.7 111.6L176.9 110.3L161.9 108L148 105L135.7 101.2L125.2 96.8L116.7 91.8L110.5 86.5L106.7 80.8L105.4 75M105.4 67.1L105.4 75M312.3 67.1L312.3 75"/></g><g class="iso-solid munt"><path class="iso-fill" d="M116.7 59.8L117.8 54.8L121.1 50L126.4 45.4L133.7 41.1L142.7 37.3L153.3 34.1L165.1 31.5L178 29.6L191.5 28.4L205.4 28L219.2 28.4L232.8 29.6L245.6 31.5L257.5 34.1L268.1 37.3L277.1 41.1L284.4 45.4L289.7 50L292.9 54.8L294 59.8L294 67.7L292.9 72.7L289.7 77.5L284.4 82.1L277.1 86.4L268.1 90.2L257.5 93.4L245.6 96L232.8 97.9L219.2 99.1L205.4 99.5L191.5 99.1L178 97.9L165.1 96L153.3 93.4L142.7 90.2L133.7 86.4L126.4 82.1L121.1 77.5L117.8 72.7L116.7 67.7Z"/><path class="iso-shade" data-shade="0" d="M292.9 72.7L289.7 77.5L289.7 69.6L292.9 64.8ZM289.7 77.5L284.4 82.1L284.4 74.2L289.7 69.6ZM284.4 82.1L277.1 86.4L277.1 78.5L284.4 74.2ZM277.1 86.4L268.1 90.2L268.1 82.3L277.1 78.5ZM268.1 90.2L257.5 93.4L257.5 85.5L268.1 82.3ZM257.5 93.4L245.6 96L245.6 88.1L257.5 85.5ZM294 67.7L292.9 72.7L292.9 64.8L294 59.8Z"/><path class="iso-shade" data-shade="1" d="M245.6 96L232.8 97.9L232.8 90L245.6 88.1ZM232.8 97.9L219.2 99.1L219.2 91.2L232.8 90ZM219.2 99.1L205.4 99.5L205.4 91.6L219.2 91.2Z"/><path class="iso-shade" data-shade="2" d="M205.4 99.5L191.5 99.1L191.5 91.2L205.4 91.6ZM191.5 99.1L178 97.9L178 90L191.5 91.2ZM178 97.9L165.1 96L165.1 88.1L178 90Z"/><path class="iso-shade" data-shade="3" d="M165.1 96L153.3 93.4L153.3 85.5L165.1 88.1ZM153.3 93.4L142.7 90.2L142.7 82.3L153.3 85.5ZM142.7 90.2L133.7 86.4L133.7 78.5L142.7 82.3ZM133.7 86.4L126.4 82.1L126.4 74.2L133.7 78.5ZM126.4 82.1L121.1 77.5L121.1 69.6L126.4 74.2ZM121.1 77.5L117.8 72.7L117.8 64.8L121.1 69.6ZM117.8 72.7L116.7 67.7L116.7 59.8L117.8 64.8Z"/><path class="iso-top" d="M292.9 64.8L289.7 69.6L284.4 74.2L277.1 78.5L268.1 82.3L257.5 85.5L245.6 88.1L232.8 90L219.2 91.2L205.4 91.6L191.5 91.2L178 90L165.1 88.1L153.3 85.5L142.7 82.3L133.7 78.5L126.4 74.2L121.1 69.6L117.8 64.8L116.7 59.8L117.8 54.8L121.1 50L126.4 45.4L133.7 41.1L142.7 37.3L153.3 34.1L165.1 31.5L178 29.6L191.5 28.4L205.4 28L219.2 28.4L232.8 29.6L245.6 31.5L257.5 34.1L268.1 37.3L277.1 41.1L284.4 45.4L289.7 50L292.9 54.8L294 59.8Z"/><path class="iso-line iso-crease" data-tone="faint" d="M294 59.8L292.9 64.8L289.7 69.6L284.4 74.2L277.1 78.5L268.1 82.3L257.5 85.5L245.6 88.1L232.8 90L219.2 91.2L205.4 91.6L191.5 91.2L178 90L165.1 88.1L153.3 85.5L142.7 82.3L133.7 78.5L126.4 74.2L121.1 69.6L117.8 64.8L116.7 59.8"/><path class="iso-line iso-edge" data-tone="mid" d="M116.7 59.8L117.8 54.8L121.1 50L126.4 45.4L133.7 41.1L142.7 37.3L153.3 34.1L165.1 31.5L178 29.6L191.5 28.4L205.4 28L219.2 28.4L232.8 29.6L245.6 31.5L257.5 34.1L268.1 37.3L277.1 41.1L284.4 45.4L289.7 50L292.9 54.8L294 59.8M294 67.7L292.9 72.7L289.7 77.5L284.4 82.1L277.1 86.4L268.1 90.2L257.5 93.4L245.6 96L232.8 97.9L219.2 99.1L205.4 99.5L191.5 99.1L178 97.9L165.1 96L153.3 93.4L142.7 90.2L133.7 86.4L126.4 82.1L121.1 77.5L117.8 72.7L116.7 67.7M116.7 59.8L116.7 67.7M294 59.8L294 67.7"/></g><g class="iso-solid munt"><path class="iso-fill" d="M128 52.5L129 48.4L131.7 44.3L136.1 40.5L142.2 36.9L149.7 33.8L158.5 31.1L168.4 28.9L179.1 27.3L190.4 26.3L201.9 26L213.5 26.3L224.7 27.3L235.5 28.9L245.3 31.1L254.2 33.8L261.7 36.9L267.7 40.5L272.2 44.3L274.9 48.4L275.8 52.5L275.8 60.4L274.9 64.5L272.2 68.6L267.7 72.4L261.7 75.9L254.2 79.1L245.3 81.8L235.5 84L224.7 85.6L213.5 86.5L201.9 86.9L190.4 86.5L179.1 85.6L168.4 84L158.5 81.8L149.7 79.1L142.2 75.9L136.1 72.4L131.7 68.6L129 64.5L128 60.4Z"/><path class="iso-shade" data-shade="0" d="M274.9 64.5L272.2 68.6L272.2 60.7L274.9 56.6ZM272.2 68.6L267.7 72.4L267.7 64.5L272.2 60.7ZM267.7 72.4L261.7 75.9L261.7 68.1L267.7 64.5ZM261.7 75.9L254.2 79.1L254.2 71.2L261.7 68.1ZM254.2 79.1L245.3 81.8L245.3 73.9L254.2 71.2ZM245.3 81.8L235.5 84L235.5 76.1L245.3 73.9ZM275.8 60.4L274.9 64.5L274.9 56.6L275.8 52.5Z"/><path class="iso-shade" data-shade="1" d="M235.5 84L224.7 85.6L224.7 77.7L235.5 76.1ZM224.7 85.6L213.5 86.5L213.5 78.6L224.7 77.7ZM213.5 86.5L201.9 86.9L201.9 79L213.5 78.6Z"/><path class="iso-shade" data-shade="2" d="M201.9 86.9L190.4 86.5L190.4 78.6L201.9 79ZM190.4 86.5L179.1 85.6L179.1 77.7L190.4 78.6ZM179.1 85.6L168.4 84L168.4 76.1L179.1 77.7Z"/><path class="iso-shade" data-shade="3" d="M168.4 84L158.5 81.8L158.5 73.9L168.4 76.1ZM158.5 81.8L149.7 79.1L149.7 71.2L158.5 73.9ZM149.7 79.1L142.2 75.9L142.2 68.1L149.7 71.2ZM142.2 75.9L136.1 72.4L136.1 64.5L142.2 68.1ZM136.1 72.4L131.7 68.6L131.7 60.7L136.1 64.5ZM131.7 68.6L129 64.5L129 56.6L131.7 60.7ZM129 64.5L128 60.4L128 52.5L129 56.6Z"/><path class="iso-top" d="M274.9 56.6L272.2 60.7L267.7 64.5L261.7 68.1L254.2 71.2L245.3 73.9L235.5 76.1L224.7 77.7L213.5 78.6L201.9 79L190.4 78.6L179.1 77.7L168.4 76.1L158.5 73.9L149.7 71.2L142.2 68.1L136.1 64.5L131.7 60.7L129 56.6L128 52.5L129 48.4L131.7 44.3L136.1 40.5L142.2 36.9L149.7 33.8L158.5 31.1L168.4 28.9L179.1 27.3L190.4 26.3L201.9 26L213.5 26.3L224.7 27.3L235.5 28.9L245.3 31.1L254.2 33.8L261.7 36.9L267.7 40.5L272.2 44.3L274.9 48.4L275.8 52.5Z"/><path class="iso-line iso-crease" data-tone="faint" d="M275.8 52.5L274.9 56.6L272.2 60.7L267.7 64.5L261.7 68.1L254.2 71.2L245.3 73.9L235.5 76.1L224.7 77.7L213.5 78.6L201.9 79L190.4 78.6L179.1 77.7L168.4 76.1L158.5 73.9L149.7 71.2L142.2 68.1L136.1 64.5L131.7 60.7L129 56.6L128 52.5"/><path class="iso-line iso-edge" data-tone="mid" d="M128 52.5L129 48.4L131.7 44.3L136.1 40.5L142.2 36.9L149.7 33.8L158.5 31.1L168.4 28.9L179.1 27.3L190.4 26.3L201.9 26L213.5 26.3L224.7 27.3L235.5 28.9L245.3 31.1L254.2 33.8L261.7 36.9L267.7 40.5L272.2 44.3L274.9 48.4L275.8 52.5M275.8 60.4L274.9 64.5L272.2 68.6L267.7 72.4L261.7 75.9L254.2 79.1L245.3 81.8L235.5 84L224.7 85.6L213.5 86.5L201.9 86.9L190.4 86.5L179.1 85.6L168.4 84L158.5 81.8L149.7 79.1L142.2 75.9L136.1 72.4L131.7 68.6L129 64.5L128 60.4M128 52.5L128 60.4M275.8 52.5L275.8 60.4"/></g><g class="iso-solid munt"><path class="iso-fill" d="M138.3 45.2L139 41.8L141.2 38.5L144.9 35.4L149.8 32.5L155.9 29.9L163.1 27.7L171.2 26L179.9 24.7L189.1 23.9L198.5 23.6L207.9 23.9L217.1 24.7L225.8 26L233.8 27.7L241 29.9L247.1 32.5L252.1 35.4L255.7 38.5L257.9 41.8L258.6 45.2L258.6 53.1L257.9 56.4L255.7 59.7L252.1 62.8L247.1 65.7L241 68.3L233.8 70.5L225.8 72.3L217.1 73.6L207.9 74.4L198.5 74.6L189.1 74.4L179.9 73.6L171.2 72.3L163.1 70.5L155.9 68.3L149.8 65.7L144.9 62.8L141.2 59.7L139 56.4L138.3 53.1Z"/><path class="iso-shade" data-shade="0" d="M257.9 56.4L255.7 59.7L255.7 51.8L257.9 48.6ZM255.7 59.7L252.1 62.8L252.1 55L255.7 51.8ZM252.1 62.8L247.1 65.7L247.1 57.9L252.1 55ZM247.1 65.7L241 68.3L241 60.4L247.1 57.9ZM241 68.3L233.8 70.5L233.8 62.6L241 60.4ZM233.8 70.5L225.8 72.3L225.8 64.4L233.8 62.6ZM258.6 53.1L257.9 56.4L257.9 48.6L258.6 45.2Z"/><path class="iso-shade" data-shade="1" d="M225.8 72.3L217.1 73.6L217.1 65.7L225.8 64.4ZM217.1 73.6L207.9 74.4L207.9 66.5L217.1 65.7ZM207.9 74.4L198.5 74.6L198.5 66.7L207.9 66.5Z"/><path class="iso-shade" data-shade="2" d="M198.5 74.6L189.1 74.4L189.1 66.5L198.5 66.7ZM189.1 74.4L179.9 73.6L179.9 65.7L189.1 66.5ZM179.9 73.6L171.2 72.3L171.2 64.4L179.9 65.7Z"/><path class="iso-shade" data-shade="3" d="M171.2 72.3L163.1 70.5L163.1 62.6L171.2 64.4ZM163.1 70.5L155.9 68.3L155.9 60.4L163.1 62.6ZM155.9 68.3L149.8 65.7L149.8 57.9L155.9 60.4ZM149.8 65.7L144.9 62.8L144.9 55L149.8 57.9ZM144.9 62.8L141.2 59.7L141.2 51.8L144.9 55ZM141.2 59.7L139 56.4L139 48.6L141.2 51.8ZM139 56.4L138.3 53.1L138.3 45.2L139 48.6Z"/><path class="iso-top" d="M257.9 48.6L255.7 51.8L252.1 55L247.1 57.9L241 60.4L233.8 62.6L225.8 64.4L217.1 65.7L207.9 66.5L198.5 66.7L189.1 66.5L179.9 65.7L171.2 64.4L163.1 62.6L155.9 60.4L149.8 57.9L144.9 55L141.2 51.8L139 48.6L138.3 45.2L139 41.8L141.2 38.5L144.9 35.4L149.8 32.5L155.9 29.9L163.1 27.7L171.2 26L179.9 24.7L189.1 23.9L198.5 23.6L207.9 23.9L217.1 24.7L225.8 26L233.8 27.7L241 29.9L247.1 32.5L252.1 35.4L255.7 38.5L257.9 41.8L258.6 45.2Z"/><path class="iso-line iso-crease" data-tone="faint" d="M258.6 45.2L257.9 48.6L255.7 51.8L252.1 55L247.1 57.9L241 60.4L233.8 62.6L225.8 64.4L217.1 65.7L207.9 66.5L198.5 66.7L189.1 66.5L179.9 65.7L171.2 64.4L163.1 62.6L155.9 60.4L149.8 57.9L144.9 55L141.2 51.8L139 48.6L138.3 45.2"/><path class="iso-line iso-edge" data-tone="mid" d="M138.3 45.2L139 41.8L141.2 38.5L144.9 35.4L149.8 32.5L155.9 29.9L163.1 27.7L171.2 26L179.9 24.7L189.1 23.9L198.5 23.6L207.9 23.9L217.1 24.7L225.8 26L233.8 27.7L241 29.9L247.1 32.5L252.1 35.4L255.7 38.5L257.9 41.8L258.6 45.2M258.6 53.1L257.9 56.4L255.7 59.7L252.1 62.8L247.1 65.7L241 68.3L233.8 70.5L225.8 72.3L217.1 73.6L207.9 74.4L198.5 74.6L189.1 74.4L179.9 73.6L171.2 72.3L163.1 70.5L155.9 68.3L149.8 65.7L144.9 62.8L141.2 59.7L139 56.4L138.3 53.1M138.3 45.2L138.3 53.1M258.6 45.2L258.6 53.1"/></g><g class="iso-solid munt"><path class="iso-fill" d="M148.6 37.9L149.1 35.3L150.8 32.7L153.6 30.3L157.4 28.1L162.2 26.1L167.7 24.4L173.9 23L180.7 22L187.7 21.4L195 21.2L202.3 21.4L209.4 22L216.1 23L222.3 24.4L227.8 26.1L232.6 28.1L236.4 30.3L239.2 32.7L240.9 35.3L241.4 37.9L241.4 45.7L240.9 48.4L239.2 50.9L236.4 53.3L232.6 55.5L227.8 57.5L222.3 59.2L216.1 60.6L209.4 61.6L202.3 62.2L195 62.4L187.7 62.2L180.7 61.6L173.9 60.6L167.7 59.2L162.2 57.5L157.4 55.5L153.6 53.3L150.8 50.9L149.1 48.4L148.6 45.7Z"/><path class="iso-shade" data-shade="0" d="M240.9 48.4L239.2 50.9L239.2 43L240.9 40.5ZM239.2 50.9L236.4 53.3L236.4 45.4L239.2 43ZM236.4 53.3L232.6 55.5L232.6 47.6L236.4 45.4ZM232.6 55.5L227.8 57.5L227.8 49.6L232.6 47.6ZM227.8 57.5L222.3 59.2L222.3 51.3L227.8 49.6ZM222.3 59.2L216.1 60.6L216.1 52.7L222.3 51.3ZM241.4 45.7L240.9 48.4L240.9 40.5L241.4 37.9Z"/><path class="iso-shade" data-shade="1" d="M216.1 60.6L209.4 61.6L209.4 53.7L216.1 52.7ZM209.4 61.6L202.3 62.2L202.3 54.3L209.4 53.7ZM202.3 62.2L195 62.4L195 54.5L202.3 54.3Z"/><path class="iso-shade" data-shade="2" d="M195 62.4L187.7 62.2L187.7 54.3L195 54.5ZM187.7 62.2L180.7 61.6L180.7 53.7L187.7 54.3ZM180.7 61.6L173.9 60.6L173.9 52.7L180.7 53.7Z"/><path class="iso-shade" data-shade="3" d="M173.9 60.6L167.7 59.2L167.7 51.3L173.9 52.7ZM167.7 59.2L162.2 57.5L162.2 49.6L167.7 51.3ZM162.2 57.5L157.4 55.5L157.4 47.6L162.2 49.6ZM157.4 55.5L153.6 53.3L153.6 45.4L157.4 47.6ZM153.6 53.3L150.8 50.9L150.8 43L153.6 45.4ZM150.8 50.9L149.1 48.4L149.1 40.5L150.8 43ZM149.1 48.4L148.6 45.7L148.6 37.9L149.1 40.5Z"/><path class="iso-top" d="M240.9 40.5L239.2 43L236.4 45.4L232.6 47.6L227.8 49.6L222.3 51.3L216.1 52.7L209.4 53.7L202.3 54.3L195 54.5L187.7 54.3L180.7 53.7L173.9 52.7L167.7 51.3L162.2 49.6L157.4 47.6L153.6 45.4L150.8 43L149.1 40.5L148.6 37.9L149.1 35.3L150.8 32.7L153.6 30.3L157.4 28.1L162.2 26.1L167.7 24.4L173.9 23L180.7 22L187.7 21.4L195 21.2L202.3 21.4L209.4 22L216.1 23L222.3 24.4L227.8 26.1L232.6 28.1L236.4 30.3L239.2 32.7L240.9 35.3L241.4 37.9Z"/><path class="iso-line iso-crease" data-tone="faint" d="M241.4 37.9L240.9 40.5L239.2 43L236.4 45.4L232.6 47.6L227.8 49.6L222.3 51.3L216.1 52.7L209.4 53.7L202.3 54.3L195 54.5L187.7 54.3L180.7 53.7L173.9 52.7L167.7 51.3L162.2 49.6L157.4 47.6L153.6 45.4L150.8 43L149.1 40.5L148.6 37.9"/><path class="iso-line iso-edge" data-tone="mid" d="M148.6 37.9L149.1 35.3L150.8 32.7L153.6 30.3L157.4 28.1L162.2 26.1L167.7 24.4L173.9 23L180.7 22L187.7 21.4L195 21.2L202.3 21.4L209.4 22L216.1 23L222.3 24.4L227.8 26.1L232.6 28.1L236.4 30.3L239.2 32.7L240.9 35.3L241.4 37.9M241.4 45.7L240.9 48.4L239.2 50.9L236.4 53.3L232.6 55.5L227.8 57.5L222.3 59.2L216.1 60.6L209.4 61.6L202.3 62.2L195 62.4L187.7 62.2L180.7 61.6L173.9 60.6L167.7 59.2L162.2 57.5L157.4 55.5L153.6 53.3L150.8 50.9L149.1 48.4L148.6 45.7M148.6 37.9L148.6 45.7M241.4 37.9L241.4 45.7"/></g><g class="iso-solid munt"><path class="iso-fill" d="M157.8 30.6L158.2 28.7L159.4 26.8L161.5 25.1L164.2 23.4L167.7 22L171.7 20.8L176.2 19.8L181.1 19L186.3 18.6L191.5 18.5L196.8 18.6L202 19L206.9 19.8L211.4 20.8L215.4 22L218.9 23.4L221.6 25.1L223.7 26.8L224.9 28.7L225.3 30.6L225.3 38.4L224.9 40.3L223.7 42.2L221.6 43.9L218.9 45.6L215.4 47L211.4 48.2L206.9 49.2L202 49.9L196.8 50.4L191.5 50.5L186.3 50.4L181.1 49.9L176.2 49.2L171.7 48.2L167.7 47L164.2 45.6L161.5 43.9L159.4 42.2L158.2 40.3L157.8 38.4Z"/><path class="iso-shade" data-shade="0" d="M224.9 40.3L223.7 42.2L223.7 34.3L224.9 32.4ZM223.7 42.2L221.6 43.9L221.6 36L223.7 34.3ZM221.6 43.9L218.9 45.6L218.9 37.7L221.6 36ZM218.9 45.6L215.4 47L215.4 39.1L218.9 37.7ZM215.4 47L211.4 48.2L211.4 40.3L215.4 39.1ZM211.4 48.2L206.9 49.2L206.9 41.3L211.4 40.3ZM225.3 38.4L224.9 40.3L224.9 32.4L225.3 30.6Z"/><path class="iso-shade" data-shade="1" d="M206.9 49.2L202 49.9L202 42.1L206.9 41.3ZM202 49.9L196.8 50.4L196.8 42.5L202 42.1ZM196.8 50.4L191.5 50.5L191.5 42.7L196.8 42.5Z"/><path class="iso-shade" data-shade="2" d="M191.5 50.5L186.3 50.4L186.3 42.5L191.5 42.7ZM186.3 50.4L181.1 49.9L181.1 42.1L186.3 42.5ZM181.1 49.9L176.2 49.2L176.2 41.3L181.1 42.1Z"/><path class="iso-shade" data-shade="3" d="M176.2 49.2L171.7 48.2L171.7 40.3L176.2 41.3ZM171.7 48.2L167.7 47L167.7 39.1L171.7 40.3ZM167.7 47L164.2 45.6L164.2 37.7L167.7 39.1ZM164.2 45.6L161.5 43.9L161.5 36L164.2 37.7ZM161.5 43.9L159.4 42.2L159.4 34.3L161.5 36ZM159.4 42.2L158.2 40.3L158.2 32.4L159.4 34.3ZM158.2 40.3L157.8 38.4L157.8 30.6L158.2 32.4Z"/><path class="iso-top" d="M224.9 32.4L223.7 34.3L221.6 36L218.9 37.7L215.4 39.1L211.4 40.3L206.9 41.3L202 42.1L196.8 42.5L191.5 42.7L186.3 42.5L181.1 42.1L176.2 41.3L171.7 40.3L167.7 39.1L164.2 37.7L161.5 36L159.4 34.3L158.2 32.4L157.8 30.6L158.2 28.7L159.4 26.8L161.5 25.1L164.2 23.4L167.7 22L171.7 20.8L176.2 19.8L181.1 19L186.3 18.6L191.5 18.5L196.8 18.6L202 19L206.9 19.8L211.4 20.8L215.4 22L218.9 23.4L221.6 25.1L223.7 26.8L224.9 28.7L225.3 30.6Z"/><path class="iso-line iso-crease" data-tone="faint" d="M225.3 30.6L224.9 32.4L223.7 34.3L221.6 36L218.9 37.7L215.4 39.1L211.4 40.3L206.9 41.3L202 42.1L196.8 42.5L191.5 42.7L186.3 42.5L181.1 42.1L176.2 41.3L171.7 40.3L167.7 39.1L164.2 37.7L161.5 36L159.4 34.3L158.2 32.4L157.8 30.6"/><path class="iso-line iso-edge" data-tone="mid" d="M157.8 30.6L158.2 28.7L159.4 26.8L161.5 25.1L164.2 23.4L167.7 22L171.7 20.8L176.2 19.8L181.1 19L186.3 18.6L191.5 18.5L196.8 18.6L202 19L206.9 19.8L211.4 20.8L215.4 22L218.9 23.4L221.6 25.1L223.7 26.8L224.9 28.7L225.3 30.6M225.3 38.4L224.9 40.3L223.7 42.2L221.6 43.9L218.9 45.6L215.4 47L211.4 48.2L206.9 49.2L202 49.9L196.8 50.4L191.5 50.5L186.3 50.4L181.1 49.9L176.2 49.2L171.7 48.2L167.7 47L164.2 45.6L161.5 43.9L159.4 42.2L158.2 40.3L157.8 38.4M157.8 30.6L157.8 38.4M225.3 30.6L225.3 38.4"/></g><g class="iso-solid munt"><path class="iso-fill" d="M165.9 23.2L166.2 22L167 20.8L168.3 19.6L170.2 18.6L172.4 17.6L175.1 16.8L178 16.2L181.2 15.7L184.6 15.4L188.1 15.3L191.6 15.4L194.9 15.7L198.2 16.2L201.1 16.8L203.8 17.6L206 18.6L207.8 19.6L209.2 20.8L210 22L210.3 23.2L210.3 31.1L210 32.4L209.2 33.6L207.8 34.7L206 35.8L203.8 36.7L201.1 37.5L198.2 38.2L194.9 38.7L191.6 39L188.1 39.1L184.6 39L181.2 38.7L178 38.2L175.1 37.5L172.4 36.7L170.2 35.8L168.3 34.7L167 33.6L166.2 32.4L165.9 31.1Z"/><path class="iso-shade" data-shade="0" d="M210 32.4L209.2 33.6L209.2 25.7L210 24.5ZM209.2 33.6L207.8 34.7L207.8 26.8L209.2 25.7ZM207.8 34.7L206 35.8L206 27.9L207.8 26.8ZM206 35.8L203.8 36.7L203.8 28.9L206 27.9ZM203.8 36.7L201.1 37.5L201.1 29.7L203.8 28.9ZM201.1 37.5L198.2 38.2L198.2 30.3L201.1 29.7ZM210.3 31.1L210 32.4L210 24.5L210.3 23.2Z"/><path class="iso-shade" data-shade="1" d="M198.2 38.2L194.9 38.7L194.9 30.8L198.2 30.3ZM194.9 38.7L191.6 39L191.6 31.1L194.9 30.8ZM191.6 39L188.1 39.1L188.1 31.2L191.6 31.1Z"/><path class="iso-shade" data-shade="2" d="M188.1 39.1L184.6 39L184.6 31.1L188.1 31.2ZM184.6 39L181.2 38.7L181.2 30.8L184.6 31.1ZM181.2 38.7L178 38.2L178 30.3L181.2 30.8Z"/><path class="iso-shade" data-shade="3" d="M178 38.2L175.1 37.5L175.1 29.7L178 30.3ZM175.1 37.5L172.4 36.7L172.4 28.9L175.1 29.7ZM172.4 36.7L170.2 35.8L170.2 27.9L172.4 28.9ZM170.2 35.8L168.3 34.7L168.3 26.8L170.2 27.9ZM168.3 34.7L167 33.6L167 25.7L168.3 26.8ZM167 33.6L166.2 32.4L166.2 24.5L167 25.7ZM166.2 32.4L165.9 31.1L165.9 23.2L166.2 24.5Z"/><path class="iso-top" d="M210 24.5L209.2 25.7L207.8 26.8L206 27.9L203.8 28.9L201.1 29.7L198.2 30.3L194.9 30.8L191.6 31.1L188.1 31.2L184.6 31.1L181.2 30.8L178 30.3L175.1 29.7L172.4 28.9L170.2 27.9L168.3 26.8L167 25.7L166.2 24.5L165.9 23.2L166.2 22L167 20.8L168.3 19.6L170.2 18.6L172.4 17.6L175.1 16.8L178 16.2L181.2 15.7L184.6 15.4L188.1 15.3L191.6 15.4L194.9 15.7L198.2 16.2L201.1 16.8L203.8 17.6L206 18.6L207.8 19.6L209.2 20.8L210 22L210.3 23.2Z"/><path class="iso-line iso-crease" data-tone="faint" d="M210.3 23.2L210 24.5L209.2 25.7L207.8 26.8L206 27.9L203.8 28.9L201.1 29.7L198.2 30.3L194.9 30.8L191.6 31.1L188.1 31.2L184.6 31.1L181.2 30.8L178 30.3L175.1 29.7L172.4 28.9L170.2 27.9L168.3 26.8L167 25.7L166.2 24.5L165.9 23.2"/><path class="iso-line iso-edge" data-tone="mid" d="M165.9 23.2L166.2 22L167 20.8L168.3 19.6L170.2 18.6L172.4 17.6L175.1 16.8L178 16.2L181.2 15.7L184.6 15.4L188.1 15.3L191.6 15.4L194.9 15.7L198.2 16.2L201.1 16.8L203.8 17.6L206 18.6L207.8 19.6L209.2 20.8L210 22L210.3 23.2M210.3 31.1L210 32.4L209.2 33.6L207.8 34.7L206 35.8L203.8 36.7L201.1 37.5L198.2 38.2L194.9 38.7L191.6 39L188.1 39.1L184.6 39L181.2 38.7L178 38.2L175.1 37.5L172.4 36.7L170.2 35.8L168.3 34.7L167 33.6L166.2 32.4L165.9 31.1M165.9 23.2L165.9 31.1M210.3 23.2L210.3 31.1"/></g><g class="iso-solid munt"><path class="iso-fill" d="M173 15.9L173.2 15.3L173.6 14.6L174.3 14L175.2 13.5L176.4 13L177.8 12.6L179.4 12.2L181 12L182.8 11.8L184.6 11.8L186.4 11.8L188.2 12L189.9 12.2L191.5 12.6L192.8 13L194 13.5L195 14L195.7 14.6L196.1 15.3L196.2 15.9L196.2 23.8L196.1 24.5L195.7 25.1L195 25.7L194 26.3L192.8 26.8L191.5 27.2L189.9 27.5L188.2 27.8L186.4 27.9L184.6 28L182.8 27.9L181 27.8L179.4 27.5L177.8 27.2L176.4 26.8L175.2 26.3L174.3 25.7L173.6 25.1L173.2 24.5L173 23.8Z"/><path class="iso-shade" data-shade="0" d="M196.1 24.5L195.7 25.1L195.7 17.2L196.1 16.6ZM195.7 25.1L195 25.7L195 17.8L195.7 17.2ZM195 25.7L194 26.3L194 18.4L195 17.8ZM194 26.3L192.8 26.8L192.8 18.9L194 18.4ZM192.8 26.8L191.5 27.2L191.5 19.3L192.8 18.9ZM191.5 27.2L189.9 27.5L189.9 19.6L191.5 19.3ZM196.2 23.8L196.1 24.5L196.1 16.6L196.2 15.9Z"/><path class="iso-shade" data-shade="1" d="M189.9 27.5L188.2 27.8L188.2 19.9L189.9 19.6ZM188.2 27.8L186.4 27.9L186.4 20L188.2 19.9ZM186.4 27.9L184.6 28L184.6 20.1L186.4 20Z"/><path class="iso-shade" data-shade="2" d="M184.6 28L182.8 27.9L182.8 20L184.6 20.1ZM182.8 27.9L181 27.8L181 19.9L182.8 20ZM181 27.8L179.4 27.5L179.4 19.6L181 19.9Z"/><path class="iso-shade" data-shade="3" d="M179.4 27.5L177.8 27.2L177.8 19.3L179.4 19.6ZM177.8 27.2L176.4 26.8L176.4 18.9L177.8 19.3ZM176.4 26.8L175.2 26.3L175.2 18.4L176.4 18.9ZM175.2 26.3L174.3 25.7L174.3 17.8L175.2 18.4ZM174.3 25.7L173.6 25.1L173.6 17.2L174.3 17.8ZM173.6 25.1L173.2 24.5L173.2 16.6L173.6 17.2ZM173.2 24.5L173 23.8L173 15.9L173.2 16.6Z"/><path class="iso-top" d="M196.1 16.6L195.7 17.2L195 17.8L194 18.4L192.8 18.9L191.5 19.3L189.9 19.6L188.2 19.9L186.4 20L184.6 20.1L182.8 20L181 19.9L179.4 19.6L177.8 19.3L176.4 18.9L175.2 18.4L174.3 17.8L173.6 17.2L173.2 16.6L173 15.9L173.2 15.3L173.6 14.6L174.3 14L175.2 13.5L176.4 13L177.8 12.6L179.4 12.2L181 12L182.8 11.8L184.6 11.8L186.4 11.8L188.2 12L189.9 12.2L191.5 12.6L192.8 13L194 13.5L195 14L195.7 14.6L196.1 15.3L196.2 15.9Z"/><path class="iso-line iso-crease" data-tone="faint" d="M196.2 15.9L196.1 16.6L195.7 17.2L195 17.8L194 18.4L192.8 18.9L191.5 19.3L189.9 19.6L188.2 19.9L186.4 20L184.6 20.1L182.8 20L181 19.9L179.4 19.6L177.8 19.3L176.4 18.9L175.2 18.4L174.3 17.8L173.6 17.2L173.2 16.6L173 15.9"/><path class="iso-line iso-edge" data-tone="mid" d="M173 15.9L173.2 15.3L173.6 14.6L174.3 14L175.2 13.5L176.4 13L177.8 12.6L179.4 12.2L181 12L182.8 11.8L184.6 11.8L186.4 11.8L188.2 12L189.9 12.2L191.5 12.6L192.8 13L194 13.5L195 14L195.7 14.6L196.1 15.3L196.2 15.9M196.2 23.8L196.1 24.5L195.7 25.1L195 25.7L194 26.3L192.8 26.8L191.5 27.2L189.9 27.5L188.2 27.8L186.4 27.9L184.6 28L182.8 27.9L181 27.8L179.4 27.5L177.8 27.2L176.4 26.8L175.2 26.3L174.3 25.7L173.6 25.1L173.2 24.5L173 23.8M173 15.9L173 23.8M196.2 15.9L196.2 23.8"/></g><path class="riu" d="M240 55.2L262 79.1L288.2 103.3L311.1 114.5L346.4 111.9L380.9 120.8"/><g class="iso-solid volca"><path class="iso-fill" d="M547.8 138.2L550 134.6L553.4 131.2L557.9 127.9L563.5 124.9L570 122.1L577.5 119.6L585.7 117.4L594.7 115.7L604.1 114.3L613.9 113.3L624 112.8L634.2 112.7L644.4 113.1L654.3 113.9L663.9 115.1L673.1 116.7L681.6 118.7L689.4 121L696.3 123.7L702.3 126.7L707.3 129.9L711.1 133.3L713.8 136.8L715.3 140.4L715.5 144L715.5 152.9L714.6 156.6L547.8 147.1Z"/><path class="iso-shade" data-shade="0" d="M715.5 152.9L714.6 156.6L714.6 147.7L715.5 144Z"/><path class="iso-shade" data-shade="2" d="M714.6 156.6L547.8 147.1L547.8 138.2L714.6 147.7Z"/><path class="iso-top" d="M547.8 138.2L550 134.6L553.4 131.2L557.9 127.9L563.5 124.9L570 122.1L577.5 119.6L585.7 117.4L594.7 115.7L604.1 114.3L613.9 113.3L624 112.8L634.2 112.7L644.4 113.1L654.3 113.9L663.9 115.1L673.1 116.7L681.6 118.7L689.4 121L696.3 123.7L702.3 126.7L707.3 129.9L711.1 133.3L713.8 136.8L715.3 140.4L715.5 144L714.6 147.7Z"/><path class="iso-line iso-crease" data-tone="faint" d="M715.5 144L714.6 147.7L547.8 138.2"/><path class="iso-line iso-edge" data-tone="mid" d="M547.8 138.2L550 134.6L553.4 131.2L557.9 127.9L563.5 124.9L570 122.1L577.5 119.6L585.7 117.4L594.7 115.7L604.1 114.3L613.9 113.3L624 112.8L634.2 112.7L644.4 113.1L654.3 113.9L663.9 115.1L673.1 116.7L681.6 118.7L689.4 121L696.3 123.7L702.3 126.7L707.3 129.9L711.1 133.3L713.8 136.8L715.3 140.4L715.5 144M715.5 152.9L714.6 156.6L547.8 147.1M547.8 138.2L547.8 147.1M715.5 144L715.5 152.9"/></g><g class="iso-solid volca"><path class="iso-fill" d="M555.8 129.8L557.8 126.6L560.9 123.5L565 120.5L570 117.8L576 115.2L582.7 113L590.1 111L598.2 109.4L606.7 108.2L615.6 107.3L624.7 106.9L633.9 106.8L643.1 107.1L652.1 107.8L660.8 108.9L669 110.4L676.7 112.2L683.8 114.3L690 116.7L695.4 119.4L699.9 122.3L703.4 125.3L705.8 128.5L707.1 131.8L707.4 135.1L707.4 143.9L706.5 147.2L555.8 138.7Z"/><path class="iso-shade" data-shade="0" d="M707.4 143.9L706.5 147.2L706.5 138.4L707.4 135.1Z"/><path class="iso-shade" data-shade="2" d="M706.5 147.2L555.8 138.7L555.8 129.8L706.5 138.4Z"/><path class="iso-top" d="M555.8 129.8L557.8 126.6L560.9 123.5L565 120.5L570 117.8L576 115.2L582.7 113L590.1 111L598.2 109.4L606.7 108.2L615.6 107.3L624.7 106.9L633.9 106.8L643.1 107.1L652.1 107.8L660.8 108.9L669 110.4L676.7 112.2L683.8 114.3L690 116.7L695.4 119.4L699.9 122.3L703.4 125.3L705.8 128.5L707.1 131.8L707.4 135.1L706.5 138.4Z"/><path class="iso-line iso-crease" data-tone="faint" d="M707.4 135.1L706.5 138.4L555.8 129.8"/><path class="iso-line iso-edge" data-tone="mid" d="M555.8 129.8L557.8 126.6L560.9 123.5L565 120.5L570 117.8L576 115.2L582.7 113L590.1 111L598.2 109.4L606.7 108.2L615.6 107.3L624.7 106.9L633.9 106.8L643.1 107.1L652.1 107.8L660.8 108.9L669 110.4L676.7 112.2L683.8 114.3L690 116.7L695.4 119.4L699.9 122.3L703.4 125.3L705.8 128.5L707.1 131.8L707.4 135.1M707.4 143.9L706.5 147.2L555.8 138.7M555.8 129.8L555.8 138.7M707.4 135.1L707.4 143.9"/></g><g class="iso-solid volca"><path class="iso-fill" d="M563.9 121.4L565.7 118.5L568.4 115.7L572.1 113.1L576.6 110.6L581.9 108.4L587.9 106.4L594.5 104.6L601.7 103.2L609.3 102.1L617.3 101.3L625.4 100.9L633.6 100.8L641.8 101.1L649.8 101.8L657.6 102.7L665 104L671.8 105.7L678.1 107.6L683.7 109.7L688.5 112.1L692.5 114.7L695.6 117.4L697.8 120.2L699 123.2L699.2 126.1L699.2 135L698.4 137.9L563.9 130.3Z"/><path class="iso-shade" data-shade="0" d="M699.2 135L698.4 137.9L698.4 129L699.2 126.1Z"/><path class="iso-shade" data-shade="2" d="M698.4 137.9L563.9 130.3L563.9 121.4L698.4 129Z"/><path class="iso-top" d="M563.9 121.4L565.7 118.5L568.4 115.7L572.1 113.1L576.6 110.6L581.9 108.4L587.9 106.4L594.5 104.6L601.7 103.2L609.3 102.1L617.3 101.3L625.4 100.9L633.6 100.8L641.8 101.1L649.8 101.8L657.6 102.7L665 104L671.8 105.7L678.1 107.6L683.7 109.7L688.5 112.1L692.5 114.7L695.6 117.4L697.8 120.2L699 123.2L699.2 126.1L698.4 129Z"/><path class="iso-line iso-crease" data-tone="faint" d="M699.2 126.1L698.4 129L563.9 121.4"/><path class="iso-line iso-edge" data-tone="mid" d="M563.9 121.4L565.7 118.5L568.4 115.7L572.1 113.1L576.6 110.6L581.9 108.4L587.9 106.4L594.5 104.6L601.7 103.2L609.3 102.1L617.3 101.3L625.4 100.9L633.6 100.8L641.8 101.1L649.8 101.8L657.6 102.7L665 104L671.8 105.7L678.1 107.6L683.7 109.7L688.5 112.1L692.5 114.7L695.6 117.4L697.8 120.2L699 123.2L699.2 126.1M699.2 135L698.4 137.9L563.9 130.3M563.9 121.4L563.9 130.3M699.2 126.1L699.2 135"/></g><g class="iso-solid volca"><path class="iso-fill" d="M572 113L573.6 110.5L576 108L579.2 105.7L583.1 103.5L587.8 101.5L593.1 99.8L598.9 98.3L605.3 97L612 96L618.9 95.3L626.1 95L633.3 94.9L640.5 95.1L647.6 95.7L654.4 96.6L660.9 97.7L666.9 99.1L672.5 100.8L677.4 102.7L681.7 104.8L685.2 107.1L687.9 109.5L689.8 112L690.8 114.5L691 117.1L691 126L690.3 128.6L572 121.9Z"/><path class="iso-shade" data-shade="0" d="M691 126L690.3 128.6L690.3 119.7L691 117.1Z"/><path class="iso-shade" data-shade="2" d="M690.3 128.6L572 121.9L572 113L690.3 119.7Z"/><path class="iso-top" d="M572 113L573.6 110.5L576 108L579.2 105.7L583.1 103.5L587.8 101.5L593.1 99.8L598.9 98.3L605.3 97L612 96L618.9 95.3L626.1 95L633.3 94.9L640.5 95.1L647.6 95.7L654.4 96.6L660.9 97.7L666.9 99.1L672.5 100.8L677.4 102.7L681.7 104.8L685.2 107.1L687.9 109.5L689.8 112L690.8 114.5L691 117.1L690.3 119.7Z"/><path class="iso-line iso-crease" data-tone="faint" d="M691 117.1L690.3 119.7L572 113"/><path class="iso-line iso-edge" data-tone="mid" d="M572 113L573.6 110.5L576 108L579.2 105.7L583.1 103.5L587.8 101.5L593.1 99.8L598.9 98.3L605.3 97L612 96L618.9 95.3L626.1 95L633.3 94.9L640.5 95.1L647.6 95.7L654.4 96.6L660.9 97.7L666.9 99.1L672.5 100.8L677.4 102.7L681.7 104.8L685.2 107.1L687.9 109.5L689.8 112L690.8 114.5L691 117.1M691 126L690.3 128.6L572 121.9M572 113L572 121.9M691 117.1L691 126"/></g><g class="iso-solid volca"><path class="iso-fill" d="M580.1 104.6L581.4 102.4L583.5 100.3L586.3 98.3L589.7 96.4L593.7 94.7L598.3 93.2L603.3 91.9L608.8 90.8L614.6 89.9L620.6 89.3L626.8 89L633 89L639.2 89.2L645.3 89.7L651.2 90.4L656.8 91.4L662.1 92.6L666.8 94.1L671.1 95.7L674.8 97.5L677.8 99.5L680.1 101.5L681.8 103.7L682.7 105.9L682.8 108.2L682.8 117L682.2 119.2L580.1 113.4Z"/><path class="iso-shade" data-shade="0" d="M682.8 117L682.2 119.2L682.2 110.4L682.8 108.2Z"/><path class="iso-shade" data-shade="2" d="M682.2 119.2L580.1 113.4L580.1 104.6L682.2 110.4Z"/><path class="iso-top" d="M580.1 104.6L581.4 102.4L583.5 100.3L586.3 98.3L589.7 96.4L593.7 94.7L598.3 93.2L603.3 91.9L608.8 90.8L614.6 89.9L620.6 89.3L626.8 89L633 89L639.2 89.2L645.3 89.7L651.2 90.4L656.8 91.4L662.1 92.6L666.8 94.1L671.1 95.7L674.8 97.5L677.8 99.5L680.1 101.5L681.8 103.7L682.7 105.9L682.8 108.2L682.2 110.4Z"/><path class="iso-line iso-crease" data-tone="faint" d="M682.8 108.2L682.2 110.4L580.1 104.6"/><path class="iso-line iso-edge" data-tone="mid" d="M580.1 104.6L581.4 102.4L583.5 100.3L586.3 98.3L589.7 96.4L593.7 94.7L598.3 93.2L603.3 91.9L608.8 90.8L614.6 89.9L620.6 89.3L626.8 89L633 89L639.2 89.2L645.3 89.7L651.2 90.4L656.8 91.4L662.1 92.6L666.8 94.1L671.1 95.7L674.8 97.5L677.8 99.5L680.1 101.5L681.8 103.7L682.7 105.9L682.8 108.2M682.8 117L682.2 119.2L580.1 113.4M580.1 104.6L580.1 113.4M682.8 108.2L682.8 117"/></g><g class="iso-solid volca"><path class="iso-fill" d="M588.2 96.2L589.3 94.3L591 92.6L593.4 90.9L596.3 89.3L599.6 87.8L603.5 86.6L607.7 85.5L612.3 84.5L617.2 83.8L622.3 83.3L627.5 83.1L632.7 83L638 83.2L643.1 83.6L648.1 84.2L652.8 85.1L657.2 86.1L661.2 87.3L664.8 88.7L667.9 90.2L670.4 91.9L672.4 93.6L673.8 95.4L674.5 97.3L674.7 99.2L674.7 108L674.2 109.9L588.2 105Z"/><path class="iso-shade" data-shade="0" d="M674.7 108L674.2 109.9L674.2 101.1L674.7 99.2Z"/><path class="iso-shade" data-shade="2" d="M674.2 109.9L588.2 105L588.2 96.2L674.2 101.1Z"/><path class="iso-top" d="M588.2 96.2L589.3 94.3L591 92.6L593.4 90.9L596.3 89.3L599.6 87.8L603.5 86.6L607.7 85.5L612.3 84.5L617.2 83.8L622.3 83.3L627.5 83.1L632.7 83L638 83.2L643.1 83.6L648.1 84.2L652.8 85.1L657.2 86.1L661.2 87.3L664.8 88.7L667.9 90.2L670.4 91.9L672.4 93.6L673.8 95.4L674.5 97.3L674.7 99.2L674.2 101.1Z"/><path class="iso-line iso-crease" data-tone="faint" d="M674.7 99.2L674.2 101.1L588.2 96.2"/><path class="iso-line iso-edge" data-tone="mid" d="M588.2 96.2L589.3 94.3L591 92.6L593.4 90.9L596.3 89.3L599.6 87.8L603.5 86.6L607.7 85.5L612.3 84.5L617.2 83.8L622.3 83.3L627.5 83.1L632.7 83L638 83.2L643.1 83.6L648.1 84.2L652.8 85.1L657.2 86.1L661.2 87.3L664.8 88.7L667.9 90.2L670.4 91.9L672.4 93.6L673.8 95.4L674.5 97.3L674.7 99.2M674.7 108L674.2 109.9L588.2 105M588.2 96.2L588.2 105M674.7 99.2L674.7 108"/></g><g class="iso-solid volca"><path class="iso-fill" d="M596.2 87.8L597.2 86.3L598.6 84.8L600.5 83.5L602.8 82.2L605.6 81L608.7 80L612.1 79.1L615.9 78.3L619.8 77.7L623.9 77.3L628.2 77.1L632.4 77.1L636.7 77.2L640.9 77.6L644.9 78.1L648.7 78.7L652.3 79.6L655.5 80.6L658.5 81.7L661 82.9L663 84.3L664.7 85.7L665.8 87.2L666.4 88.7L666.5 90.2L666.5 99.1L666.1 100.6L596.2 96.6Z"/><path class="iso-shade" data-shade="0" d="M666.5 99.1L666.1 100.6L666.1 91.7L666.5 90.2Z"/><path class="iso-shade" data-shade="2" d="M666.1 100.6L596.2 96.6L596.2 87.8L666.1 91.7Z"/><path class="iso-top" d="M596.2 87.8L597.2 86.3L598.6 84.8L600.5 83.5L602.8 82.2L605.6 81L608.7 80L612.1 79.1L615.9 78.3L619.8 77.7L623.9 77.3L628.2 77.1L632.4 77.1L636.7 77.2L640.9 77.6L644.9 78.1L648.7 78.7L652.3 79.6L655.5 80.6L658.5 81.7L661 82.9L663 84.3L664.7 85.7L665.8 87.2L666.4 88.7L666.5 90.2L666.1 91.7Z"/><path class="iso-line iso-crease" data-tone="faint" d="M666.5 90.2L666.1 91.7L596.2 87.8"/><path class="iso-line iso-edge" data-tone="mid" d="M596.2 87.8L597.2 86.3L598.6 84.8L600.5 83.5L602.8 82.2L605.6 81L608.7 80L612.1 79.1L615.9 78.3L619.8 77.7L623.9 77.3L628.2 77.1L632.4 77.1L636.7 77.2L640.9 77.6L644.9 78.1L648.7 78.7L652.3 79.6L655.5 80.6L658.5 81.7L661 82.9L663 84.3L664.7 85.7L665.8 87.2L666.4 88.7L666.5 90.2M666.5 99.1L666.1 100.6L596.2 96.6M596.2 87.8L596.2 96.6M666.5 90.2L666.5 99.1"/></g><g class="iso-solid volca"><path class="iso-fill" d="M604.3 79.4L605 78.2L606.1 77.1L607.6 76L609.4 75.1L611.5 74.2L613.9 73.4L616.5 72.7L619.4 72.1L622.5 71.6L625.6 71.3L628.9 71.2L632.1 71.1L635.4 71.3L638.6 71.5L641.7 71.9L644.7 72.4L647.4 73.1L649.9 73.8L652.1 74.7L654.1 75.6L655.7 76.7L656.9 77.8L657.8 78.9L658.2 80.1L658.3 81.2L658.3 90.1L658 91.3L604.3 88.2Z"/><path class="iso-shade" data-shade="0" d="M658.3 90.1L658 91.3L658 82.4L658.3 81.2Z"/><path class="iso-shade" data-shade="2" d="M658 91.3L604.3 88.2L604.3 79.4L658 82.4Z"/><path class="iso-top" d="M604.3 79.4L605 78.2L606.1 77.1L607.6 76L609.4 75.1L611.5 74.2L613.9 73.4L616.5 72.7L619.4 72.1L622.5 71.6L625.6 71.3L628.9 71.2L632.1 71.1L635.4 71.3L638.6 71.5L641.7 71.9L644.7 72.4L647.4 73.1L649.9 73.8L652.1 74.7L654.1 75.6L655.7 76.7L656.9 77.8L657.8 78.9L658.2 80.1L658.3 81.2L658 82.4Z"/><path class="iso-line iso-crease" data-tone="faint" d="M658.3 81.2L658 82.4L604.3 79.4"/><path class="iso-line iso-edge" data-tone="mid" d="M604.3 79.4L605 78.2L606.1 77.1L607.6 76L609.4 75.1L611.5 74.2L613.9 73.4L616.5 72.7L619.4 72.1L622.5 71.6L625.6 71.3L628.9 71.2L632.1 71.1L635.4 71.3L638.6 71.5L641.7 71.9L644.7 72.4L647.4 73.1L649.9 73.8L652.1 74.7L654.1 75.6L655.7 76.7L656.9 77.8L657.8 78.9L658.2 80.1L658.3 81.2M658.3 90.1L658 91.3L604.3 88.2M604.3 79.4L604.3 88.2M658.3 81.2L658.3 90.1"/></g><g class="iso-solid volca"><path class="iso-fill" d="M612.4 70.9L612.9 70.1L613.7 69.4L614.7 68.6L615.9 67.9L617.4 67.3L619.1 66.8L620.9 66.3L622.9 65.9L625.1 65.6L627.3 65.3L629.6 65.2L631.8 65.2L634.1 65.3L636.4 65.5L638.5 65.7L640.6 66.1L642.5 66.5L644.3 67.1L645.8 67.7L647.2 68.3L648.3 69.1L649.2 69.8L649.8 70.6L650.1 71.4L650.1 72.3L650.1 81.1L649.9 81.9L612.4 79.8Z"/><path class="iso-shade" data-shade="0" d="M650.1 81.1L649.9 81.9L649.9 73.1L650.1 72.3Z"/><path class="iso-shade" data-shade="2" d="M649.9 81.9L612.4 79.8L612.4 70.9L649.9 73.1Z"/><path class="iso-top" d="M612.4 70.9L612.9 70.1L613.7 69.4L614.7 68.6L615.9 67.9L617.4 67.3L619.1 66.8L620.9 66.3L622.9 65.9L625.1 65.6L627.3 65.3L629.6 65.2L631.8 65.2L634.1 65.3L636.4 65.5L638.5 65.7L640.6 66.1L642.5 66.5L644.3 67.1L645.8 67.7L647.2 68.3L648.3 69.1L649.2 69.8L649.8 70.6L650.1 71.4L650.1 72.3L649.9 73.1Z"/><path class="iso-line iso-crease" data-tone="faint" d="M650.1 72.3L649.9 73.1L612.4 70.9"/><path class="iso-line iso-edge" data-tone="mid" d="M612.4 70.9L612.9 70.1L613.7 69.4L614.7 68.6L615.9 67.9L617.4 67.3L619.1 66.8L620.9 66.3L622.9 65.9L625.1 65.6L627.3 65.3L629.6 65.2L631.8 65.2L634.1 65.3L636.4 65.5L638.5 65.7L640.6 66.1L642.5 66.5L644.3 67.1L645.8 67.7L647.2 68.3L648.3 69.1L649.2 69.8L649.8 70.6L650.1 71.4L650.1 72.3M650.1 81.1L649.9 81.9L612.4 79.8M612.4 70.9L612.4 79.8M650.1 72.3L650.1 81.1"/></g><path class="zona-crosta" d="M763.2 82.7L730.2 157.4L730.2 388L763.2 313.3Z"/><path class="zona-meta" d="M763.2 122.2L730.2 196.9L730.2 317.6L763.2 242.8Z"/><path class="zona-fusio" d="M763.2 242.8L730.2 317.6L730.2 388L763.2 313.3Z"/><path class="ombra-cara" d="M763.2 82.7L730.2 157.4L730.2 388L763.2 313.3Z"/><path class="zona-crosta" d="M63 119.6L361.2 136.5L392.4 150.1L505 156.5L536.3 146.4L547.8 147.1L547.8 138.2L555.8 138.7L555.8 129.8L563.9 130.3L563.9 121.4L572 121.9L572 113L580.1 113.4L580.1 104.6L588.2 105L588.2 96.2L596.2 96.6L596.2 87.8L604.3 88.2L604.3 79.4L612.4 79.8L612.4 70.9L621.8 71.5L626.5 80.6L635.9 81.1L640.5 72.5L649.9 73.1L649.9 81.9L658 82.4L658 91.3L666.1 91.7L666.1 100.6L674.2 101.1L674.2 109.9L682.2 110.4L682.2 119.2L690.3 119.7L690.3 128.6L698.4 129L698.4 137.9L706.5 138.4L706.5 147.2L714.6 147.7L714.6 156.6L730.2 157.4L730.2 388L63 350.1Z"/><path class="aigua-tall" d="M361.2 136.5L392.4 150.1L505 156.5L536.3 146.4Z"/><path class="capa c0" d="M361.2 148.3L536.3 158.3L545.7 163.7L351.8 152.7Z"/><path class="capa c1" d="M351.8 152.7L545.7 163.7L555.1 169.2L342.4 157.1Z"/><path class="capa c2" d="M342.4 157.1L555.1 169.2L564.4 174.7L333 161.5Z"/><path class="capa c0" d="M333 161.5L564.4 174.7L573.8 180.2L323.6 166Z"/><path class="capa c1" d="M323.6 166L573.8 180.2L583.2 185.6L314.3 170.4Z"/><path class="zona-meta" d="M63 159.1L76.9 158.7L90.8 158.5L104.7 158.7L118.6 159.3L132.5 160.3L146.4 161.8L160.3 163.6L174.2 165.5L188.1 167.4L202 169.2L215.9 170.5L229.8 171.5L243.7 172L257.6 172L271.5 171.8L285.4 171.4L299.3 171.1L313.2 171L327.1 171.2L341 171.9L354.9 173.1L368.8 174.6L382.7 176.5L396.6 178.4L410.5 180.3L424.4 182L438.3 183.2L452.2 184.1L466.1 184.4L480 184.4L493.9 184.1L507.8 183.7L521.7 183.4L535.6 183.4L549.5 183.8L563.4 184.6L577.3 185.9L591.2 187.5L605.1 189.4L619 191.4L632.9 193.2L646.8 194.8L660.7 195.9L674.6 196.6L688.5 196.9L702.4 196.8L716.3 196.4L730.2 196.1L730.2 325.4L63 287.6Z"/><path class="plec" d="M67.2 169.2L81 168.3L94.8 168.9L108.5 171L122.3 174.1L136.1 177.4L149.8 179.9L163.6 180.9L177.4 180.3L191.1 178.7L204.9 177L218.7 176.1L232.4 176.7L246.2 178.8L260 182L273.7 185.2L287.5 187.7L301.3 188.7L315 188.1L328.8 186.5L342.6 184.8L356.4 184L370.1 184.5L383.9 186.7L397.7 189.8L411.4 193.1L425.2 195.5L439 196.5L452.7 195.9L466.5 194.3L480.3 192.6L494 191.8L507.8 192.4L521.6 194.5L535.3 197.6L549.1 200.9L562.9 203.3L576.7 204.3L590.4 203.7L604.2 202.1L618 200.4L631.7 199.6L645.5 200.2L659.3 202.3L673 205.5L686.8 208.7L700.6 211.2L714.3 212.1L728.1 211.5"/><path class="plec" d="M67.2 180.2L81 180.1L94.8 181.5L108.5 184.3L122.3 187.6L136.1 190.6L149.8 192.2L163.6 192.4L177.4 191.1L191.1 189.4L204.9 188L218.7 187.9L232.4 189.3L246.2 192.1L260 195.5L273.7 198.4L287.5 200.1L301.3 200.2L315 198.9L328.8 197.2L342.6 195.8L356.4 195.7L370.1 197.2L383.9 200L397.7 203.3L411.4 206.2L425.2 207.9L439 208L452.7 206.7L466.5 205L480.3 203.6L494 203.5L507.8 205L521.6 207.8L535.3 211.1L549.1 214L562.9 215.7L576.7 215.8L590.4 214.5L604.2 212.8L618 211.4L631.7 211.3L645.5 212.8L659.3 215.6L673 219L686.8 221.9L700.6 223.5L714.3 223.6L728.1 222.3"/><path class="plec" d="M67.2 191.6L81 192.3L94.8 194.6L108.5 197.8L122.3 201L136.1 203.3L149.8 204.1L163.6 203.4L177.4 201.8L191.1 200.1L204.9 199.4L218.7 200.1L232.4 202.4L246.2 205.6L260 208.8L273.7 211.1L287.5 211.9L301.3 211.2L315 209.6L328.8 207.9L342.6 207.2L356.4 208L370.1 210.2L383.9 213.4L397.7 216.7L411.4 219L425.2 219.7L439 219L452.7 217.4L466.5 215.7L480.3 215L494 215.8L507.8 218.1L521.6 221.3L535.3 224.5L549.1 226.8L562.9 227.6L576.7 226.8L590.4 225.2L604.2 223.5L618 222.8L631.7 223.6L645.5 225.9L659.3 229.1L673 232.3L686.8 234.6L700.6 235.4L714.3 234.6L728.1 233"/><path class="plec" d="M67.2 203.4L81 205L94.8 207.9L108.5 211.3L122.3 214.1L136.1 215.6L149.8 215.5L163.6 214.2L177.4 212.4L191.1 211.2L204.9 211.2L218.7 212.9L232.4 215.7L246.2 219.1L260 221.9L273.7 223.4L287.5 223.3L301.3 222L315 220.2L328.8 219L342.6 219L356.4 220.7L370.1 223.6L383.9 226.9L397.7 229.7L411.4 231.2L425.2 231.1L439 229.8L452.7 228L466.5 226.8L480.3 226.9L494 228.5L507.8 231.4L521.6 234.7L535.3 237.5L549.1 239L562.9 238.9L576.7 237.6L590.4 235.8L604.2 234.6L618 234.7L631.7 236.3L645.5 239.2L659.3 242.6L673 245.4L686.8 246.9L700.6 246.8L714.3 245.4L728.1 243.6"/><path class="plec" d="M67.2 215.8L81 218.2L94.8 221.4L108.5 224.6L122.3 226.7L136.1 227.4L149.8 226.5L163.6 224.8L177.4 223.2L191.1 222.6L204.9 223.6L218.7 226L232.4 229.2L246.2 232.4L260 234.6L273.7 235.2L287.5 234.3L301.3 232.6L315 231L328.8 230.5L342.6 231.4L356.4 233.8L370.1 237.1L383.9 240.2L397.7 242.4L411.4 243L425.2 242.1L439 240.4L452.7 238.8L466.5 238.3L480.3 239.2L494 241.6L507.8 244.9L521.6 248.1L535.3 250.2L549.1 250.8L562.9 249.9L576.7 248.2L590.4 246.6L604.2 246.1L618 247L631.7 249.5L645.5 252.7L659.3 255.9L673 258L686.8 258.6L700.6 257.7L714.3 256L728.1 254.4"/><path class="plec" d="M67.2 228.6L81 231.5L94.8 234.9L108.5 237.6L122.3 238.9L136.1 238.7L149.8 237.3L163.6 235.5L177.4 234.4L191.1 234.6L204.9 236.4L218.7 239.4L232.4 242.7L246.2 245.4L260 246.7L273.7 246.5L287.5 245.1L301.3 243.3L315 242.2L328.8 242.4L342.6 244.2L356.4 247.2L370.1 250.5L383.9 253.2L397.7 254.5L411.4 254.3L425.2 252.9L439 251.1L452.7 250L466.5 250.2L480.3 252L494 255L507.8 258.4L521.6 261L535.3 262.4L549.1 262.1L562.9 260.7L576.7 258.9L590.4 257.8L604.2 258L618 259.9L631.7 262.9L645.5 266.2L659.3 268.9L673 270.2L686.8 269.9L700.6 268.5L714.3 266.7L728.1 265.6"/><path class="plec" d="M67.2 241.7L81 245L94.8 248.1L108.5 250.1L122.3 250.6L136.1 249.6L149.8 247.9L163.6 246.4L177.4 245.9L191.1 247L204.9 249.6L218.7 252.9L232.4 256L246.2 258L260 258.4L273.7 257.4L287.5 255.7L301.3 254.2L315 253.7L328.8 254.9L342.6 257.4L356.4 260.7L370.1 263.8L383.9 265.8L397.7 266.2L411.4 265.2L425.2 263.5L439 262L452.7 261.5L466.5 262.7L480.3 265.2L494 268.5L507.8 271.6L521.6 273.6L535.3 274L549.1 273L562.9 271.3L576.7 269.8L590.4 269.4L604.2 270.5L618 273.1L631.7 276.4L645.5 279.4L659.3 281.4L673 281.8L686.8 280.8L700.6 279.1L714.3 277.6L728.1 277.2"/><path class="plec" d="M67.2 255.2L81 258.5L94.8 261.1L108.5 262.2L122.3 261.8L136.1 260.3L149.8 258.6L163.6 257.6L177.4 258L191.1 259.9L204.9 263L218.7 266.3L232.4 268.9L246.2 270L260 269.6L273.7 268.1L287.5 266.4L301.3 265.4L315 265.8L328.8 267.8L342.6 270.8L356.4 274.1L370.1 276.7L383.9 277.8L397.7 277.4L411.4 275.9L425.2 274.2L439 273.2L452.7 273.6L466.5 275.6L480.3 278.7L494 282L507.8 284.5L521.6 285.7L535.3 285.2L549.1 283.7L562.9 282L576.7 281L590.4 281.4L604.2 283.4L618 286.5L631.7 289.8L645.5 292.3L659.3 293.5L673 293L686.8 291.5L700.6 289.8L714.3 288.8L728.1 289.2"/><path class="plec" d="M67.2 268.7L81 271.7L94.8 273.5L108.5 273.8L122.3 272.7L136.1 270.9L149.8 269.5L163.6 269.2L177.4 270.5L191.1 273.2L204.9 276.5L218.7 279.5L232.4 281.3L246.2 281.6L260 280.5L273.7 278.7L287.5 277.3L301.3 277L315 278.3L328.8 281L342.6 284.3L356.4 287.3L370.1 289.2L383.9 289.4L397.7 288.3L411.4 286.5L425.2 285.1L439 284.8L452.7 286.2L466.5 288.8L480.3 292.2L494 295.2L507.8 297L521.6 297.2L535.3 296.1L549.1 294.3L562.9 292.9L576.7 292.7L590.4 294L604.2 296.7L618 300L631.7 303L645.5 304.8L659.3 305L673 303.9L686.8 302.1L700.6 300.7L714.3 300.5L728.1 301.8"/><path class="zona-fusio" d="M63 276.4L76.9 276.5L90.8 277.7L104.7 279.6L118.6 282.2L132.5 284.9L146.4 287.3L160.3 289L174.2 289.8L188.1 289.7L202 288.9L215.9 287.8L229.8 286.8L243.7 286.4L257.6 286.8L271.5 288.1L285.4 290.3L299.3 292.9L313.2 295.6L327.1 297.9L341 299.4L354.9 299.9L368.8 299.7L382.7 298.7L396.6 297.6L410.5 296.7L424.4 296.5L438.3 297.1L452.2 298.7L466.1 301L480 303.6L493.9 306.3L507.8 308.4L521.7 309.7L535.6 310L549.5 309.5L563.4 308.5L577.3 307.4L591.2 306.6L605.1 306.6L619 307.5L632.9 309.2L646.8 311.7L660.7 314.4L674.6 316.9L688.5 318.8L702.4 319.9L716.3 320L730.2 319.4L730.2 388L63 350.1Z"/><circle class="bombolla" cx="81.8" cy="294.5" r="2"/><circle class="bombolla" cx="182.9" cy="303.7" r="3"/><circle class="bombolla" cx="284" cy="312.9" r="4"/><circle class="bombolla" cx="385.2" cy="322.1" r="2"/><circle class="bombolla" cx="486.3" cy="331.3" r="3"/><circle class="bombolla" cx="587.4" cy="340.5" r="4"/><circle class="bombolla" cx="688.5" cy="349.7" r="2"/><circle class="bombolla" cx="160" cy="323.1" r="3"/><circle class="bombolla" cx="261.1" cy="332.3" r="4"/><circle class="bombolla" cx="362.2" cy="341.5" r="2"/><circle class="bombolla" cx="463.3" cy="350.7" r="3"/><circle class="bombolla" cx="564.4" cy="359.9" r="4"/><circle class="bombolla" cx="665.6" cy="369.1" r="2"/><circle class="bombolla" cx="137.1" cy="342.5" r="3"/><circle class="bombolla" cx="238.2" cy="351.7" r="4"/><circle class="bombolla" cx="339.3" cy="312.1" r="2"/><circle class="bombolla" cx="440.4" cy="321.3" r="3"/><circle class="bombolla" cx="541.5" cy="330.5" r="4"/><circle class="bombolla" cx="642.6" cy="339.7" r="2"/><circle class="bombolla" cx="114.1" cy="313.1" r="3"/><circle class="bombolla" cx="215.2" cy="322.3" r="4"/><circle class="bombolla" cx="316.4" cy="331.5" r="2"/><circle class="bombolla" cx="417.5" cy="340.7" r="3"/><circle class="bombolla" cx="518.6" cy="349.9" r="4"/><circle class="bombolla" cx="619.7" cy="359.1" r="2"/><circle class="bombolla" cx="91.2" cy="332.5" r="3"/><path class="magma" d="M599.9 316.1L615.5 256.6L620.7 210.3L641.6 211.5L646.8 258.4L662.4 319.6Z"/><path class="magma" d="M687.4 206.2L686.8 203.9L684.7 201.5L681.3 199.2L676.7 197L671 194.9L664.2 193L656.7 191.3L648.6 190L640 189L631.2 188.3L622.4 188L613.8 188L605.6 188.4L598.1 189.2L591.4 190.3L585.6 191.8L581 193.5L577.6 195.4L575.6 197.6L574.9 199.9L575.6 202.2L577.6 204.6L581 206.9L585.6 209.2L591.4 211.2L598.1 213.1L605.6 214.8L613.8 216.1L622.4 217.2L631.2 217.8L640 218.2L648.6 218.1L656.7 217.7L664.2 216.9L671 215.8L676.7 214.3L681.3 212.6L684.7 210.7L686.8 208.5L687.4 206.2Z"/><path class="magma" d="M625.9 190.9L627 80.6L635.3 81.1L636.4 191.5Z"/><path class="colada" d="M640.5 72.5L649.9 73.1L649.9 81.9L658 82.4L658 91.3L666.1 91.7L666.1 100.6L674.2 101.1L674.2 109.9L682.2 110.4L682.2 119.2L690.3 119.7L690.3 128.6L698.4 129L698.4 137.9L691.1 138.5L691.1 129.6L683 129.1L683 120.3L674.9 119.8L674.9 110.9L666.9 110.5L666.9 101.6L658.8 101.2L658.8 92.3L650.7 91.8L650.7 83L642.6 82.5L642.6 73.6L633.2 73.1Z"/><path class="regle" d="M63 119.6L79.7 120.5"/><path class="regle" d="M63 151.6L72.4 152.1"/><path class="regle" d="M63 183.6L79.7 184.6"/><path class="regle" d="M63 215.6L72.4 216.2"/><path class="regle" d="M63 247.7L79.7 248.6"/><path class="regle" d="M63 279.7L72.4 280.2"/><path class="regle" d="M63 311.7L79.7 312.7"/><path class="regle" d="M63 343.7L72.4 344.3"/><path class="vora" d="M63 119.6L361.2 136.5L392.4 150.1L505 156.5L536.3 146.4L547.8 147.1L547.8 138.2L555.8 138.7L555.8 129.8L563.9 130.3L563.9 121.4L572 121.9L572 113L580.1 113.4L580.1 104.6L588.2 105L588.2 96.2L596.2 96.6L596.2 87.8L604.3 88.2L604.3 79.4L612.4 79.8L612.4 70.9L621.8 71.5L626.5 80.6L635.9 81.1L640.5 72.5L649.9 73.1L649.9 81.9L658 82.4L658 91.3L666.1 91.7L666.1 100.6L674.2 101.1L674.2 109.9L682.2 110.4L682.2 119.2L690.3 119.7L690.3 128.6L698.4 129L698.4 137.9L706.5 138.4L706.5 147.2L714.6 147.7L714.6 156.6L730.2 157.4"/><path class="vora" d="M63 119.6L63 350.1L730.2 388L763.2 313.3L763.2 82.7"/><path class="vora" d="M730.2 388L730.2 157.4"/><path class="vora fina" d="M63 119.6L96.1 44.9L763.2 82.7"/></svg><div class="tags" aria-hidden="true"></div></div></figure>
+<p class="nomes-sr" data-f="descripcio" aria-live="polite"></p></section>
+<section class="ctrl" aria-label="Controls">
+<p class="etiq" id="e-proc">Què li passa ara?</p>
+<div class="processos" role="group" aria-labelledby="e-proc"><button class="btn proc" type="button" data-proc="erosio">Erosió i transport</button><button class="btn proc" type="button" data-proc="litificacio">Acumulació i litificació</button><button class="btn proc" type="button" data-proc="metamorfisme">Més pressió i temperatura</button><button class="btn proc" type="button" data-proc="fusio">Fusió</button><button class="btn proc" type="button" data-proc="erupcio">Surt pel volcà i es refreda de pressa</button><button class="btn proc" type="button" data-proc="refredament">Es queda a la cambra i es refreda a poc a poc</button><button class="btn proc" type="button" data-proc="sortida">Surt a la superfície</button></div>
+<p class="avis-var" data-f="avis" role="status"></p>
+<p class="etiq" id="e-inici">Comença de nou amb una roca:</p>
+<div class="grup dos" role="group" aria-labelledby="e-inici"><button class="btn" type="button" data-inici="basalt" aria-pressed="false">Basalt</button><button class="btn" type="button" data-inici="granit" aria-pressed="false">Granit</button><button class="btn" type="button" data-inici="sedimentaria" aria-pressed="false">Sedimentària</button><button class="btn" type="button" data-inici="metamorfica" aria-pressed="false">Metamòrfica</button></div>
+<p class="estat" id="estat-desc" data-f="estat"></p>
+<div class="grup dos peu-ctrl"></div>
+</section>
+<section class="quick" aria-label="Controls ràpids"><p class="avis-var" data-f="avis2" role="status"></p><div class="processos rapid" role="group" aria-label="Què li passa ara?"><button class="btn proc" type="button" data-proc="erosio">Erosió i transport</button><button class="btn proc" type="button" data-proc="litificacio">Acumulació i litificació</button><button class="btn proc" type="button" data-proc="metamorfisme">Més pressió i temperatura</button><button class="btn proc" type="button" data-proc="fusio">Fusió</button><button class="btn proc" type="button" data-proc="erupcio">Surt pel volcà i es refreda de pressa</button><button class="btn proc" type="button" data-proc="refredament">Es queda a la cambra i es refreda a poc a poc</button><button class="btn proc" type="button" data-proc="sortida">Surt a la superfície</button></div></section>
+<section class="lect" aria-label="Lectures">
+<div class="lectura lv"><h3>On és, en context</h3>
+<p class="v-fila"><span class="v-n">Profunditat</span><span class="v-b"><i data-b="km"></i></span><b data-f="km"></b></p><p class="v-t" data-f="fondaria"></p>
+<p class="v-fila"><span class="v-n">Temperatura</span><span class="v-b calor"><i data-b="t"></i><u class="forn" title="Forn de casa"></u></span><b data-f="t"></b></p><p class="v-t" data-f="calor"></p></div>
+<div class="lectura lt"><h3>Quant triga aquest pas</h3><p class="v-t" data-f="temps"></p><h3>A l'experiment</h3><p class="v-t" data-f="xocolata"></p></div>
+<div class="lectura lb"><h3>Biografia <span class="sub-t" data-f="grups"></span></h3><ol class="bio" id="bio" tabindex="0" aria-label="Biografia de la roca, amb desplaçament"></ol></div>
+<p class="frase"><span class="resum" data-f="resum" aria-live="polite"></span> <span class="consell" data-f="consell"></span></p>
+</section>
+<dialog class="panell" id="p-pred" aria-labelledby="p-pred-t"><div class="p-cap"><h2 id="p-pred-t">Abans de provar-ho</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<p class="pregunta">Una roca pot acabar sent d'un altre tipus? Què li ha de passar, i on?</p>
+<p>Heu fet el cicle de les roques amb xocolata. Aquí el fareu a la Terra: un tros de terreny tallat, amb una muntanya, un riu, el mar i un volcà, i a dins, cada vegada més calor i més pressió.</p>
+<p>Seguiràs <strong>una roca</strong> i triaràs què li passa. A cada pas veuràs on va, a quina profunditat i temperatura és, i en què es converteix.</p>
+<fieldset class="pred"><legend>Una roca metamòrfica pot convertir-se en sedimentària sense fondre's?</legend><label><input type="radio" name="pred" value="a"> Sí: si surt a la superfície, s'erosiona, i els sediments tornen a fer roca.</label><label><input type="radio" name="pred" value="b"> No: primer s'ha de fondre i tornar a ser una roca ígnia.</label><label><input type="radio" name="pred" value="c"> No: una roca metamòrfica ja no canvia més.</label></fieldset>
+<p class="nota">No et dic la resposta encara: la trobaràs fent la biografia d'una roca.</p>
+<p class="peu"><button class="btn gran" type="button" data-pred-ok>Desa la resposta i comença</button></p></div></dialog>
+<dialog class="panell" id="p-desc" aria-labelledby="p-desc-t"><div class="p-cap"><h2 id="p-desc-t">Què has descobert?</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<div data-locked>
+<p>Encara no pots respondre la pregunta. Cal que la teva roca hagi estat dels tres tipus (ígnia, sedimentària i metamòrfica) i que hagis fet tant basalt com granit. Ho pots fer en una sola biografia o en unes quantes.</p>
+<p data-f="estat2"></p>
+
+</div>
+<div data-unlocked hidden>
+<p data-f="havies"></p>
+
+<h3>La biografia de la teva roca</h3>
+<ol id="dades" aria-live="polite"></ol>
+<h3>Què diu el model</h3>
+<ul>
+<li><strong>Qualsevol roca pot acabar sent de qualsevol tipus.</strong> El cicle no és una roda amb un sol sentit. Una roca metamòrfica es fa sedimentària sense fondre's, amb tres passos: surt a la superfície, erosió i transport, acumulació i litificació.</li>
+<li><strong>El que mana és on és la roca.</strong> A la superfície arriben l'aigua i el vent, i la roca s'erosiona. Com més avall, més calor i més pes de roca a sobre: a uns 15 km hi ha uns 465 °C i la roca es transforma sense fondre's; a més de 25 km comença a fondre's.</li>
+<li><strong>El magma fa roques diferents segons com es refreda.</strong> Si surt pel volcà es refreda en dies o anys i fa basalt, de cristalls petits. Si es queda a la cambra magmàtica triga milers o milions d'anys i fa granit, de cristalls grans.</li>
+<li><strong>El que la xocolata no pot ensenyar és el temps.</strong> A l'aula el cicle dura una hora. A la Terra, segons el document del projecte, més de 65 milions d'anys: unes 12.000 vegades el temps que ens separa de l'Ötzi.</li>
+</ul>
+<div class="taula-wrap"><table class="taula comp"><caption>El mateix cicle, a l'experiment i a la Terra</caption>
+<thead><tr><th scope="col">Procés</th><th scope="col">A l'experiment</th><th scope="col">A la Terra, on passa</th><th scope="col">Temperatura</th></tr></thead><tbody>
+<tr><th scope="row">Erosió i transport</th><td>Ratllar la xocolata</td><td>A la superfície</td><td>Uns 15 °C</td></tr>
+<tr><th scope="row">Litificació</th><td>Prémer les ratlladures</td><td>Sota altres capes, a uns 4 km</td><td>Uns 135 °C</td></tr>
+<tr><th scope="row">Pressió i temperatura</th><td>Prémer i escalfar sense fondre</td><td>A uns 15 km</td><td>Uns 465 °C (entre 200 i 750)</td></tr>
+<tr><th scope="row">Fusió</th><td>Fondre la xocolata</td><td>A més de 25 km</td><td>Més de 750 °C</td></tr>
+<tr><th scope="row">Refredament ràpid</th><td>Glaçons</td><td>Al volcà, a la superfície</td><td>De 1140 a 15 °C</td></tr>
+<tr><th scope="row">Refredament lent</th><td>Deixar-la refredar</td><td>A la cambra magmàtica</td><td>Baixa molt a poc a poc</td></tr>
+</tbody></table></div>
+</div></div></dialog>
+<dialog class="panell" id="p-repte" aria-labelledby="p-repte-t"><div class="p-cap"><h2 id="p-repte-t">Reptes</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos"><p><strong>Primer repte.</strong> Comença amb un granit i fes-ne una roca sedimentària amb els mínims passos. Quants en calen, i quins?</p>
+<p><button class="btn" type="button" data-answer="1">Mostra la resposta</button></p>
+<p data-f="resposta" data-r="1" hidden>Tres: surt a la superfície, erosió i transport, acumulació i litificació. El granit es forma a sota terra, i fins que no és a la superfície l'aigua i el vent no hi arriben.</p>
+<p><strong>Segon repte.</strong> A la bossa de l'Ötzi hi ha una eina de basalt i una de granit. Totes dues venen de magma. Com sabries quina és quina mirant-les de prop?</p>
+<p><button class="btn" type="button" data-answer="2">Mostra la resposta</button></p>
+<p data-f="resposta" data-r="2" hidden>Pels cristalls. El basalt s'ha refredat de pressa a la superfície i té cristalls tan petits que gairebé no es veuen. El granit s'ha refredat a poc a poc a sota terra i té cristalls grans, que es distingeixen a simple vista.</p>
+<p><strong>Tercer repte.</strong> Per què ningú no ha vist mai una roca fer tot el cicle?</p>
+<p><button class="btn" type="button" data-answer="3">Mostra la resposta</button></p>
+<p data-f="resposta" data-r="3" hidden>Perquè dura moltíssim més que una vida, i que tota la història escrita. L'Ötzi va viure fa 5.300 anys, i les roques que duia són pràcticament iguals que llavors.</p></div></dialog>
+
+<dialog class="panell" id="p-model" aria-labelledby="p-model-t"><div class="p-cap"><h2 id="p-model-t">Sobre aquest model</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<p>El bloc de terreny és un model: una versió simplificada per pensar, no un retrat de cap lloc real. El detall de les fonts és al document FONTS.md que acompanya el recurs.</p>
+<ul>
+<li><strong>Què va a escala i què no.</strong> La profunditat va a escala: el regle de l'esquerra marca cada 5 km, fins a 36 km. L'amplada i el relleu no: la muntanya, el mar i el volcà estan molt exagerats i posats de costat perquè es vegin junts.</li>
+<li><strong>Temperatura.</strong> Es calcula amb 30 °C més per cada quilòmetre, a partir de 15 °C: és el valor típic del llibre obert <a href="https://opentextbc.ca/physicalgeology2ed/chapter/7-3-plate-tectonics-and-metamorphism/"><em>Physical Geology</em>, de Steven Earle</a>, que dona uns 300 °C a 10 km i uns 600 °C a 20 km. En zones volcàniques puja més de pressa, i el model no ho té en compte.</li>
+<li><strong>Quan una roca es transforma i quan es fon.</strong> El metamorfisme va dels 200 °C fins que la roca comença a fondre's; les roques granítiques ho fan entre 650 i 750 °C (<a href="https://www.britannica.com/science/metamorphic-rock/Metamorphic-variables">Britannica, «Metamorphic variables»</a>). Sota una serralada, la fusió comença a uns 25 km (Earle).</li>
+<li><strong>Lava i refredament.</strong> La lava de l'erupció del Kīlauea de 2018 va arribar a uns 1140 °C, i una colada de 4,5 m triga més de 130 dies a baixar a 200 °C (<a href="https://www.usgs.gov/observatories/hvo/news/volcano-watch-how-do-lava-flows-cool-and-how-long-does-it-take">Servei Geològic dels Estats Units</a>). El magma que queda a sota es refreda durant milers o milions d'anys i dona cristalls grans (<a href="https://www.usgs.gov/faqs/what-are-igneous-rocks">mateix servei</a>).</li>
+<li><strong>Com s'han consultat les fonts.</strong> Amb una eina que en resumeix el contingut, no llegides paraula per paraula.</li>
+<li><strong>El que no té xifra.</strong> Quant triguen l'erosió, la litificació, el metamorfisme i la sortida a la superfície: la pàgina només diu «molt de temps», perquè no n'hem llegit cap font. La pressió tampoc es dona en números: es diu quants quilòmetres de roca hi ha a sobre.</li>
+<li><strong>Suposicions.</strong> La profunditat de la cambra magmàtica (8 km), la de les capes de sediments (4 km), la de la roca metamòrfica (15 km) i la temperatura del forn de casa (250 °C). La temperatura de la superfície i les xifres de l'Ötzi i dels dinosaures són les del material del projecte.</li>
+<li><strong>Simplificacions.</strong> A la Terra, una roca es fon sobretot quan hi entra aigua o quan baixa la pressió, no només perquè baixi més avall. El document del projecte situa el magma al mantell; aquí es dibuixa la roca que es fon al fons de l'escorça. Les plaques tectòniques, que són les que enfonsen i aixequen les roques, no es dibuixen. El basalt i el granit tenen composicions diferents i no surten del mateix magma; aquí, com al document del projecte, només es compara com es refreden. Una roca sedimentària també es pot fer sense sediments d'altres roques (per exemple, amb restes d'éssers vius).</li>
+<li><strong>Pont amb l'experiment.</strong> Els passos de la xocolata s'han deduït de la llista de material i de la versió habitual de l'experiment; el vídeo no s'ha pogut veure. Cal que el docent els comprovi.</li>
+<li><strong>Autoria i revisió.</strong> Fet amb IA generativa a partir del model i les fonts d'aquest quadre. Versió de prova, pendent de revisió humana del model, dels textos i de les fonts. Autoria: Fundació Jesuïtes Educació, amb assistència de la IA. Llicència: continguts <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.ca">CC BY-SA 4.0</a> i codi <a href="https://opensource.org/license/mit">MIT</a>. La figura es dibuixa amb el kit d'anatomy (MIT). No hi ha cap petició a tercers.</li>
+</ul></div></dialog>
+<dialog class="panell" id="p-docent" aria-labelledby="p-docent-t"><div class="p-cap"><h2 id="p-docent-t">Per al docent</h2><button class="btn tanca" type="button" data-close aria-label="Tanca el panell">Tanca ×</button></div><div class="p-cos">
+<ul>
+<li><strong>On encaixa.</strong> Projecte «Petrificats en el temps» (1r d'ESO), activitat 4, «Cicle de les roques: el seu origen», després de l'experiment amb xocolata i abans que l'alumnat faci l'esquema individual. Fa servir el vocabulari de la fonamentació teòrica de l'activitat.</li>
+<li><strong>Què hi afegeix.</strong> El mateix recorregut que la xocolata, però amb el lloc, la profunditat i la temperatura reals de cada procés, i amb el temps posat en context amb l'Ötzi.</li>
+<li><strong>Abans.</strong> Que cada grup digui en veu alta quin pas de la xocolata era quin procés.</li>
+<li><strong>Durant.</strong> En parelles. Primer, lliure. Després, una consigna: «Fes que la teva roca sigui dels tres tipus». Els botons apagats es poden prémer i diuen per què la roca no pot fer aquell pas: val la pena que els llegeixin.</li>
+<li><strong>Després.</strong> Cada alumne dibuixa el seu esquema del cicle. Ara hi pot posar on passa cada cosa i fletxes en més d'un sentit.</li>
+<li><strong>Idea errònia.</strong> «El cicle va en un sol sentit, com una roda.» La predicció inicial i el primer repte hi van directes.</li>
+<li><strong>Diferències amb el document del projecte.</strong> El document diu que el magma és al mantell i que les plaques suren. El recurs no ho contradiu, però dibuixa la fusió al fons de l'escorça. Si surt la pregunta, vegeu «Sobre aquest model».</li>
+<li><strong>Currículum.</strong> Biologia i Geologia de l'ESO; el saber concret no s'ha contrastat amb el decret.</li>
+</ul></div></dialog>
+</div><script type="module">// Plantilla de pantalla única (skill recurs-aula): comportament genèric. El build l'insereix abans del live.js del recurs.
+// No sap res del model: el recurs li diu quan s'ha provat tot (progres) i què ha de redibuixar en canviar de pestanya.
+//
+//   const P = Pantalla.inicia({ opcions, correcta, missatges, onTab, onObre });
+//   P.progres("Falta provar: …", fet)   // actualitza l'estat i desbloqueja «Què has descobert?» quan fet és cert
+//   Pantalla.etiquetes(stage, svg, [{ t, pt: [x, y], dx, dy, alt: [[dx, dy], …] }])
+//   Pantalla.vistaAmpliada({ minAmplada: 900, onCanvi })
+//   ?mesura o ?debug a l'adreça: window.__mesura() i window.__panells() per a la verificació de la fase 6.
+const Pantalla = (() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const NS = "http://www.w3.org/2000/svg";
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const senseFinal = (s) => s.replace(/[.:;]$/, "");
+
+  function inicia({ opcions = {}, correcta = null, missatges = {}, onTab = () => {}, onObre = () => {}, obrePrediccio = true } = {}) {
+    const app = $(".app");
+    let prediccio = null, vista = false, revelat = false, opener = null;
+
+    // ---- predicció i descoberta ----
+    const ind = $("[data-f=ind]");
+    const mostraInd = () => { if (ind) ind.textContent = prediccio ? "Predicció: " + opcions[prediccio] : vista ? "Predicció: sense resposta" : ""; };
+    function missatge() {
+      const m = missatges.perOpcio?.[prediccio];
+      if (m) return m;
+      if (!prediccio) return missatges.senseResposta ?? "";
+      return prediccio === correcta ? missatges.encert ?? "" : missatges.error ?? "";
+    }
+    function pintaDescoberta() {
+      const box = $("#p-desc"); if (!box) return;
+      $("[data-locked]", box).hidden = revelat;
+      $("[data-unlocked]", box).hidden = !revelat;
+      if (!revelat) return;
+      const h = $("[data-f=havies]", box);
+      if (h) h.textContent = prediccio ? "Havies triat «" + senseFinal(opcions[prediccio]) + "». " + missatge() : missatge();
+    }
+    function desbloqueja() {
+      revelat = true;
+      const b = $("[data-desc]"); if (b) { b.setAttribute("aria-disabled", "false"); b.dataset.ready = "true"; }
+      pintaDescoberta();
+    }
+    function progres(text, fet) {
+      $$("[data-f=estat], [data-f=estat2]").forEach((e) => { e.textContent = text; });
+      if (fet && !revelat) desbloqueja();
+    }
+
+    // ---- panells ----
+    const nav = $("#menu"), tog = $(".menu-toggle");
+    const tancaMenu = () => { if (!nav) return; nav.classList.remove("obert"); tog?.setAttribute("aria-expanded", "false"); };
+    function obre(id, from) {
+      const d = document.getElementById(id);
+      if (!d || d.open) return;
+      opener = from || document.activeElement;
+      if (id === "p-desc") pintaDescoberta();
+      onObre(id);
+      d.showModal(); tancaMenu();
+    }
+    $$("dialog.panell").forEach((d) => {
+      d.addEventListener("close", () => {
+        if (d.id === "p-pred") { vista = true; mostraInd(); }
+        if (opener && opener.isConnected) opener.focus();
+        opener = null;
+      });
+      d.addEventListener("click", (e) => { if (e.target === d) d.close(); }); // clic al fons
+      $("[data-close]", d)?.addEventListener("click", () => d.close());
+    });
+    $$("[data-open]").forEach((b) => b.addEventListener("click", () => obre(b.dataset.open, b)));
+    $$('input[name="pred"]').forEach((e) => e.addEventListener("change", () => { prediccio = e.value; mostraInd(); pintaDescoberta(); }));
+    $("[data-pred-ok]")?.addEventListener("click", () => $("#p-pred").close());
+    $("[data-reveal]")?.addEventListener("click", (e) => { desbloqueja(); obre("p-desc", e.currentTarget); });
+    $("[data-reveal2]")?.addEventListener("click", () => desbloqueja());
+    $$("[data-answer]").forEach((b) => b.addEventListener("click", () => {
+      const r = $(`[data-f=resposta][data-r="${b.dataset.answer}"]`); if (r) r.hidden = false;
+      b.hidden = true; r?.setAttribute("tabindex", "-1"); r?.focus();
+    }));
+
+    // ---- menú del mòbil i pestanyes ----
+    tog?.addEventListener("click", () => { const o = nav.classList.toggle("obert"); tog.setAttribute("aria-expanded", String(o)); if (o) $("button", nav)?.focus(); });
+    $$("[data-tab-btn]").forEach((b) => b.addEventListener("click", () => {
+      app.dataset.tab = b.dataset.tabBtn;
+      $$("[data-tab-btn]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      setTimeout(() => onTab(app.dataset.tab), 0);
+    }));
+
+    // ---- Esc propi: tanca el panell obert o el menú (l'Esc sintètic de les proves no tanca un <dialog>) ----
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      const d = $("dialog.panell[open]");
+      if (d) { e.preventDefault(); d.close(); return; }
+      if (nav?.classList.contains("obert")) { tancaMenu(); tog.focus(); }
+    });
+
+    if (obrePrediccio) requestAnimationFrame(() => obre("p-pred", $("[data-open=p-pred]")));
+    return { obre, progres, desbloqueja, get prediccio() { return prediccio; }, get revelat() { return revelat; } };
+  }
+
+  // ---- etiquetes: capa HTML sobre la figura, de 16-22 px reals a qualsevol amplada ----
+  // stage: element posicionat que conté l'SVG i un .tags; pt: punt de la peça en coordenades de l'SVG;
+  // dx, dy: desplaçament de l'etiqueta en píxels de pantalla; alt: altres desplaçaments per si toca una altra etiqueta.
+  // Una etiqueta que no troba lloc no es mostra i queda apuntada a window.__etiquetesAmagades (es revisa a la verificació).
+  function etiquetes(stage, svg, llista) {
+    const capa = $(".tags", stage); if (!capa) return;
+    capa.innerHTML = "";
+    const m = svg.getScreenCTM(); if (!m) return;
+    const box = stage.getBoundingClientRect();
+    if (!box.width || !box.height) return; // figura amagada (pestanya de controls al mòbil): es recol·loquen en tornar-hi
+    const lead = document.createElementNS(NS, "svg"); lead.setAttribute("class", "lead"); capa.appendChild(lead);
+    const proj = ([x, y]) => [m.a * x + m.c * y + m.e - box.left, m.b * x + m.d * y + m.f - box.top];
+    const posades = [], amagades = [];
+    for (const l of llista) {
+      const [px, py] = proj(l.pt);
+      const tag = document.createElement("span"); tag.className = "tag"; tag.textContent = l.t; capa.appendChild(tag);
+      const w = tag.offsetWidth, h = tag.offsetHeight;
+      let lloc = null;
+      for (const [dx, dy] of [[l.dx ?? 0, l.dy ?? 0], ...(l.alt || [])]) {
+        const tx = clamp(px + dx, w / 2 + 4, box.width - w / 2 - 4), ty = clamp(py + dy, h / 2 + 4, box.height - h / 2 - 4);
+        if (!posades.some((q) => Math.abs(q.x - tx) < (q.w + w) / 2 + 4 && Math.abs(q.y - ty) < (q.h + h) / 2 + 2)) { lloc = [tx, ty]; break; }
+      }
+      if (!lloc) { tag.remove(); amagades.push(l.t); continue; }
+      const [tx, ty] = lloc;
+      posades.push({ x: tx, y: ty, w, h });
+      tag.style.left = tx.toFixed(1) + "px"; tag.style.top = ty.toFixed(1) + "px";
+      const ln = document.createElementNS(NS, "line");
+      ln.setAttribute("x1", tx); ln.setAttribute("y1", ty); ln.setAttribute("x2", px); ln.setAttribute("y2", py);
+      lead.insertBefore(ln, lead.firstChild);
+      const c = document.createElementNS(NS, "circle"); c.setAttribute("cx", px); c.setAttribute("cy", py); c.setAttribute("r", 4); lead.appendChild(c);
+    }
+    window.__etiquetesAmagades = amagades;
+  }
+
+  // ---- vista ampliada (opcional): requadre #inset amb botons data-inset="gran|amaga|mostra" ----
+  // Si la figura fa menys de minAmplada px, comença amagada perquè no tapi l'objecte.
+  function vistaAmpliada({ minAmplada = 900, onCanvi = () => {} } = {}) {
+    const inset = $("#inset"), mostra = $("[data-inset=mostra]"), gran = $("[data-inset=gran]"), fig = $(".fig");
+    if (!inset) return;
+    const nom = inset.dataset.nom || "la vista ampliada";
+    $$("[data-inset]").forEach((b) => b.addEventListener("click", () => {
+      const k = b.dataset.inset;
+      if (k === "gran") { const g = inset.classList.toggle("gran"); gran.setAttribute("aria-pressed", String(g)); gran.textContent = g ? "Redueix" : "Amplia"; gran.setAttribute("aria-label", (g ? "Redueix " : "Amplia ") + nom); }
+      if (k === "amaga") { inset.hidden = true; mostra.hidden = false; mostra.focus(); }
+      if (k === "mostra") { inset.hidden = false; mostra.hidden = true; gran.focus(); }
+      onCanvi(!inset.hidden);
+    }));
+    if (getComputedStyle(inset).position === "absolute" && fig.clientWidth < minAmplada) { inset.hidden = true; mostra.hidden = false; onCanvi(false); }
+  }
+
+  // ---- mesura per a la verificació (fase 6) ----
+  // Amb overflow:hidden, scrollHeight <= innerHeight sempre és cert: aquí es mira que cada bloc visible acabi dins de la pantalla,
+  // que no tingui contingut tallat i que cap fill en sobresurti.
+  // cert si entre l'element i el bloc hi ha un contenidor que es desplaça (overflow auto o scroll)
+  const dinsDeDesplacament = (c, bloc) => { for (let p = c.parentElement; p && p !== bloc; p = p.parentElement) { const o = getComputedStyle(p); if (/(auto|scroll)/.test(o.overflowX) || /(auto|scroll)/.test(o.overflowY)) return true; } return false; };
+  const BLOCS = [".top", ".tabs", ".fig", ".quick", ".ctrl", ".lect"];
+  function mesura() {
+    const problemes = [];
+    const de = document.documentElement;
+    if (de.scrollWidth > innerWidth + 1) problemes.push(`desplaçament horitzontal: ${de.scrollWidth} > ${innerWidth}`);
+    for (const sel of BLOCS) {
+      const e = $(sel); if (!e || e.offsetParent === null || getComputedStyle(e).display === "none") continue;
+      const r = e.getBoundingClientRect();
+      if (r.bottom > innerHeight + 1 || r.right > innerWidth + 1) problemes.push(`${sel} surt de la pantalla (${Math.round(r.right)} × ${Math.round(r.bottom)})`);
+      if (sel !== ".fig" && e.scrollHeight > e.clientHeight + 1) problemes.push(`${sel} té contingut tallat (${e.scrollHeight} > ${e.clientHeight})`);
+      for (const c of e.querySelectorAll("*")) {
+        if (c.closest("svg") || c.closest(".tags") || c.closest("[hidden]") || getComputedStyle(c).position === "absolute") continue;
+        if (dinsDeDesplacament(c, e)) continue; // dins d'un contenidor amb desplaçament propi (una taula llarga): sobresortir-ne és el seu ofici
+        const q = c.getBoundingClientRect();
+        if (q.width && (q.bottom > r.bottom + 1 || q.right > r.right + 1)) { problemes.push(`${sel} > ${c.tagName.toLowerCase()}${c.className ? "." + String(c.className).split(" ")[0] : ""} sobresurt`); break; }
+      }
+    }
+    // al mòbil, que alguna etiqueta no hi càpiga és un avís per revisar en captura; a partir de tauleta, és un problema
+    const avisos = [];
+    const figVisible = $(".fig") && $(".fig").offsetParent !== null && getComputedStyle($(".fig")).display !== "none";
+    if (figVisible && window.__etiquetesAmagades?.length) (innerWidth <= 600 ? avisos : problemes).push("etiquetes amagades per manca de lloc: " + window.__etiquetesAmagades.join(", "));
+    const fig = $(".fig")?.getBoundingClientRect();
+    // la figura és el centre del recurs: si els controls o les lectures l'aixafen, cal treure'ls espai, no reduir-la
+    const minFig = innerWidth > 600 ? 0.3 : 0.22;
+    if (fig && fig.height > 0 && fig.height < minFig * innerHeight) problemes.push(`figura massa petita: ${Math.round(fig.height)} px d'alçada (mínim ${Math.round(minFig * innerHeight)})`);
+    return { mida: `${innerWidth}×${innerHeight}`, figura: fig ? `${Math.round(fig.width)}×${Math.round(fig.height)}` : null, ok: problemes.length === 0, problemes, avisos };
+  }
+  function panells() {
+    return $$("dialog.panell").map((d) => {
+      const obert = d.open; if (!obert) d.showModal();
+      const r = d.getBoundingClientRect(), c = $(".p-cos", d);
+      const ok = r.top >= -1 && r.bottom <= innerHeight + 1 && r.right <= innerWidth + 1 && c.scrollWidth <= c.clientWidth + 1;
+      const res = { id: d.id, ok, alt: `${Math.round(r.height)}/${innerHeight}`, desplacaInterior: c.scrollHeight > c.clientHeight + 1 };
+      if (!obert) d.close();
+      return res;
+    });
+  }
+  if (/[?&](mesura|debug)/.test(location.search)) { window.__mesura = mesura; window.__panells = panells; }
+
+  return { inicia, etiquetes, vistaAmpliada, mesura, panells };
+})();
+
+const M = (() => {
+// Model de «La biografia d'una roca». Tot el que la pàgina dibuixa, mou o escriu surt d'aquí.
+// Una roca té un tipus i és en un lloc del bloc de terreny. Cada procés la canvia de tipus, de lloc o de totes dues coses.
+// Les xifres porten l'origen a FONTS.md.
+
+// ---- variables reals ----
+const T_SUPERFICIE = 15;            // °C a la superfície (el document del projecte: «de 1000 graus a 15 graus»)
+const GRADIENT = 30;                // °C per km de profunditat (Earle, Physical Geology 2a ed., 7.3)
+const temperatura = (km) => T_SUPERFICIE + GRADIENT * km;
+const T_METAMORFISME = [200, 750];  // °C: del límit de la diagènesi (150-200) al començament de la fusió de roques granítiques (650-750) (Britannica)
+const KM_FUSIO = 25;                // km: a partir d'aquí la roca comença a fondre's sota una serralada (Earle, 7.3)
+const T_LAVA = 1140;                // °C: lava de l'erupció del Kīlauea de 2018 (USGS)
+const T_LAVA_SOLIDA = 1000;         // °C: per sota, la colada és sòlida (USGS)
+const COLADA = { gruix: 4.5, dies: 130, fins: 200 };   // una colada de 4,5 m triga més de 130 dies a baixar a 200 °C (USGS)
+const OTZI_ANYS = 5300;             // anys (document del projecte)
+const DINOSAURES_ANYS = 65e6;       // anys (document del projecte: «fa més de 65 milions d'anys»)
+const FORN = 250;                   // °C: forn de cuina al màxim (suposició)
+
+// ---- llocs del bloc (profunditat en km) ----
+const LLOCS = {
+  muntanya: { nom: "a la superfície, en una muntanya", km: 0 },
+  volca: { nom: "a la superfície, al vessant del volcà", km: 0 },
+  mar: { nom: "al fons del mar", km: 0 },
+  capes: { nom: "sota altres capes de sediments", km: 4 },
+  fons: { nom: "a molta profunditat", km: 15 },
+  fusio: { nom: "a la zona on la roca es fon", km: 30 },
+  cambra: { nom: "a la cambra magmàtica", km: 8 },
+};
+// ---- tipus ----
+const TIPUS = {
+  basalt: { nom: "basalt", grup: "ígnia", solida: true },
+  granit: { nom: "granit", grup: "ígnia", solida: true },
+  sedimentaria: { nom: "roca sedimentària", grup: "sedimentària", solida: true },
+  metamorfica: { nom: "roca metamòrfica", grup: "metamòrfica", solida: true },
+  sediments: { nom: "sediments", grup: null, solida: false },
+  magma: { nom: "magma", grup: null, solida: false },
+};
+const GRUPS = ["ígnia", "sedimentària", "metamòrfica"];
+// Roques amb què es pot començar: tipus i lloc on es troba
+const INICIS = { basalt: "volca", granit: "cambra", sedimentaria: "capes", metamorfica: "fons" };
+
+const superficie = (s) => LLOCS[s.lloc].km === 0 && s.lloc !== "mar";
+const solida = (s) => TIPUS[s.tipus].solida;
+const enterrada = (s) => solida(s) && LLOCS[s.lloc].km > 0;
+
+// ---- processos ----
+// pot(s): cert si es pot fer; si no, motiu(s) diu per què. fa(s): l'estat nou. temps: ordre de magnitud, en paraules, i si té font.
+const PROCESSOS = {
+  erosio: {
+    nom: "Erosió i transport", pot: (s) => solida(s) && superficie(s), fa: () => ({ tipus: "sediments", lloc: "mar" }),
+    motiu: (s) => (!solida(s) ? "Només s'erosiona una roca sòlida." : "L'aigua i el vent només arriben a les roques de la superfície. Aquesta és a sota terra."),
+    temps: "molt de temps", font: false, xocolata: "ratllar la xocolata",
+  },
+  litificacio: {
+    nom: "Acumulació i litificació", pot: (s) => s.tipus === "sediments", fa: () => ({ tipus: "sedimentaria", lloc: "capes" }),
+    motiu: () => "Per fer una roca sedimentària calen sediments. Primer, la roca s'ha d'erosionar.",
+    temps: "molt de temps", font: false, xocolata: "prémer les ratlladures",
+  },
+  metamorfisme: {
+    nom: "Més pressió i temperatura", pot: (s) => solida(s), fa: () => ({ tipus: "metamorfica", lloc: "fons" }),
+    motiu: (s) => (s.tipus === "magma" ? "El magma ja és fos: no es pot transformar sense fondre's." : "Els sediments solts primer s'han de convertir en roca."),
+    temps: "molt de temps", font: false, xocolata: "prémer i escalfar sense que es fongui",
+  },
+  fusio: {
+    nom: "Fusió", pot: (s) => enterrada(s), fa: () => ({ tipus: "magma", lloc: "fusio" }),
+    motiu: (s) => (!solida(s) ? (s.tipus === "magma" ? "Ja és magma." : "Els sediments solts primer s'han de convertir en roca.") : "A la superfície no fa prou calor per fondre una roca. Primer ha de ser a sota terra."),
+    temps: "molt de temps", font: false, xocolata: "fondre la xocolata",
+  },
+  erupcio: {
+    nom: "Surt pel volcà i es refreda de pressa", pot: (s) => s.tipus === "magma", fa: () => ({ tipus: "basalt", lloc: "volca" }),
+    motiu: () => "Pel volcà només en surt magma. Primer, la roca s'ha de fondre.",
+    temps: "dies o anys", font: true, xocolata: "refredar-la de cop amb glaçons",
+  },
+  refredament: {
+    nom: "Es queda a la cambra i es refreda a poc a poc", pot: (s) => s.tipus === "magma", fa: () => ({ tipus: "granit", lloc: "cambra" }),
+    motiu: () => "A la cambra magmàtica només hi ha magma. Primer, la roca s'ha de fondre.",
+    temps: "milers o milions d'anys", font: true, xocolata: "deixar-la refredar a poc a poc",
+  },
+  sortida: {
+    nom: "Surt a la superfície", pot: (s) => enterrada(s), fa: (s) => ({ tipus: s.tipus, lloc: "muntanya" }),
+    motiu: (s) => (!solida(s) ? "Només hi surt una roca sòlida." : "Ja és a la superfície."),
+    temps: "molt de temps", font: false, xocolata: null,
+  },
+};
+const ORDRE = ["erosio", "litificacio", "metamorfisme", "fusio", "erupcio", "refredament", "sortida"];
+
+const inici = (tipus) => ({ tipus, lloc: INICIS[tipus] });
+const pot = (s, p) => PROCESSOS[p].pot(s);
+const aplica = (s, p) => { if (!pot(s, p)) throw new Error("procés no possible: " + p); return PROCESSOS[p].fa(s); };
+const possibles = (s) => ORDRE.filter((p) => pot(s, p));
+// Variables reals del lloc on és la roca: profunditat i temperatura segons el gradient.
+function variables(s) {
+  const km = LLOCS[s.lloc].km;
+  return { km, t: Math.round(temperatura(km) / 5) * 5 };
+}
+// Biografia: aplica una llista de processos des d'un inici i torna tots els estats
+function biografia(tipus, passos) { const h = [inici(tipus)]; for (const p of passos) h.push(aplica(h.at(-1), p)); return h; }
+// Camí més curt (en passos) d'un tipus de roca a un grup
+function camiMesCurt(tipus, grup, sense = []) {
+  const vist = new Set(), cua = [[inici(tipus), []]];
+  while (cua.length) {
+    const [s, c] = cua.shift(); const k = s.tipus + "@" + s.lloc;
+    if (c.length && TIPUS[s.tipus].grup === grup) return c;
+    if (vist.has(k) || c.length > 8) continue; vist.add(k);
+    for (const p of possibles(s)) if (!sense.includes(p)) cua.push([aplica(s, p), [...c, p]]);
+  }
+  return null;
+}
+const coma = (x, d = 0) => Number(x).toFixed(d).replace(".", ",");
+const milers = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+
+return { COLADA, DINOSAURES_ANYS, FORN, GRADIENT, GRUPS, INICIS, KM_FUSIO, LLOCS, ORDRE, OTZI_ANYS, PROCESSOS, TIPUS, T_LAVA, T_LAVA_SOLIDA, T_METAMORFISME, T_SUPERFICIE, aplica, biografia, camiMesCurt, coma, inici, milers, possibles, pot, temperatura, variables };
+})();
+
+const GEOM = {"lloc":{"muntanya":[240,55.2],"volca":[701.5,136.1],"mar":[448.7,153.3],"capes":[448.7,167.1],"fons":[323.6,230.4],"fusio":[511.3,337.1],"cambra":[608.2,201.8]},"camins":{"fons>fons>metamorfisme":[[323.6,230.4],[323.6,230.4]],"fons>fusio>fusio":[[323.6,230.4],[511.3,337.1]],"fons>muntanya>sortida":[[323.6,230.4],[125.6,131],[104.7,121.9],[155.6,98.8],[240,55.2]],"muntanya>mar>erosio":[[240,55.2],[262,79.1],[288.2,103.3],[311.1,114.5],[346.4,111.9],[380.9,120.8],[417.5,139.7],[448.7,153.3]],"muntanya>fons>metamorfisme":[[240,55.2],[323.6,230.4]],"mar>capes>litificacio":[[448.7,153.3],[448.7,167.1]],"capes>fons>metamorfisme":[[448.7,167.1],[323.6,230.4]],"capes>fusio>fusio":[[448.7,167.1],[511.3,337.1]],"capes>muntanya>sortida":[[448.7,167.1],[125.6,131],[104.7,121.9],[155.6,98.8],[240,55.2]],"fusio>volca>erupcio":[[511.3,337.1],[606.1,314.5],[631.2,209],[631.2,188.3],[631.2,77.9],[668.2,97.8],[701.5,136.1]],"fusio>cambra>refredament":[[511.3,337.1],[606.1,314.5],[624.9,212.6],[608.2,201.8]],"cambra>fons>metamorfisme":[[608.2,201.8],[323.6,230.4]],"cambra>fusio>fusio":[[608.2,201.8],[511.3,337.1]],"cambra>muntanya>sortida":[[608.2,201.8],[125.6,131],[104.7,121.9],[155.6,98.8],[240,55.2]],"volca>mar>erosio":[[701.5,136.1],[698.9,155.7],[675.9,135.2],[547.5,135.6],[490.4,143.8],[448.7,153.3]],"volca>fons>metamorfisme":[[701.5,136.1],[323.6,230.4]]},"etiq":{"volca":[631.2,72],"cambra":[662.4,204.8],"mar":[461.9,111.6],"muntanya":[188,10.8],"fusio":[188.1,322],"meta":[156.9,224.7]},"regle":[{"km":0,"pt":[63,119.6]},{"km":10,"pt":[63,183.6]},{"km":20,"pt":[63,247.7]},{"km":30,"pt":[63,311.7]}],"fonsKm":36};
+const TX = {"opcions":{"a":"Sí: si surt a la superfície, s'erosiona, i els sediments tornen a fer roca.","b":"No: primer s'ha de fondre i tornar a ser una roca ígnia.","c":"No: una roca metamòrfica ja no canvia més."},"descoberta":{"perOpcio":{"a":"Tenies raó: el cicle no té un sol sentit. Una roca metamòrfica que surt a la superfície s'erosiona com qualsevol altra.","b":"No cal que es fongui. El cicle no és una roda amb un sol sentit: una roca metamòrfica que surt a la superfície s'erosiona, i els sediments fan una roca sedimentària.","c":"Les roques metamòrfiques també canvien: es poden fondre, erosionar-se si surten a la superfície o tornar-se a transformar amb més pressió i temperatura."},"senseResposta":"No havies triat cap resposta, però ja ho has vist: una roca metamòrfica pot acabar sent sedimentària sense fondre's."},"frases":{"roca":{"basalt":"basalt, una roca ígnia","granit":"granit, una roca ígnia","sedimentaria":"una roca sedimentària","metamorfica":"una roca metamòrfica","sediments":"sediments (encara no és una roca)","magma":"magma (no és una roca: és roca fosa)"},"fondaria":{"0":"A la superfície: no té roca a sobre.","n":"Té {km} km de roca a sobre: aquest pes és la pressió."},"calor":{"fred":"Com un dia de primavera.","tebi":"Menys que el forn de casa al màxim ({f} °C).","igual":"Com el forn de casa al màxim ({f} °C).","calent":"Unes {v} vegades el forn de casa al màxim ({f} °C)."},"temps":{"inici":"Tria què li passa a la roca.","molt de temps":"Milers o milions d'anys. Un cicle sencer en demana més de 65 milions: unes 12.000 vegades el temps que ens separa de l'Ötzi.","dies o anys":"Dies o anys: una colada de lava de 4,5 m de gruix triga més de 130 dies a baixar a 200 °C. Per això el basalt té cristalls petits.","milers o milions d'anys":"Milers o milions d'anys. Per comparar: l'Ötzi va viure fa 5.300 anys. Per això el granit té cristalls grans."},"xocolata":{"cap":"No surt a l'experiment. A la Terra, el terreny de sobre s'erosiona.","inici":"Cada pas que facis aquí té el seu pas a l'experiment de la xocolata.","pas":"Era {x}."},"noPot":"Ara no pot. {m}","consell":{"inici":"Tria què li passa a la roca. Els botons apagats també es poden prémer: et diuen per què no pot.","mou":"Mira on va la roca.","pas":"Què li passa ara?"},"progres":{"falta":"Per respondre la pregunta, la teva roca encara ha de ser: {l}.","fet":"Ja pots respondre la pregunta: obre «Què has descobert?»."},"falten":{"ígnia":"ígnia","sedimentària":"sedimentària","metamòrfica":"metamòrfica","basalt":"basalt (refredament ràpid)","granit":"granit (refredament lent)"},"bio":{"inici":"Comença sent {r}, {l}.","pas":"{p}: ara és {r}, {l}."},"etiq":{"volca":"Volcà","cambra":"Cambra magmàtica","meta":"Molta pressió i temperatura","fusio":"La roca es fon","sup":"Superfície"},"descripcio":"La teva roca és {r} i és {l}. Profunditat: {km} km. Temperatura: {t} °C."}};
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const NS = "http://www.w3.org/2000/svg";
+const svg = $("svg.roca"), stage = $(".stage"), app = $(".app");
+const el = (name, attrs = {}, parent) => { const e = document.createElementNS(NS, name); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const params = new URLSearchParams(location.search);
+const QUIET = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const DURADA = Number(params.get("ms")) || 1700;
+
+// ---------- estat ----------
+let roca = M.inici("granit"), tipusInici = "granit";
+let bio = [];                       // [{ proces, de, a }]
+let movent = false, ultim = null, avis = "";
+const vistos = new Set();           // grups i roques ígnies que la roca ha estat, en totes les biografies
+
+// ---------- mostres de cada roca (textura) ----------
+function mostra(tipus, mida = 40) {
+  const r = (i, m) => ((i * 7919 + 13) % m);
+  let d = `<svg viewBox="0 0 40 40" width="${mida}" height="${mida}" class="tros m-${tipus}"><rect class="m-fons" x="1" y="1" width="38" height="38" rx="7"/>`;
+  if (tipus === "basalt") for (let i = 0; i < 26; i++) d += `<circle class="m-gra" cx="${4 + r(i, 32)}" cy="${4 + r(i * 3 + 1, 32)}" r=".9"/>`;
+  if (tipus === "granit") for (let i = 0; i < 9; i++) { const x = 3 + (i % 3) * 12 + r(i, 3), y = 3 + Math.floor(i / 3) * 12 + r(i + 4, 3); d += `<path class="m-cristall k${i % 3}" d="M${x} ${y + 3}l5 -3l6 2l-1 7l-7 2z"/>`; }
+  if (tipus === "sedimentaria") { for (let i = 0; i < 4; i++) d += `<rect class="m-capa k${i % 3}" x="1" y="${3 + i * 9}" width="38" height="8"/>`; d += `<path class="m-fossil" d="M22 25a5 5 0 1 1 8 0m-6.5 -1l2.5 -5l2.5 5"/>`; }
+  if (tipus === "metamorfica") for (let i = 0; i < 5; i++) d += `<path class="m-banda k${i % 2}" d="M1 ${6 + i * 7}q6 -5 10 0t10 0t10 0t8 0"/>`;
+  if (tipus === "sediments") for (let i = 0; i < 22; i++) d += `<circle class="m-gra k${i % 3}" cx="${5 + r(i, 30)}" cy="${14 + r(i * 5 + 2, 22)}" r="${1.4 + (i % 3) * 0.5}"/>`;
+  if (tipus === "magma") for (let i = 0; i < 7; i++) d += `<circle class="m-bombolla" cx="${7 + r(i, 26)}" cy="${7 + r(i * 3 + 2, 26)}" r="${2 + (i % 3)}"/>`;
+  return d + `<rect class="m-vora" x="1" y="1" width="38" height="38" rx="7"/></svg>`;
+}
+
+// ---------- la roca dins del bloc ----------
+const gRastre = el("g", { class: "rastre" }, svg), gRoca = el("g", { class: "fitxa-roca" }, svg);
+el("circle", { class: "halo", r: 15 }, gRoca); el("circle", { class: "cos", r: 9 }, gRoca); el("circle", { class: "punt", r: 3 }, gRoca);
+const posa = ([x, y]) => gRoca.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+const camiDe = (de, a, p) => GEOM.camins[`${de}>${a}>${p}`] || [GEOM.lloc[de], GEOM.lloc[a]];
+function alLlarg(pts, u) {
+  const L = pts.slice(1).map((p, i) => Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1])), T = L.reduce((a, b) => a + b, 0);
+  let d = u * T; for (let i = 0; i < L.length; i++) { if (d <= L[i] || i === L.length - 1) { const k = L[i] ? Math.min(1, d / L[i]) : 0; return [pts[i][0] + (pts[i + 1][0] - pts[i][0]) * k, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * k]; } d -= L[i]; }
+  return pts.at(-1);
+}
+function pintaRastre() {
+  gRastre.innerHTML = "";
+  bio.slice(-3).forEach((b, i, a) => el("path", { class: "pas", d: "M" + camiDe(b.de.lloc, b.a.lloc, b.proces).map((p) => p.join(" ")).join("L"), opacity: 0.25 + (0.6 * (i + 1)) / a.length }, gRastre));
+}
+
+// ---------- etiquetes ----------
+function etiquetes() {
+  const v = M.variables(roca), p = GEOM.lloc[roca.lloc], E = GEOM.etiq, n = TX.frases.etiq;
+  const ll = [{ t: v.km ? `${v.km} km · ${v.t} °C` : `${n.sup} · ${v.t} °C`, pt: p, dx: 0, dy: -34, alt: [[0, 36], [96, 0], [-96, 0]] }];
+  if (!movent) {
+    ll.push({ t: n.volca, pt: E.volca, dx: 0, dy: -24, alt: [[-60, -10]] }, { t: n.cambra, pt: E.cambra, dx: 20, dy: 32, alt: [[-110, 26], [0, 40]] },
+      { t: n.meta, pt: E.meta, dx: 60, dy: 0, alt: [[60, 30], [60, -30]] }, { t: n.fusio, pt: E.fusio, dx: 20, dy: 0, alt: [[20, 22]] });
+    if (stage.clientWidth > 800) for (const r of GEOM.regle) ll.push({ t: r.km + " km", pt: r.pt, dx: -40, dy: 0 });
+  }
+  Pantalla.etiquetes(stage, svg, ll);
+}
+
+// ---------- lectures ----------
+const noms = (l) => (l.length < 2 ? l[0] || "" : l.slice(0, -1).join(", ") + " i " + l.at(-1));
+const majus = (s) => s[0].toUpperCase() + s.slice(1);
+const fraseRoca = (s) => TX.frases.roca[s.tipus], fraseLloc = (s) => M.LLOCS[s.lloc].nom;
+function calor(v, s) {
+  const C = TX.frases.calor, f = M.FORN;
+  const k = v.t < 60 ? "fred" : Math.abs(v.t - f) <= 15 ? "igual" : v.t < f ? "tebi" : "calent";
+  return C[k].replace("{f}", f).replace("{v}", M.coma(v.t / f, 1));
+}
+function pinta() {
+  const v = M.variables(roca);
+  $("#mostra").innerHTML = mostra(roca.tipus);
+  $("[data-f=roca]").textContent = fraseRoca(roca); $("[data-f=lloc]").textContent = "· " + fraseLloc(roca);
+  gRoca.setAttribute("class", "fitxa-roca t-" + roca.tipus);
+  $("[data-f=km]").textContent = v.km + " km"; $("[data-b=km]").style.width = (v.km / GEOM.fonsKm) * 100 + "%";
+  $("[data-f=t]").textContent = v.t + " °C"; $("[data-b=t]").style.width = Math.min(100, (v.t / 1200) * 100) + "%";
+  $(".forn").style.left = (M.FORN / 1200) * 100 + "%";
+  $("[data-f=fondaria]").textContent = v.km ? TX.frases.fondaria.n.replace("{km}", v.km) : TX.frases.fondaria[0];
+  $("[data-f=calor]").textContent = calor(v, roca);
+  const P = ultim ? M.PROCESSOS[ultim] : null;
+  $("[data-f=temps]").textContent = P ? TX.frases.temps[P.temps] : TX.frases.temps.inici;
+  $("[data-f=xocolata]").textContent = !P ? TX.frases.xocolata.inici : P.xocolata ? TX.frases.xocolata.pas.replace("{x}", P.xocolata) : TX.frases.xocolata.cap;
+  // botons
+  $$("[data-proc]").forEach((b) => { const ok = M.pot(roca, b.dataset.proc) && !movent; b.setAttribute("aria-disabled", String(!ok)); });
+  $$("[data-inici]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.inici === tipusInici && !bio.length)));
+  $$("[data-f=avis], [data-f=avis2]").forEach((e) => { e.textContent = avis; e.classList.toggle("on", !!avis); });
+  // biografia
+  const B = TX.frases.bio, ini = bio.length ? bio[0].de : roca;
+  $("#bio").innerHTML = `<li>${B.inici.replace("{r}", fraseRoca(ini)).replace("{l}", fraseLloc(ini))}</li>` + bio.map((b) => `<li>${B.pas.replace("{p}", M.PROCESSOS[b.proces].nom).replace("{r}", fraseRoca(b.a)).replace("{l}", fraseLloc(b.a))}</li>`).join("");
+  $("#bio").scrollTop = $("#bio").scrollHeight;
+  const estat = [ini, ...bio.map((b) => b.a)].map((s) => M.TIPUS[s.tipus].grup).filter(Boolean);
+  $("[data-f=grups]").textContent = "(" + M.GRUPS.map((g) => g + ": " + (estat.includes(g) ? "sí" : "encara no")).join(" · ") + ")";
+  const C = TX.frases.consell;
+  $("[data-f=resum]").textContent = ""; $("[data-f=consell]").textContent = movent ? C.mou : bio.length ? C.pas : C.inici;
+  $("[data-f=descripcio]").textContent = TX.frases.descripcio.replace("{r}", fraseRoca(roca)).replace("{l}", fraseLloc(roca)).replace("{km}", v.km).replace("{t}", v.t);
+  app.dataset.mov = movent ? "si" : "no";
+  pintaRastre(); etiquetes(); progres();
+}
+function apunta(s) { const g = M.TIPUS[s.tipus].grup; if (g) vistos.add(g); if (s.tipus === "basalt" || s.tipus === "granit") vistos.add(s.tipus); }
+const CAL = [...M.GRUPS, "basalt", "granit"];
+function progres() {
+  const falta = CAL.filter((k) => !vistos.has(k));
+  P.progres(falta.length ? TX.frases.progres.falta.replace("{l}", noms(falta.map((k) => TX.frases.falten[k]))) : TX.frases.progres.fet, falta.length === 0);
+}
+function pintaDades() {
+  const B = TX.frases.bio, ini = bio.length ? bio[0].de : roca;
+  $("#dades").innerHTML = `<li>${B.inici.replace("{r}", fraseRoca(ini)).replace("{l}", fraseLloc(ini))}</li>` + bio.map((b) => { const v = M.variables(b.a); return `<li>${B.pas.replace("{p}", M.PROCESSOS[b.proces].nom).replace("{r}", fraseRoca(b.a)).replace("{l}", fraseLloc(b.a))} (${v.km} km, ${v.t} °C)</li>`; }).join("");
+}
+
+// ---------- accions ----------
+function fes(p, animat = true) {
+  if (movent) return;
+  if (!M.pot(roca, p)) { avis = TX.frases.noPot.replace("{m}", M.PROCESSOS[p].motiu(roca)); pinta(); return; }
+  avis = "";
+  const de = roca, a = M.aplica(roca, p), pts = camiDe(de.lloc, a.lloc, p);
+  const acaba = () => { movent = false; roca = a; ultim = p; bio.push({ proces: p, de, a }); apunta(a); posa(GEOM.lloc[a.lloc]); pinta(); };
+  if (!animat || QUIET) { acaba(); return; }
+  movent = true; pinta();
+  const t0 = performance.now();
+  const pas = (ara) => { const u = Math.min(1, (ara - t0) / DURADA), e = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2; posa(alLlarg(pts, e)); if (u < 1) requestAnimationFrame(pas); else acaba(); };
+  requestAnimationFrame(pas);
+}
+function comenca(tipus) { if (movent) return; tipusInici = tipus; roca = M.inici(tipus); bio = []; ultim = null; avis = ""; apunta(roca); posa(GEOM.lloc[roca.lloc]); pinta(); }
+$$("[data-proc]").forEach((b) => b.addEventListener("click", () => fes(b.dataset.proc)));
+$$("[data-inici]").forEach((b) => b.addEventListener("click", () => comenca(b.dataset.inici)));
+
+const P = Pantalla.inicia({
+  opcions: TX.opcions, correcta: "a",
+  missatges: { perOpcio: TX.descoberta.perOpcio, senseResposta: TX.descoberta.senseResposta },
+  onTab: () => pinta(), onObre: (id) => { if (id === "p-desc") pintaDades(); },
+});
+addEventListener("resize", () => etiquetes());
+comenca("granit");
+// per a les proves: comença amb una roca i hi aplica uns passos sense animació
+window.__roca = { fes(tipus, passos = []) { movent = false; comenca(tipus); for (const p of passos) fes(p, false); return roca; }, prova(p) { fes(p, false); return avis; }, get roca() { return roca; }, get vistos() { return [...vistos]; } };
+</script></body></html>
