@@ -8,6 +8,7 @@ Adreça: https://fundaciojesuiteseducacio.github.io/recursos-aula-propis/
 |---|---|---|
 | Les hores en català | Primària, 2n a 4t, i aula d'acollida | `hores/` |
 | El pot tancat | ESO, 1r (projecte «Life in a jar») | `pot/` |
+| La biografia d'una roca | ESO, 1r (projecte «Petrificats en el temps») | `roca/` |
 | Laboratori del pèndol | Primària, 5è i 6è | `pendol/` |
 | Circuits elèctrics senzills | Primària, 5è i 6è | `circuit/` |
 | Els canvis de marxa d'una bicicleta | Primària, 5è i 6è | `bicicleta/` |
